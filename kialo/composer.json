@@ -1,0 +1,21 @@
+{
+  "name": "kialo/moodle-plugin",
+  "description": "Integrates Kialo Edu into Moodle",
+  "minimum-stability": "stable",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Kialo",
+      "email": "support@kialo-edu.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "oat-sa/lib-lti1p3-core": "^6.9"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4"
+    }
+  }
+}

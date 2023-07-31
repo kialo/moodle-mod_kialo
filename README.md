@@ -14,3 +14,7 @@
 * `$PAGE`: This is a central store of information about the current page we are generating in response to the user's request.
 * `$OUTPUT`: `$OUTPUT `is an instance of core_renderer or one of its subclasses. It is used to generate HTML for output.
 * `$DB`: This holds the database connection details. It is used for all access to the database.
+
+# Docs
+
+* https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally

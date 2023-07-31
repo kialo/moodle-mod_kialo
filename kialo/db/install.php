@@ -27,6 +27,14 @@
  * Custom code to be run on installing the plugin.
  */
 function xmldb_kialo_install() {
+    global $CFG, $OUTPUT;
 
+    // Create the private key.
+    require_once($CFG->dirroot . '/mod/kialo/upgradelib.php');
+
+    $warning = mod_kialo_verify_private_key();
+    if (!empty($warning)) {
+        echo $OUTPUT->notification($warning, 'notifyproblem');
+    }
     return true;
 }

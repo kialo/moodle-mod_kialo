@@ -108,10 +108,9 @@ function kialo_delete_instance($id) {
 function kialo_get_coursemodule_info($coursemodule) {
     $info = new cached_cm_info();
 
-    $url = "https://www.google.de";
+    $url = new moodle_url('/mod/kialo/view.php', array('id' => $coursemodule->id)) ;
 
-    $info->onclick = "window.open('" . $url . "', 'lti-".$coursemodule->id."'); return false;";
-    //$info->name = info->;
+    $info->onclick = "window.open('" . $url->out(false) . "', 'lti-".$coursemodule->id."'); return false;";
 
     return $info;
 }
