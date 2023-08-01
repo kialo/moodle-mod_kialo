@@ -29,73 +29,26 @@ require_once('vendor/autoload.php');
 /** @var moodle_page $PAGE */
 /** @var core_renderer $OUTPUT */
 
-//// Course module id.
-//$id = optional_param('id', 0, PARAM_INT);
-//
-//// Activity instance id.
-//$k = optional_param('k', 0, PARAM_INT);
-//
-//if ($id) {
-//    $cm = get_coursemodule_from_id('kialo', $id, 0, false, MUST_EXIST);
-//    $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-//    $moduleinstance = $DB->get_record('kialo', array('id' => $cm->instance), '*', MUST_EXIST);
-//} else {
-//    $moduleinstance = $DB->get_record('kialo', array('id' => $k), '*', MUST_EXIST);
-//    $course = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
-//    $cm = get_coursemodule_from_instance('kialo', $moduleinstance->id, $course->id, false, MUST_EXIST);
-//}
-//
-//require_login($course, true, $cm);
-
-//$modulecontext = context_module::instance($cm->id);
-
-//$event = \mod_kialo\event\course_module_viewed::create(array(
-//    'objectid' => $moduleinstance->id,
-//    'context' => $modulecontext
-//));
-//$event->add_record_snapshot('course', $course);
-//$event->add_record_snapshot('kialo', $moduleinstance);
-//$event->trigger();
-
-//$PAGE->set_url('/mod/kialo/view.php', array('id' => $cm->id));
-//$PAGE->set_title(format_string($moduleinstance->name));
-//$PAGE->set_heading(format_string($course->fullname));
-//$PAGE->set_context($modulecontext);
-
-//echo $OUTPUT->header();
-
-//// TODO: How to properly check if this is a student or teacher
-//if (false && has_capability('mod/kialo:addinstance', $modulecontext)) {
-//    redirect($moduleinstance->discussion_url, 'redirecting to Kialo...');
-//} else {
-//    //echo "STUDENT";
-//}
-
-use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
-use OAT\Library\Lti1p3Core\Security\Jwt\Validator\ValidatorInterface;
-use OAT\Library\Lti1p3Core\Security\Key\KeyChainFactory;
-use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
+use GuzzleHttp\Psr7\ServerRequest;
+use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Platform\Platform;
 use OAT\Library\Lti1p3Core\Registration\Registration;
+use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
+use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
+use OAT\Library\Lti1p3Core\Security\Key\KeyChainFactory;
+use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceGeneratorInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceInterface;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
-use OAT\Library\Lti1p3Core\Tool\Tool;
-use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
-use OAT\Library\Lti1p3Core\Security\User\UserAuthenticatorInterface;
 use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterface;
-use OAT\Library\Lti1p3Core\User\UserIdentityInterface;
-
-use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
-use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
-use OAT\Library\Lti1p3Core\Message\Payload\Claim\ContextClaim;
-use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
+use OAT\Library\Lti1p3Core\Security\User\UserAuthenticatorInterface;
+use OAT\Library\Lti1p3Core\Tool\Tool;
 use OAT\Library\Lti1p3Core\User\UserIdentity;
-use Psr\Http\Message\ServerRequestInterface;
+use OAT\Library\Lti1p3Core\User\UserIdentityInterface;
 
 $kid = get_config("mod_kialo", "kid");
 $privatekey_str = get_config("mod_kialo", "privatekey");
-$publickey_str = bin2hex(openssl_pkey_get_details(openssl_pkey_get_private($privatekey_str))['rsa']['n']);
+$publickey_str = openssl_pkey_get_details(openssl_pkey_get_private($privatekey_str))['key'];
 
 $platformKeyChain = (new KeyChainFactory)->create(
         $kid,                                // [required] identifier (used for JWT kid header)
@@ -128,7 +81,7 @@ $toolJwksUrl = "http://localhost:5000/lti/jwks.json";  # TODO PM-41849: replace 
 $deploymentIds = ["8"];
 
 $registration = new Registration(
-        'registrationIdentifier',  // [required] identifier
+        'kialo-edu',      // [required] identifier
         'kialo-xzy-42',    // [required] client id
         $platform,                 // [required] (PlatformInterface) platform
         $tool,                     // [required] (ToolInterface) tool
@@ -165,8 +118,6 @@ class RegistrationRepository implements RegistrationRepositoryInterface {
         return $registration;
     }
 }
-
-;
 
 class UserAuthenticationResult implements UserAuthenticationResultInterface {
     /** @var bool */
@@ -205,27 +156,13 @@ class UserAuthenticator implements UserAuthenticatorInterface {
     }
 }
 
-;
-
-// Create a builder instance
-$builder = new PlatformOriginatingLaunchBuilder();
-
 // Get related registration of the launch
 $registrationRepository = new RegistrationRepository();
 $registration_instance = $registrationRepository->find("WHATEVER");
 
 $userAuthenticator = new UserAuthenticator();
 
-$request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
-
-class NoopValidator implements ValidatorInterface {
-
-    public function validate(\OAT\Library\Lti1p3Core\Security\Jwt\TokenInterface $token, KeyInterface $key): bool {
-        return true;
-    }
-}
-
-$validator = new NoopValidator();  # TODO: Replace with proper validator
+$request = ServerRequest::fromGlobals();
 
 class StaticNonce implements NonceInterface {
     public function getValue(): string {
@@ -243,27 +180,33 @@ class StaticNonce implements NonceInterface {
 
 class StaticNonceBuilder implements NonceGeneratorInterface {
 
-    public function generate($ttl = null): \OAT\Library\Lti1p3Core\Security\Nonce\NonceInterface {
+    public function generate($ttl = null): NonceInterface {
         return new StaticNonce();
     }
 }
 
-$nonceBuilder = null;
-$payloadBuilder = (new \OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder(new StaticNonceBuilder()))
-        ->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
-                "title" => "Kialo",
-                "description" => "",
-                "id" => "1"
-        ]);
+$payloadBuilder = (new MessagePayloadBuilder(new StaticNonceBuilder()));
 
 // Create the OIDC authenticator
-$authenticator = new OidcAuthenticator($registrationRepository, $userAuthenticator, $payloadBuilder, $validator);
+$authenticator = new OidcAuthenticator($registrationRepository, $userAuthenticator, $payloadBuilder);
 
 // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint')
 $message = $authenticator->authenticate($request);
 
-// Auto redirection to the tool via the user's browser
-echo $message->toHtmlRedirectForm();
-
-
-//echo $OUTPUT->footer();
+# TODO PM-41780: If something goes wrong above, show a helpful error
+# TODO PM-42133: Improve the loading screen below
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Redirecting to Kialo...</title>
+</head>
+<body>
+<?php
+$html = $message->toHtmlRedirectForm();
+// workaround for wrong redirect URI generated by the LTI lib, see https://github.com/oat-sa/lib-lti1p3-core/issues/160
+$html = preg_replace("/action=\".*?\"/i", 'action="' . $tool->getLaunchUrl() . '"', $html);
+echo $html;
+?>
+</body>
+</html>

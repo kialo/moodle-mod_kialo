@@ -11,7 +11,10 @@
   ],
   "require": {
     "php": ">=7.4.0",
-    "oat-sa/lib-lti1p3-core": "^6.9"
+    "oat-sa/lib-lti1p3-core": "^6.9",
+    "guzzlehttp/guzzle": "^6.5 || ^7.0",
+    "ext-openssl": "*",
+    "ext-json": "*"
   },
   "config": {
     "platform": {

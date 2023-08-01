@@ -18,3 +18,4 @@
 # Docs
 
 * https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
+* https://docs.moodle.org/dev/Automatic_class_loading
