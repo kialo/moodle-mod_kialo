@@ -31,10 +31,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
-use mod_kialo\kialo_config;
-use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
-use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
-use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
+use mod_kialo\lti_flow;
 
 // Course module id.
 $id = optional_param('id', 0, PARAM_INT);
@@ -54,27 +51,7 @@ if ($id) {
 
 require_login($course, true, $cm);
 
-// get moodle user id
-$userid = $USER->id;
-
-$kialo_config = kialo_config::get_instance();
-$registration = $kialo_config->create_registration($id);
-
-$builder = new PlatformOriginatingLaunchBuilder();
-$message = $builder->buildPlatformOriginatingLaunch(
-        $registration,
-        LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-        'http://localhost:5000/lti/launch3', // target link uri of the launch (final destination after OIDC flow)
-        'loginHint42', // login hint that will be used afterwards by the platform to perform authentication
-        $id,
-        // will use the registration default deployment id, but you can pass a specific one
-        [
-                'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner' // role
-        ],
-        [
-                new ResourceLinkClaim('discussionIdMaybe?', 'discussion title maybe?', 'discussion description maybe?'), // LTI claim representing the resource link of the launch
-        ]
-);
+$message = lti_flow::lti_init_launch($id, $USER->id, $moduleinstance->discussion_url);
 
 # TODO PM-41780: If something goes wrong above, show a helpful error
 # TODO PM-42133: Improve the loading screen below

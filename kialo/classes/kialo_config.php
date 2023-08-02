@@ -60,7 +60,7 @@ class kialo_config {
         );
     }
 
-    public function create_registration(string $deployment_id): Registration {
+    public function create_registration(?string $deployment_id = null): Registration {
         $tool = new Tool(
                 'kialo-edu',
                 'Kialo Edu',
@@ -71,7 +71,7 @@ class kialo_config {
         );
         $platformJwksUrl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();
         $toolJwksUrl = $this->tool_url . "/lti/jwks.json";
-        $deploymentIds = [$deployment_id];
+        $deploymentIds = $deployment_id ? [$deployment_id] : [];
 
         return new Registration(
                 'kialo-moodle-registration',
