@@ -15,13 +15,22 @@ class user_authenticator implements UserAuthenticatorInterface {
             string $loginHint
     ): UserAuthenticationResultInterface {
         global $USER;
+        global $PAGE;
 
-        // TODO: Implement authenticate() method to perform user authentication (ex: session, LDAP, etc)
-        // TODO: Check if Moodle user is logged in
         $userid = $loginHint;
         assert($userid == $USER->id);
-        // TODO: Return identity of the user
+
         return new user_authentication_result(true,
-                new UserIdentity('userIdentifier', 'userName', 'me2@me.com'));
+                # TODO PM-42104: Add language and timezone
+                new UserIdentity(
+                        $USER->username,
+                        fullname($USER),
+                        $USER->email,
+                        $USER->firstname,
+                        $USER->lastname,
+                        $USER->middlename,
+                        null,
+                        (new \user_picture($USER))->get_url($PAGE),
+                ));
     }
 }

@@ -7,6 +7,7 @@ use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuild
 use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
+use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 
 class lti_flow {
@@ -24,6 +25,11 @@ class lti_flow {
                 [
                     // TODO: set appropriate roles
                         'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner' // role
+                ],
+                [
+                    // the resource link claim is required in the spec, but we don't use it
+                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim
+                    new ResourceLinkClaim('resource-link-' . $deployment_id, '', ''),
                 ]
         );
     }
