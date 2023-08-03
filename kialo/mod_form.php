@@ -20,11 +20,19 @@
  * @package     mod_kialo
  * @copyright   2023 Kialo Inc. <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * @see https://docs.moodle.org/dev/Form_API
+ * @var stdClass $CFG see ../moodle/config-dist.php for available fields
  */
+
+use mod_kialo\deep_link_form;
+use mod_kialo\lti_flow;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot.'/course/moodleform_mod.php');
+require_once($CFG->dirroot . '/course/moodleform_mod.php');
+
+require_once('vendor/autoload.php');
 
 /**
  * Module instance settings form.
@@ -40,6 +48,8 @@ class mod_kialo_mod_form extends moodleform_mod {
      */
     public function definition() {
         global $CFG;
+        global $USER;
+        global $COURSE;
 
         $mform = $this->_form;
 
@@ -48,9 +58,12 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Discussion URL
         $mform->addElement("url", "discussion_url", get_string("discussion_url", "mod_kialo"), array("size" => "64"));
-        $mform->setType("discussion_url", PARAM_URL);
+        $mform->setType("discussion_url", PARAM_RAW);
         $mform->addRule('discussion_url', null, 'required', null, 'client');
         $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+
+        // Deep Linking Button
+        $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
 
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('kialoname', 'mod_kialo'), array('size' => '64'));
@@ -70,5 +83,25 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    public function display() {
+        parent::display();
+
+        // it's important that this form is printed after the actual form, since forms can't be nested
+        $this->display_lti_form();
+    }
+
+    public function display_lti_form() {
+        global $COURSE;
+        global $USER;
+
+        // Generates a default HTML form for submitting LTI deep link request,
+        // and a script function `submit_deeplink` which can be called by the button above.
+        $deeplinkmsg = lti_flow::init_deep_link(
+                $COURSE->id, $USER->id, "get discussion URL from input field above"
+        );
+        $ltiform = new deep_link_form($deeplinkmsg);
+        echo $ltiform->create_form("id_kialo_select_discussion");
     }
 }

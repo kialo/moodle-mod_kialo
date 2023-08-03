@@ -35,3 +35,4 @@ $string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['discussion_url'] = 'Discussion URL';
+$string['select_discussion'] = 'Select Discussion';

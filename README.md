@@ -19,3 +19,10 @@
 
 * https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
 * https://docs.moodle.org/dev/Automatic_class_loading
+* https://docs.moodle.org/dev/Plugin_contribution_checklist
+
+# TODOs
+
+* go through the plugin checklist linked above
+* the plugin content should be at the root of the repo, not its own folder
+* the git repo should be called `moodle-mod_kialo`
