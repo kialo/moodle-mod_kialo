@@ -17,8 +17,15 @@ class user_authenticator implements UserAuthenticatorInterface {
         global $USER;
         global $PAGE;
 
-        $userid = $loginHint;
-        assert($userid == $USER->id);
+        // the login hint is in the form of "course_id/moodle_user_id"
+        $loginhint = $_GET['login_hint'] ?? "";
+        [$courseid, $userid] = explode("/", $loginhint);
+
+        require_login(intval($courseid), false);
+
+        if ($userid !== $USER->id) {
+            return new user_authentication_result(false);
+        }
 
         return new user_authentication_result(true,
                 # TODO PM-42104: Add language and timezone

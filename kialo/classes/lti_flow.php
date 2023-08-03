@@ -35,18 +35,22 @@ class lti_flow {
         return $roles;
     }
 
-    public static function lti_init_launch(int $course_module_id, string $deployment_id, string $moodle_user_id, ?string $target_link_uri = null) {
+    public static function lti_init_launch(int $course_id, int $course_module_id, string $deployment_id, string $moodle_user_id, ?string $target_link_uri = null) {
         $kialo_config = kialo_config::get_instance();
         $registration = $kialo_config->create_registration($deployment_id);
         $context = context_module::instance($course_module_id);
         $roles = self::assign_lti_roles($context);
+
+        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
+        // We also assert that it's the same moodle user that was used in the first step.
+        $login_hint = "$course_id/$moodle_user_id";
 
         $builder = new PlatformOriginatingLaunchBuilder();
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
                 $target_link_uri ?? 'TBD', // the final destination URL will decided by our backend
-                $moodle_user_id, // login hint that will be used afterwards by the platform to perform authentication
+                $login_hint, // login hint that will be used afterwards by the platform to perform authentication
                 $deployment_id,
                 $roles,
                 [

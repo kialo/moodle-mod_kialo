@@ -33,7 +33,6 @@ require_once('vendor/autoload.php');
 use mod_kialo\kialo_config;
 use mod_kialo\lti_flow;
 
-// Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint')
 $message = lti_flow::lti_auth();
 
 # TODO PM-41780: If something goes wrong above, show a helpful error
