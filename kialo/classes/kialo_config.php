@@ -13,10 +13,14 @@ use OAT\Library\Lti1p3Core\Tool\Tool;
 class kialo_config {
     private static $instance = null;
 
-    private string $tool_url = "http://localhost:5000";
+    private string $tool_url = "https://www.kialo-edu.com";
 
     private function __construct() {
 
+    }
+
+    public function set_tool_url(string $url) {
+        $this->tool_url = $url;
     }
 
     public static function get_instance() {

@@ -31,6 +31,7 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
+use mod_kialo\kialo_config;
 use mod_kialo\lti_flow;
 
 // Course module id.
@@ -48,6 +49,13 @@ if ($id) {
     $course = $DB->get_record('course', array('id' => $moduleinstance->course), '*', MUST_EXIST);
     $cm = get_coursemodule_from_instance('kialo', $moduleinstance->id, $course->id, false, MUST_EXIST);
 }
+
+// TODO PM-42182: Remove or adapt the 3 lines below
+$discussion_url_parts = parse_url($moduleinstance->discussion_url);
+$port = ($discussion_url_parts['port'] !== 80 || $discussion_url_parts['port'] !== 443) ? ":" . $discussion_url_parts['port'] : "";
+$tool_url = $discussion_url_parts['scheme'] . '://' . $discussion_url_parts['host'] . $port;
+kialo_config::get_instance()->set_tool_url($tool_url);
+// TODO PM-42182: End
 
 require_login($course, false, $cm);
 
