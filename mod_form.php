@@ -48,6 +48,7 @@ class mod_kialo_mod_form extends moodleform_mod {
      */
     public function definition() {
         global $CFG;
+        global $COURSE;
 
         $mform = $this->_form;
 
@@ -61,8 +62,19 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Deep Linking Button
+        $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
+                "courseid" => $COURSE->id,
+        ]))->out(true);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
-
+        $mform->addElement("html", sprintf('
+        <script>
+        function start_deeplink() {
+            var starturl = "%s&pdu=" + encodeURIComponent(document.getElementById("id_discussion_url").value);
+            window.open(starturl, "_blank");
+        }
+        document.getElementById("id_kialo_select_discussion").addEventListener("click", start_deeplink);
+        </script>
+        ', $deeplinkurl));
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('kialoname', 'mod_kialo'), array('size' => '64'));
 
@@ -81,31 +93,5 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Add standard buttons.
         $this->add_action_buttons();
-    }
-
-    public function display() {
-        parent::display();
-
-        // it's important that this form is printed after the actual form, since forms can't be nested
-        $this->display_lti_form();
-    }
-
-    public function display_lti_form() {
-        global $COURSE;
-        global $USER;
-
-        // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
-        // when the deep linking happens, we need to use a different deployment id.
-        $deploymentid = md5($COURSE->id . $USER->id . time());
-
-        // Generates a default HTML form for submitting LTI deep link request,
-        // and a script function `submit_deeplink` which can be called by the button above.
-        $deeplinkmsg = lti_flow::init_deep_link(
-                $COURSE->id,
-                $USER->id,
-                $deploymentid,
-        );
-        $ltiform = new deep_link_form($deeplinkmsg);
-        echo $ltiform->create_form("id_kialo_select_discussion", "id_discussion_url");
     }
 }
