@@ -51,7 +51,8 @@ if ($id) {
 
 require_login($course, true, $cm);
 
-$message = lti_flow::lti_init_launch($id, $USER->id, $moduleinstance->discussion_url);
+$deployment_id = $id; // for now, the deployment id is the same as the activity (course module) id, but that may change
+$message = lti_flow::lti_init_launch($id, $deployment_id, $USER->id, $moduleinstance->discussion_url);
 
 # TODO PM-41780: If something goes wrong above, show a helpful error
 # TODO PM-42133: Improve the loading screen below
