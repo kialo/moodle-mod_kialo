@@ -48,8 +48,6 @@ class mod_kialo_mod_form extends moodleform_mod {
      */
     public function definition() {
         global $CFG;
-        global $USER;
-        global $COURSE;
 
         $mform = $this->_form;
 
@@ -96,12 +94,18 @@ class mod_kialo_mod_form extends moodleform_mod {
         global $COURSE;
         global $USER;
 
+        // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
+        // when the deep linking happens, we need to use a different deployment id.
+        $deploymentid = md5($COURSE->id . $USER->id . time());
+
         // Generates a default HTML form for submitting LTI deep link request,
         // and a script function `submit_deeplink` which can be called by the button above.
         $deeplinkmsg = lti_flow::init_deep_link(
-                $COURSE->id, $USER->id, "get discussion URL from input field above"
+                $COURSE->id,
+                $USER->id,
+                $deploymentid,
         );
         $ltiform = new deep_link_form($deeplinkmsg);
-        echo $ltiform->create_form("id_kialo_select_discussion");
+        echo $ltiform->create_form("id_kialo_select_discussion", "id_discussion_url");
     }
 }

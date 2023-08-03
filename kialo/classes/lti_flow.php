@@ -101,12 +101,8 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_deep_link(int $course_id, string $moodle_user_id, string $discussion_url) {
+    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id) {
         $kialoconfig = kialo_config::get_instance();
-
-        // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
-        // when the deep linking happens, we need to use a different deployment id.
-        $deployment_id = md5($discussion_url);
 
         $registration = $kialoconfig->create_registration($deployment_id);
 
@@ -136,7 +132,7 @@ class lti_flow {
                                 false, // autoCreate
                                 null, // title, unused
                                 null, // text, unsued
-                                $discussion_url, // data, used to preselect the discussion right now
+                                null, // data, unused
                         ),
                 ]
         );

@@ -15,7 +15,7 @@ class deep_link_form {
      * @param string $buttonid id of the button that should submit the form
      * @return string
      */
-    public function create_form(string $buttonid): string
+    public function create_form(string $buttonid, string $discussionurlinputid): string
     {
         $forminputs = [];
         $parameters = array_filter($this->message->getParameters()->all());
@@ -31,8 +31,17 @@ class deep_link_form {
         }
         $inputshtml = implode('', $forminputs);
 
+        // TODO PM-42182: Remove this
+        $inputshtml .= '<input type="hidden" name="preselected_discussion_url" value=""/>';
+
         $submitscript = "<script>
-            function submit_deeplink() { document.getElementById(\"{$formid}\").submit(); }
+            function submit_deeplink() { 
+                // TODO PM-42182: Remove the following two lines
+                var temp_url = document.getElementById(\"{$discussionurlinputid}\").value;
+                document.getElementsByName(\"preselected_discussion_url\")[0].value = temp_url;
+                
+                document.getElementById(\"{$formid}\").submit(); 
+            }
             document.getElementById(\"{$buttonid}\").addEventListener(\"click\", submit_deeplink);
             </script>";
 
