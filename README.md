@@ -42,12 +42,3 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-# Development
-
-## IDE Setup
-
-* https://docs.moodle.org/dev/Setting_up_PhpStorm
-* https://docs.moodle.org/dev/Setting_up_VSCode
-* https://docs.moodle.org/dev/Setting_up_ViM

@@ -12,6 +12,12 @@ to test changes.
 docker compose up
 ```
 
+## IDE Setup
+
+* https://docs.moodle.org/dev/Setting_up_PhpStorm
+* https://docs.moodle.org/dev/Setting_up_VSCode
+* https://docs.moodle.org/dev/Setting_up_ViM
+
 # Moodle 3 / 4 compatibility
 
 * A single branch can be used to support both Moodle 3x and 4x activity plugins by including icon.svg for Moodle 3x and monologo.svg for Moodle 4x.
