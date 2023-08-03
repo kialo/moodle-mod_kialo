@@ -38,7 +38,7 @@ class deep_link_form {
                 var temp_url = document.getElementById(\"{$discussionurlinputid}\").value;
                 document.getElementsByName(\"preselected_discussion_url\")[0].value = temp_url;
                 var form = document.getElementById(\"{$formid}\");
-                form.action = new URL(temp_url).origin + '/lti/select';
+                form.action = new URL(temp_url).origin + '/lti/launch';
                 
                 document.getElementById(\"{$formid}\").submit(); 
             }
