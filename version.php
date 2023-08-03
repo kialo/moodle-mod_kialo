@@ -24,8 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/** @var \core\plugininfo\base $plugin */
-
+/** @var stdClass $plugin */
 $plugin->component = 'mod_kialo';
 $plugin->release = '0.1.3';
 $plugin->version = 2023072403;

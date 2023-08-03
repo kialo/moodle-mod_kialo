@@ -1,4 +1,4 @@
-# bundle kialo folder into a zip file
+# bundle kialo folder into a zip file (excluding development-related files)
 # Usage: ./bundle.sh
-# TODO: Exclude development folder from ZIP file
-zip -r kialo.zip ..
+cd ..
+zip -r development/mod_kialo.zip . -x development\* -x .idea\*
