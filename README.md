@@ -1,32 +1,53 @@
-# Local Development Setup
+# Kialo Debates #
 
-* see `development/README.md`
+TODO Describe the plugin shortly here.
 
-# Moodle 3 / 4 compatibility
+TODO Provide more detailed description here.
 
- * A single branch can be used to support both Moodle 3x and 4x activity plugins by including icon.svg for Moodle 3x and monologo.svg for Moodle 4x.
- * in `kialo_supports` when defining a MOD_PURPOSE_, `if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
-   return MOD_PURPOSE_CONTENT` to ensure Moodle 3 compatibility.
+## Installing via uploaded ZIP file ##
 
-# Global Moodle vars
+1. Log in to your Moodle site as an admin and go to _Site administration >
+   Plugins > Install plugins_.
+2. Upload the ZIP file with the plugin code. You should only be prompted to add
+   extra details if your plugin type is not automatically detected.
+3. Check the plugin validation report and finish the installation.
 
-* `$CFG`: This global variable contains configuration values of the Moodle setup, such as the root directory, data directory, database details, and other config values. 
-* ```$SESSION`: Moodle's wrapper round PHP's `$_SESSION`.
-* `$USER`: Holds the user table record for the current user. This will be the 'guest' user record for people who are not logged in.
-* `$SITE`: Frontpage course record. This is the course record with id=1.
-* `$COURSE`: This global variable holds the current course details. An alias for `$PAGE->course`.
-* `$PAGE`: This is a central store of information about the current page we are generating in response to the user's request.
-* `$OUTPUT`: `$OUTPUT `is an instance of core_renderer or one of its subclasses. It is used to generate HTML for output.
-* `$DB`: This holds the database connection details. It is used for all access to the database.
+## Installing manually ##
 
-# Docs
+The plugin can be also installed by putting the contents of this directory to
 
-* https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
-* https://docs.moodle.org/dev/Automatic_class_loading
-* https://docs.moodle.org/dev/Plugin_contribution_checklist
+    {your/moodle/dirroot}/mod/kialo
 
-# TODOs
+Afterwards, log in to your Moodle site as an admin and go to _Site administration >
+Notifications_ to complete the installation.
 
-* go through the plugin checklist linked above
-* the plugin content should be at the root of the repo, not its own folder
-* the git repo should be called `moodle-mod_kialo`
+Alternatively, you can run
+
+    $ php admin/cli/upgrade.php
+
+to complete the installation from the command line.
+
+## License ##
+
+2023 Kialo Inc. <support@kialo-edu.com>
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+# Development
+
+## IDE Setup
+
+* https://docs.moodle.org/dev/Setting_up_PhpStorm
+* https://docs.moodle.org/dev/Setting_up_VSCode
+* https://docs.moodle.org/dev/Setting_up_ViM

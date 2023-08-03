@@ -1,3 +1,7 @@
+## PHP
+
+vendor/
+
 ## IDEA
 
 # User-specific stuff
@@ -35,7 +39,3 @@
 
 # Local History for Visual Studio Code
 .history/
-
-dump/
-
-kialo/vendor
