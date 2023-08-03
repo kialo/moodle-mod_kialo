@@ -19,6 +19,10 @@ class kialo_config {
 
     }
 
+    public function get_tool_url() {
+        return $this->tool_url;
+    }
+
     public function set_tool_url(string $url) {
         $this->tool_url = $url;
     }
@@ -84,8 +88,8 @@ class kialo_config {
         );
     }
 
-    public function create_registration(?string $deployment_id = null): Registration {
-        $tool = new Tool(
+    public function get_tool(): Tool {
+        return new Tool(
                 'kialo-edu',
                 'Kialo Edu',
                 $this->tool_url,
@@ -93,6 +97,10 @@ class kialo_config {
                 $this->tool_url . '/lti/launch',
                 $this->tool_url . '/lti/deep-linking'
         );
+    }
+
+    public function create_registration(?string $deployment_id = null): Registration {
+        $tool = $this->get_tool();
         $platformJwksUrl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();
         $toolJwksUrl = $this->tool_url . "/lti/jwks.json";
         $deploymentIds = $deployment_id ? [$deployment_id] : [];

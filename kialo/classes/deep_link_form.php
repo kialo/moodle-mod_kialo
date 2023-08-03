@@ -20,10 +20,8 @@ class deep_link_form {
         $forminputs = [];
         $parameters = array_filter($this->message->getParameters()->all());
 
-        $discussionurl = $this->message->getParameters()->get("target_link_uri");
-        $toolurl = kialo_config::get_instance()->override_tool_url_for_target($discussionurl);
-
-        $formurl = $toolurl . '/lti/select';
+        $toolurl = kialo_config::get_instance()->get_tool_url();
+        $formurl = $toolurl . '/lti/launch';
         $formid = sprintf('launch_%s', md5($toolurl . implode('-', $parameters)));
 
         foreach ($parameters as $name => $value) {
@@ -36,9 +34,11 @@ class deep_link_form {
 
         $submitscript = "<script>
             function submit_deeplink() { 
-                // TODO PM-42182: Remove the following two lines
+                // TODO PM-42182: Remove the following lines
                 var temp_url = document.getElementById(\"{$discussionurlinputid}\").value;
                 document.getElementsByName(\"preselected_discussion_url\")[0].value = temp_url;
+                var form = document.getElementById(\"{$formid}\");
+                form.action = new URL(temp_url).origin + '/lti/select';
                 
                 document.getElementById(\"{$formid}\").submit(); 
             }
