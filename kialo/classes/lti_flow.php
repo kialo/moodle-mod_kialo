@@ -114,11 +114,14 @@ class lti_flow {
 
         $builder = new PlatformOriginatingLaunchBuilder();
 
+        // in the end we want to redirect to launch which handles the deep link request
+        $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/launch';
+
         // see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
-                $deeplinkingreturnurl, // the targetLinkUri is required by the library here but not actually used for deep links
+                $targetlinkuri,
                 $loginhint, // login hint that will be used afterwards by the platform to perform authentication
                 $deployment_id,
                 ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // only teachers can deeplink
