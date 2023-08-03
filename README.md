@@ -1,3 +1,7 @@
+# Local Development Setup
+
+* see `development/README.md`
+
 # Moodle 3 / 4 compatibility
 
  * A single branch can be used to support both Moodle 3x and 4x activity plugins by including icon.svg for Moodle 3x and monologo.svg for Moodle 4x.
