@@ -14,7 +14,8 @@
     "oat-sa/lib-lti1p3-core": "^6.9",
     "guzzlehttp/guzzle": "^6.5 || ^7.0",
     "ext-openssl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "cache/adapter-common": "^1.3"
   },
   "config": {
     "platform": {

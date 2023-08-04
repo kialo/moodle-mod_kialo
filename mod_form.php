@@ -61,6 +61,17 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addRule('discussion_url', null, 'required', null, 'client');
         $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
+        // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
+        // which means the user successfully linked the discussion via the deeplinking button.
+        $mform->addElement("hidden", "discussion_url_hidden", "");
+        $mform->addRule('discussion_url_hidden', null, 'required', null, 'client');
+
+        // Deployment ID, filled when selecting the discussion
+        $mform->addElement("hidden", "deployment_id", "");
+        $mform->addRule('deployment_id', null, 'required', null, 'client');
+
+        // TODO: show an error when the hidden fields weren't filled (because deeplinking didn't happen yet)
+
         // Deep Linking Button
         $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
                 "courseid" => $COURSE->id,
@@ -68,10 +79,26 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
         $mform->addElement("html", sprintf('
         <script>
+        var selectWindow = null;
         function start_deeplink() {
             var starturl = "%s&pdu=" + encodeURIComponent(document.getElementById("id_discussion_url").value);
-            window.open(starturl, "_blank");
+            selectWindow = window.open(starturl, "_blank");
         }
+        window.addEventListener(
+          "message",
+          (event) => {
+              console.log(event);
+              if (event.data.type !== "selected") return;
+            
+              document.querySelector("input[name=discussion_url_hidden]").value = event.data.discussion_url;
+              document.querySelector("input[name=deployment_id]").value = event.data.deployment_id;
+            
+              // trigger closing of the selection tab
+              console.log("SENDING ACK");
+              selectWindow.postMessage({ type: "acknowledged" }, "*");
+          },
+          false,
+        );
         document.getElementById("id_kialo_select_discussion").addEventListener("click", start_deeplink);
         </script>
         ', $deeplinkurl));

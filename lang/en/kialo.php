@@ -35,4 +35,13 @@ $string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['discussion_url'] = 'Discussion URL';
-$string['select_discussion'] = 'Select Discussion';
+$string['select_discussion'] = 'Link Discussion';
+
+$string['deploymentid'] = "Discussion Linked";
+$string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
+
+$string['deeplinking_error_generic_title'] = "Discussion Selection Error";
+$string['deeplinking_error_generic_description'] = "Something went wrong with the discussion selection. Please try again.";
+
+// Displayed in the title of the HTML page while redirecting to Kialo during the deeplinking flow
+$string['deeplinking_redirect'] = "Redirecting to Kialo...";

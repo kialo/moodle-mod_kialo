@@ -5,23 +5,20 @@ namespace mod_kialo;
 use context_module;
 use core\context\module;
 use GuzzleHttp\Psr7\ServerRequest;
+use OAT\Library\Lti1p3Core\Exception\LtiException;
 use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
+use OAT\Library\Lti1p3Core\Message\Launch\Validator\Platform\PlatformLaunchValidator;
 use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
+use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
+use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
+use Psr\Http\Message\ServerRequestInterface;
 
 class lti_flow {
-    // TODO PM-42182: Remove this function
-    public static function override_tool_url(string $targeturl) {
-        $urlparts = parse_url($targeturl);
-        $port = ($urlparts['port'] !== 80 || $urlparts['port'] !== 443) ? ":" . $urlparts['port'] : "";
-        $tool_url = $urlparts['scheme'] . '://' . $urlparts['host'] . $port;
-        kialo_config::get_instance()->set_tool_url($tool_url);
-    }
-
     /**
      * @param module $context
      * @return string[]
@@ -88,6 +85,55 @@ class lti_flow {
                     // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim
                         new ResourceLinkClaim('resource-link-' . $deployment_id, '', ''),
                 ]
+        );
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return deep_linking_result
+     * @throws LtiException
+     * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
+     */
+    public static function validate_deep_linking_response(ServerRequestInterface $request): deep_linking_result {
+        $kialo_config = kialo_config::get_instance();
+        $registration = $kialo_config->create_registration();
+        $registrationrepo = new static_registration_repository($registration);
+        $noncerepo = new NonceRepository(moodle_cache::nonce_cache());
+
+        $validator = new PlatformLaunchValidator($registrationrepo, $noncerepo);
+        $message = $validator->validateToolOriginatingLaunch($request);
+        $payload = $message->getPayload();
+
+        if ($message->hasError() || $payload === null) {
+            throw new LtiException($message->getError());
+        }
+
+        if ($payload->getMessageType() !== "LtiDeepLinkingResponse") {
+            throw new LtiException('Expected LtiDeepLinkingResponse');
+        }
+
+        if ($payload->getDeepLinkingContentItems() === null) {
+            throw new LtiException('Expected deep linking content items');
+        }
+
+        $items = $payload->getDeepLinkingContentItems()->getContentItems();
+        if (count($items) !== 1) {
+            throw new LtiException('Expected exactly one content item');
+        }
+
+        $content = $items[0];
+
+        if ($content["type"] !== "ltiResourceLink") {
+            throw new LtiException('Expected content item to be of type ltiResourceLink');
+        }
+
+        if (!$content["url"]) {
+            throw new LtiException('Expected content item to have a url');
+        }
+
+        return new deep_linking_result(
+                $payload->getDeploymentId(),
+                $content["url"]
         );
     }
 
