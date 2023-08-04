@@ -78,7 +78,7 @@
         <option value="$PROJECT_DIR$/../moodle/moodle/reportbuilder/tests" />
         <option value="$PROJECT_DIR$/../moodle/moodle/admin/presets/tests" />
         <option value="$PROJECT_DIR$/../moodle/moodle/admin/tests" />
-        <option value="$PROJECT_DIR$/kialo/tests" />
+        <option value="$PROJECT_DIR$/tests" />
       </list>
     </option>
   </component>

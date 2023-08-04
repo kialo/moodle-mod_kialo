@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="-a --exclude development /Users/mathias/Code/moodle-plugin/ /Users/mathias/Code/moodle-plugin/development/moodle/mod/kialo" />
+      <option name="arguments" value="-a --exclude development . ./development/moodle/mod/kialo" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
