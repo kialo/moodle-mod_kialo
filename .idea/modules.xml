@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/moodle-plugin.iml" filepath="$PROJECT_DIR$/.idea/moodle-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mod_kialo.iml" filepath="$PROJECT_DIR$/.idea/mod_kialo.iml" />
     </modules>
   </component>
 </project>
