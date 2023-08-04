@@ -25,9 +25,6 @@
  * @var stdClass $CFG see ../moodle/config-dist.php for available fields
  */
 
-use mod_kialo\deep_link_form;
-use mod_kialo\lti_flow;
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
