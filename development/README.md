@@ -1,5 +1,10 @@
 # Plugin Development Guide
 
+## Prerequisites
+
+* PHP composer (https://getcomposer.org/)
+* Docker (https://www.docker.com/)
+
 ## Run Moodle locally
 
 This starts Moodle locally on port 88 with MariaDB running on port 3366.
