@@ -2,18 +2,30 @@
 
 ## Prerequisites
 
+* Git
 * PHP composer (https://getcomposer.org/)
 * Docker (https://www.docker.com/)
+
+## Development Setup
+
+First, check out this repository and install the PHP dependencies.
+
+```shell
+git clone git@github.com:kialo/moodle-plugin.git
+cd moodle-plugin
+composer install
+```
 
 ## Run Moodle locally
 
 This starts Moodle locally on port 88 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
 
-It locally mounts moodle in the folder `moodle`. You can copy the plugin into the `moodle/mod` folder,
-to test changes.
+It locally mounts moodle in the folder `moodle`. To test changes to the plugin code, 
+you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
 
 ```shell
+cd development
 docker compose up
 ```
 
@@ -23,13 +35,19 @@ docker compose up
 * https://docs.moodle.org/dev/Setting_up_VSCode
 * https://docs.moodle.org/dev/Setting_up_ViM
 
-# Moodle 3 / 4 compatibility
+Project files for IntelliJ IDEA / PhpStorm are already included in the `.idea` folder.
+The IDEA project also includes a file watcher that automatically copies over the plugin files
+into the mounted moodle plugin folder on every change.
+
+# Random Notes (temporary, should be removed/updated before release)
+
+## Moodle 3 / 4 compatibility
 
 * A single branch can be used to support both Moodle 3x and 4x activity plugins by including icon.svg for Moodle 3x and monologo.svg for Moodle 4x.
 * in `kialo_supports` when defining a MOD_PURPOSE_, `if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
   return MOD_PURPOSE_CONTENT` to ensure Moodle 3 compatibility.
 
-# Global Moodle vars
+## Global Moodle vars
 
 * `$CFG`: This global variable contains configuration values of the Moodle setup, such as the root directory, data directory, database details, and other config values.
 * ```$SESSION`: Moodle's wrapper round PHP's `$_SESSION`.
@@ -40,13 +58,13 @@ docker compose up
 * `$OUTPUT`: `$OUTPUT `is an instance of core_renderer or one of its subclasses. It is used to generate HTML for output.
 * `$DB`: This holds the database connection details. It is used for all access to the database.
 
-# Docs
+## Docs
 
 * https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
 * https://docs.moodle.org/dev/Automatic_class_loading
 * https://docs.moodle.org/dev/Plugin_contribution_checklist
 
-# TODOs
+## TODOs
 
 * go through the plugin checklist linked above
 * the plugin content should be at the root of the repo, not its own folder
