@@ -55,7 +55,7 @@ kialo_config::get_instance()->override_tool_url_for_target($moduleinstance->disc
 
 require_login($course, false, $cm);
 
-$message = lti_flow::init_resource_link($course->id, $id, $USER->id, $moduleinstance->discussion_url);
+$message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id, $moduleinstance->discussion_url);
 
 # TODO PM-41780: If something goes wrong above, show a helpful error
 # TODO PM-42133: Improve the loading screen below

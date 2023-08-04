@@ -17,6 +17,7 @@ use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
+use stdClass;
 
 class lti_flow {
     /**
@@ -42,28 +43,20 @@ class lti_flow {
     }
 
     /**
-     * @param int $course_module_id
-     * @return int
-     */
-    public static function get_deployment_id(int $course_module_id) {
-        // For now, the deployment id is the same as the activity (course module) id, but that may change.
-        return strval($course_module_id);
-    }
-
-    /**
      * Initializes an LTI flow that ends up just taking the user to the target_link_uri on the tool (i.e. Kialo).
+     *
      * @param int $course_id
      * @param int $course_module_id
+     * @param string $deployment_id
      * @param string $moodle_user_id
      * @param string|null $target_link_uri
      * @return LtiMessageInterface
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_resource_link(int $course_id, int $course_module_id, string $moodle_user_id,
+    public static function init_resource_link(int $course_id, int $course_module_id, string $deployment_id, string $moodle_user_id,
             ?string $target_link_uri = null) {
         $kialo_config = kialo_config::get_instance();
-        $deployment_id = self::get_deployment_id($course_module_id);
         $registration = $kialo_config->create_registration($deployment_id);
         $context = context_module::instance($course_module_id);
         $roles = self::assign_lti_roles($context);
