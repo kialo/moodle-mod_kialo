@@ -16,8 +16,11 @@ class deep_linking_result {
      */
     public string $discussionurl;
 
-    public function __construct(string $deploymentid, string $discussionurl) {
+    public string $discussiontitle;
+
+    public function __construct(string $deploymentid, string $discussionurl, string $discussiontitle) {
         $this->deploymentid = $deploymentid;
         $this->discussionurl = $discussionurl;
+        $this->discussiontitle = $discussiontitle;
     }
 }

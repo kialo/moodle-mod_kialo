@@ -66,6 +66,8 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("hidden", "discussion_url_hidden", "");
         $mform->addRule('discussion_url_hidden', null, 'required', null, 'client');
 
+        // TODO PM-42186: When the deeplink was finished, display the title of the selected discussion here
+
         // Deployment ID, filled when selecting the discussion
         $mform->addElement("hidden", "deployment_id", "");
         $mform->addRule('deployment_id', null, 'required', null, 'client');

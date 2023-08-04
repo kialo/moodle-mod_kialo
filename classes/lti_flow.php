@@ -133,7 +133,8 @@ class lti_flow {
 
         return new deep_linking_result(
                 $payload->getDeploymentId(),
-                $content["url"]
+                $content["url"] ?? "",
+                $content["title"] ?? "",
         );
     }
 

@@ -29,11 +29,9 @@ $idtoken = optional_param("id_token", "", PARAM_TEXT);
 
 require_login($courseid, false);
 
-// Kialo's backend doesn't implement the DeepLinkingResponse yet, so we need to fake it for now.
-// TODO PM-42186: Unfake this once the backend implements the deeplinking flow
-$fake = true;
+if ($courseid) {
+    // called by our activity creation form in Moodle to start the deeplinking flow
 
-if ($courseid && !$fake) {
     // TODO PM-42182: Remove these lines
     $preselecteddiscussionurl = required_param('pdu', PARAM_URL);
     kialo_config::get_instance()->override_tool_url_for_target($preselecteddiscussionurl);
@@ -53,21 +51,15 @@ if ($courseid && !$fake) {
     // TODO: Should we show a loading screen here? right now it will just be a blank page
     echo $deeplinkmsg->toHtmlRedirectForm();
     echo "</body></html>";
-} else if ($idtoken || $fake) {
+} else if ($idtoken) {
+    // received LtiDeepLinkingResponse from Kialo
     try {
-        if (!$fake) {
-            $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals());
-        } else {
-            $link = new deep_linking_result(
-                    md5(time()),
-                    "http://localhost:5000/p/037d99d4-8df5-41ce-90b4-ac1b62120859/5804",
-            );
-        }
+        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals());
     } catch (LtiException $e) {
         // TODO PM-42186 error handling
+        die('LTI ERROR: ' . $e->getMessage());
     }
 
-    // Kialo POSTed back to this URL, finishing the deep linking flow
     echo "<script>
     window.addEventListener(
         'message',
@@ -77,7 +69,12 @@ if ($courseid && !$fake) {
             }
         },
         false );
-        window.opener.postMessage({type: \"selected\", deployment_id: \"{$link->deploymentid}\", discussion_url: \"{$link->discussionurl}\"}, \"*\");
+        window.opener.postMessage({ 
+            type: \"selected\", 
+            deployment_id: \"{$link->deploymentid}\", 
+            discussion_url: \"{$link->discussionurl}\", 
+            discussion_title: \"{$link->discussiontitle}\"
+        }, \"*\");
     </script>";
 
     // the user should basically not see this, or just very briefly
