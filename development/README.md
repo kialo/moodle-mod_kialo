@@ -18,8 +18,9 @@ composer install
 
 ## Run Moodle locally
 
-This starts Moodle locally on port 88 with MariaDB running on port 3366.
+This starts Moodle locally on port 8080 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
+It also starts the hosted version of the Moodle app on port 8100.
 
 It locally mounts moodle in the folder `moodle`. To test changes to the plugin code, 
 you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
@@ -28,6 +29,17 @@ you can use `development/sync.sh` to copy over the code into the `moodle/mod/kia
 cd development
 docker compose up
 ```
+
+If you don't want to or can't run Moodle locally, you can also use Moodle's hosted versions:
+
+* https://sandbox.moodledemo.net/ - this is a clean Moodle instance, reset once per hour
+* https://latest.apps.moodledemo.net/ - the mobile app
+
+## Using the Moodle Mobile app
+
+The Moodle mobile app is part of the docker compose setup and is available on port 8100.
+To use the local Moodle instance with the mobile app, you need to change the app's configuration,
+and enable web services following these instructions: https://docs.moodle.org/402/en/Mobile_web_services
 
 ## IDE Setup
 

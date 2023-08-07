@@ -1,3 +1,4 @@
+# https://hub.docker.com/r/bitnami/moodle
 version: '2'
 services:
   mariadb:
@@ -14,16 +15,20 @@ services:
   moodle:
     image: docker.io/bitnami/moodle:4.2
     ports:
-      - '88:8080'
+      - '8080:8080'
       - '443:8443'
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
       - MOODLE_DATABASE_USER=bn_moodle
       - MOODLE_DATABASE_NAME=bitnami_moodle
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
+      - MOODLE_PASSWORD=kialo
     volumes:
       - './moodle:/bitnami/moodle'
     depends_on:
       - mariadb
+  moodleapp:
+    image: moodlehq/moodleapp:latest-dev
+    ports:
+      - '8100:80'
