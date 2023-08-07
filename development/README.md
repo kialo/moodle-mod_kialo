@@ -30,16 +30,21 @@ cd development
 docker compose up
 ```
 
-If you don't want to or can't run Moodle locally, you can also use Moodle's hosted versions:
-
-* https://sandbox.moodledemo.net/ - this is a clean Moodle instance, reset once per hour
-* https://latest.apps.moodledemo.net/ - the mobile app
+Afterward, see `/development/config/README.md` for steps to apply default settings that are useful for development.
 
 ## Using the Moodle Mobile app
 
 The Moodle mobile app is part of the docker compose setup and is available on port 8100.
 To use the local Moodle instance with the mobile app, you need to change the app's configuration,
-and enable web services following these instructions: https://docs.moodle.org/402/en/Mobile_web_services
+and enable web services following these instructions: https://docs.moodle.org/402/en/Mobile_web_services.
+If you imported the admin preset from `/development/config/kialo-admin-preset.xml`, this should already be done.
+
+## Used hosted Moodle instances
+
+If you don't want to or can't run Moodle locally, you can also use Moodle's hosted versions:
+
+* https://sandbox.moodledemo.net/ - this is a clean Moodle instance, reset once per hour
+* https://latest.apps.moodledemo.net/ - the mobile app
 
 ## IDE Setup
 
