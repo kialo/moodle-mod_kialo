@@ -11,8 +11,8 @@
 First, check out this repository and install the PHP dependencies.
 
 ```shell
-git clone git@github.com:kialo/moodle-plugin.git
-cd moodle-plugin
+git clone git@github.com:kialo/moodle-mod_kialo.git
+cd moodle-mod_kialo
 composer install
 ```
 
