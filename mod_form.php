@@ -60,13 +60,15 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
         // which means the user successfully linked the discussion via the deeplinking button.
-        $mform->addElement("hidden", "discussion_url_hidden", "");
+        $mform->addElement("text", "discussion_url_hidden", "linked discussion url (will hidden later)");
+        $mform->setType("discussion_url_hidden", PARAM_RAW);
         $mform->addRule('discussion_url_hidden', null, 'required', null, 'client');
 
         // TODO PM-42186: When the deeplink was finished, display the title of the selected discussion here
 
         // Deployment ID, filled when selecting the discussion
-        $mform->addElement("hidden", "deployment_id", "");
+        $mform->addElement("text", "deployment_id", "linked deployment id (will hidden later)");
+        $mform->setType("deployment_id", PARAM_RAW);
         $mform->addRule('deployment_id', null, 'required', null, 'client');
 
         // TODO: show an error when the hidden fields weren't filled (because deeplinking didn't happen yet)
