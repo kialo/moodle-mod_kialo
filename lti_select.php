@@ -34,7 +34,6 @@ if ($courseid) {
 
     // TODO PM-42182: Remove these lines
     $preselecteddiscussionurl = required_param('pdu', PARAM_URL);
-    kialo_config::get_instance()->override_tool_url_for_target($preselecteddiscussionurl);
 
     // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
     // when the deep linking happens, we need to use a different deployment id.

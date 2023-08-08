@@ -50,9 +50,6 @@ if ($id) {
     $cm = get_coursemodule_from_instance('kialo', $moduleinstance->id, $course->id, false, MUST_EXIST);
 }
 
-// TODO PM-42182: Remove this line
-kialo_config::get_instance()->override_tool_url_for_target($moduleinstance->discussion_url);
-
 require_login($course, false, $cm);
 
 $message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id, $moduleinstance->discussion_url);

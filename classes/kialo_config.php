@@ -38,26 +38,6 @@ class kialo_config {
         return self::$instance;
     }
 
-
-    /**
-     * Usually the tool URL is hardcoded as kialo-edu.com in production. But for testing we
-     * need to adapt the tool url to localhost, the test or staging instance etc.
-     * For the sake of simplicity this infers the correct tool URL from the targetUrl, which
-     * usually should be the URL of a discussion or other endpoint on the desired Kialo instance.
-     *
-     * @param string $targeturl some endpoint on the desired Kialo instance
-     * @return string the inferred tool URL
-     *
-     * TODO PM-42182: Remove this function
-     */
-    public function override_tool_url_for_target(string $targeturl): string {
-        $urlparts = parse_url($targeturl);
-        $port = ($urlparts['port'] !== 80 || $urlparts['port'] !== 443) ? ":" . $urlparts['port'] : "";
-        $tool_url = $urlparts['scheme'] . '://' . $urlparts['host'] . $port;
-        kialo_config::get_instance()->set_tool_url($tool_url);
-        return $tool_url;
-    }
-
     /**
      * The privatekey and kid are generated once when the plugin is installed, see upgradelib.php.
      *

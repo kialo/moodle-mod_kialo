@@ -33,9 +33,6 @@ require_once('vendor/autoload.php');
 use mod_kialo\kialo_config;
 use mod_kialo\lti_flow;
 
-// TODO PM-42182: Remove this line
-kialo_config::get_instance()->override_tool_url_for_target($_GET['redirect_uri']);
-
 $message = lti_flow::lti_auth();
 
 # TODO PM-41780: If something goes wrong above, show a helpful error
