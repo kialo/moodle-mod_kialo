@@ -16,8 +16,9 @@ class kialo_config {
     private string $tool_url = "https://www.kialo-edu.com";
 
     private function __construct() {
-        if (!empty($_ENV['TARGET_KIALO_URL'])) {
-            $this->tool_url = $_ENV['TARGET_KIALO_URL'];
+        $target_url_from_env = getenv('TARGET_KIALO_URL');
+        if (!empty($target_url_from_env)) {
+            $this->tool_url = $target_url_from_env;
         }
     }
 
