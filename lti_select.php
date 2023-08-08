@@ -58,7 +58,10 @@ if ($courseid) {
         $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
     } catch (LtiException $e) {
         // TODO PM-42186 error handling
-        die('LTI ERROR: ' . $e->getMessage());
+        echo 'LTI ERROR: ' . $e->getMessage();
+        echo "<br>";
+        echo $e->getTraceAsString();
+        die();
     }
 
     echo "<script>

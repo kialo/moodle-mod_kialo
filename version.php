@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 $plugin->component = 'mod_kialo';
-$plugin->release = '0.1.3';
-$plugin->version = 2023072403;
+$plugin->release = '0.1.5';
+$plugin->version = 2023072405;
 $plugin->requires = 2019111800;
 $plugin->maturity = MATURITY_ALPHA;

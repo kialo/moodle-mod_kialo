@@ -12,12 +12,11 @@ use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
-use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
+use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
-use stdClass;
 
 class lti_flow {
     /**
@@ -87,7 +86,8 @@ class lti_flow {
      * @throws LtiException
      * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
      */
-    public static function validate_deep_linking_response(ServerRequestInterface $request, string $deployment_id): deep_linking_result {
+    public static function validate_deep_linking_response(ServerRequestInterface $request,
+            string $deployment_id): deep_linking_result {
         $kialo_config = kialo_config::get_instance();
         $registration = $kialo_config->create_registration($deployment_id);
         $registrationrepo = new static_registration_repository($registration);
@@ -132,11 +132,27 @@ class lti_flow {
     }
 
     /**
+     * Creates a JWT signed by Moodle itself.
+     *
+     * @param array $headers
+     * @param array $claims
+     * @return string
+     */
+    private static function create_platform_jwt_token(
+            array $headers = [],
+            array $claims = []
+    ): string {
+        $platformkey = kialo_config::get_instance()->get_platform_keychain()->getPrivateKey();
+        $jwtbuilder = new JwtBuilder();
+        return $jwtbuilder->build($headers, $claims, $platformkey)->toString();
+    }
+
+    /**
      * Initializes an LTI flow for selecting a discussion on Kialo and then returning back to Moodle.
      * @param int $course_id
      * @param int $course_module_id
      * @param string $moodle_user_id
-     * @param string $discussion_url  TODO PM-42182: Remove this parameter
+     * @param string $discussion_url TODO PM-42182: Remove this parameter
      * @return LtiMessageInterface
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
@@ -157,6 +173,9 @@ class lti_flow {
         // in the end we want to redirect to launch which handles the deep link request
         $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/launch';
 
+        // our PHP LTI library expects the data token to be a JWT token signed by the platform
+        $datatoken = self::create_platform_jwt_token(); // empty because we don't need any data, just the signature
+
         // see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
@@ -174,9 +193,12 @@ class lti_flow {
                                 false, // acceptMultiple
                                 false, // autoCreate
                                 null, // title, unused
-                                null, // text, unsued
-                                $discussionurl, // data, temporarily used to pass the preselected discussion url
+                                null, // text, unused
+                                $datatoken,
                         ),
+                        new custom_claim([
+                                "preselected_discussion_url" => $discussionurl,
+                        ]),
                 ]
         );
     }
