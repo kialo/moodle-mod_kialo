@@ -38,6 +38,7 @@ if ($courseid) {
     // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
     // when the deep linking happens, we need to use a different deployment id.
     $deploymentid = uniqid($courseid . $USER->id, true);
+    $_SESSION["kialo_deployment_id"] = $deploymentid;
 
     $deeplinkmsg = lti_flow::init_deep_link(
             $courseid,
@@ -53,7 +54,8 @@ if ($courseid) {
 } else if ($idtoken) {
     // received LtiDeepLinkingResponse from Kialo
     try {
-        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals());
+        $deploymentid = $_SESSION["kialo_deployment_id"];
+        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
     } catch (LtiException $e) {
         // TODO PM-42186 error handling
         die('LTI ERROR: ' . $e->getMessage());

@@ -87,9 +87,9 @@ class lti_flow {
      * @throws LtiException
      * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
      */
-    public static function validate_deep_linking_response(ServerRequestInterface $request): deep_linking_result {
+    public static function validate_deep_linking_response(ServerRequestInterface $request, string $deployment_id): deep_linking_result {
         $kialo_config = kialo_config::get_instance();
-        $registration = $kialo_config->create_registration();
+        $registration = $kialo_config->create_registration($deployment_id);
         $registrationrepo = new static_registration_repository($registration);
         $noncerepo = new NonceRepository(moodle_cache::nonce_cache());
 
