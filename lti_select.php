@@ -25,7 +25,7 @@ use mod_kialo\lti_flow;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
 
 $courseid = optional_param('courseid', 0, PARAM_INT);
-$idtoken = optional_param("id_token", "", PARAM_TEXT);
+$idtoken = optional_param("JWT", "", PARAM_TEXT);
 
 require_login($courseid, false);
 
