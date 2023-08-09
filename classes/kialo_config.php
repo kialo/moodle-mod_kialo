@@ -64,20 +64,21 @@ class kialo_config {
     }
 
     public function get_tool(): Tool {
+        $tool_url = $this->get_tool_url();
         return new Tool(
                 'kialo-edu',
                 'Kialo Edu',
-                $this->tool_url,
-                $this->tool_url . "/lti/login",
-                $this->tool_url . '/lti/launch',
-                $this->tool_url . '/lti/deep-linking'
+                $tool_url,
+                $tool_url . "/lti/login",
+                $tool_url . '/lti/launch',
+                $tool_url . '/lti/deep-linking'
         );
     }
 
     public function create_registration(?string $deployment_id = null): Registration {
         $tool = $this->get_tool();
         $platformJwksUrl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();
-        $toolJwksUrl = $this->tool_url . "/lti/jwks.json";
+        $toolJwksUrl = $this->get_tool_url() . "/lti/jwks.json";
         $deploymentIds = $deployment_id ? [$deployment_id] : [];
 
         return new Registration(
