@@ -18,7 +18,7 @@
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="Module 'mod_kialo'" />
       <option name="trackOnlyRoot" value="false" />
-      <option name="workingDir" value="" />
+      <option name="workingDir" value="$ProjectFileDir$/development" />
       <envs />
     </TaskOptions>
   </component>
