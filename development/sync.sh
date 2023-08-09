@@ -2,3 +2,7 @@
 cd ..
 rsync -a --delete --exclude development . ./development/moodle/mod/kialo
 echo "Synced plugin."
+
+cd development
+cp config/config.php moodle/config.php
+echo "Synced config.php"

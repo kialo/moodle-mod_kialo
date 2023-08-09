@@ -56,6 +56,28 @@ Project files for IntelliJ IDEA / PhpStorm are already included in the `.idea` f
 The IDEA project also includes a file watcher that automatically copies over the plugin files
 into the mounted moodle plugin folder on every change.
 
+## Testing
+
+Tests for the plugin are located in the `tests` folder. This need to be executed in the docker compose context,
+because they require access to the Moodle instance.
+
+### How to run tests
+
+To run all tests, follow these steps:
+
+1. Start the docker compose setup: `cd development; docker compose up`
+2. Initialise the test environment: `development/tests-init.sh`
+3. Ensure the plugin files are synchronized with the Moodle instance: `development/sync.sh`
+4. Run the tests:
+
+   * To run all tests, execute `development/tests-run-all.sh`
+   * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
+
+Each time you change the plugin code or a test, you need to run `development/sync.sh` again.
+If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
+
+Each time you add new test files, you need to run `development/tests-init.sh` again.
+
 # Random Notes (temporary, should be removed/updated before release)
 
 ## Moodle 3 / 4 compatibility
@@ -86,3 +108,4 @@ into the mounted moodle plugin folder on every change.
 * go through the plugin checklist linked above
 * the plugin content should be at the root of the repo, not its own folder
 * the git repo should be called `moodle-mod_kialo`
+* configure CI to run the tests for different moodle versions, at least 3.9 (current LTS), 4.0 (next LTS), and latest moodle (4.2)

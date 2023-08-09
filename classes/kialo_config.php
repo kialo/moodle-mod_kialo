@@ -13,21 +13,13 @@ use OAT\Library\Lti1p3Core\Tool\Tool;
 class kialo_config {
     private static $instance = null;
 
-    private string $tool_url = "https://www.kialo-edu.com";
-
-    private function __construct() {
+    public function get_tool_url() {
         $target_url_from_env = getenv('TARGET_KIALO_URL');
         if (!empty($target_url_from_env)) {
-            $this->tool_url = $target_url_from_env;
+            return $target_url_from_env;
+        } else {
+            return "https://www.kialo-edu.com";
         }
-    }
-
-    public function get_tool_url() {
-        return $this->tool_url;
-    }
-
-    public function set_tool_url(string $url) {
-        $this->tool_url = $url;
     }
 
     public static function get_instance() {

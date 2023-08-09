@@ -35,6 +35,14 @@ $CFG->admin     = 'admin';
 $CFG->directorypermissions = 02775;
 
 //=========================================================================
+// PHPUNIT SUPPORT
+//=========================================================================
+ $CFG->phpunit_prefix = 'phpu_';
+ $CFG->phpunit_dataroot = '/bitnami/moodledata/phpunit';
+ $CFG->phpunit_directorypermissions = 02777; // optional
+ $CFG->phpunit_profilingenabled = true; // optional to profile PHPUnit runs.
+
+//=========================================================================
 // Custom settings for development
 //=========================================================================
 
