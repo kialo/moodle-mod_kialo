@@ -24,8 +24,9 @@ services:
       - MOODLE_DATABASE_NAME=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
       - MOODLE_PASSWORD=kialo
-      # you can override this by creating a .env file in the same directory as this file with TARGET_KIALO_URL=...
+      # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
+      - MOODLE_HOST=${MOODLE_HOST:-http://localhost:8080}
     volumes:
       - './moodle:/bitnami/moodle'
     depends_on:

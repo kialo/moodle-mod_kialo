@@ -4,6 +4,9 @@
 
 * Git
 * PHP composer (https://getcomposer.org/)
+  * on macOS you can install via `brew install composer`
+* PHP 7.4 or higher
+  * If you installed composer `brew`, this should already be installed
 * Docker (https://www.docker.com/)
 
 ## Development Setup
@@ -22,15 +25,17 @@ This starts Moodle locally on port 8080 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
 It also starts the hosted version of the Moodle app on port 8100.
 
-It locally mounts moodle in the folder `moodle`. To test changes to the plugin code, 
-you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
 
 ```shell
 cd development
+cp .env.example .env # before starting compose, check instructions in this file
 docker compose up
 ```
 
 Afterward, see `/development/config/README.md` for steps to apply default settings that are useful for development.
+
+The folder `moodle` is mounted locally in the `development` folder. To test changes to the plugin code,
+you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
 
 ## Using the Moodle Mobile app
 
@@ -102,6 +107,13 @@ Each time you add new test files, you need to run `development/tests-init.sh` ag
 * https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
 * https://docs.moodle.org/dev/Automatic_class_loading
 * https://docs.moodle.org/dev/Plugin_contribution_checklist
+
+## Troubleshooting
+
+### When running `docker compose up` the moodle container exits shortly after startup with exit code 1
+
+This can happen if you deleted your docker containers before for some reason and then tried running `docker compose up` again.
+Try deleting both the docker images, and the folder `development/moodle`, and then run `docker compose up` again.
 
 ## TODOs
 
