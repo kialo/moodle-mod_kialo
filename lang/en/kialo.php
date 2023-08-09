@@ -30,13 +30,15 @@ $string['modulenameplural'] = 'Kialo Debates';
 $string['pluginname'] = 'Kialo Debate';
 $string['hello'] = 'Hello World!';
 $string['kialo:addinstance'] = 'Add a new Kialo Debate';
+$string['pluginadministration'] = 'Edit Kialo Debate';
 $string['kialoname'] = 'Activity Name';
 $string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['discussion_url'] = 'Discussion URL';
-$string['select_discussion'] = 'Link Discussion';
-
+$string['select_discussion'] = 'Select Discussion';
+$string['select_discussion_help'] = 'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';
+$string['discussion_title'] = 'Discussion Title';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 

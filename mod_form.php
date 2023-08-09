@@ -40,76 +40,32 @@ require_once('vendor/autoload.php');
  */
 class mod_kialo_mod_form extends moodleform_mod
 {
-
-    /**
-     * Defines forms elements
-     */
-    public function definition()
-    {
-        global $CFG;
+    private function get_deployment_id(): string {
         global $COURSE;
         global $USER;
-
-        $mform = $this->_form;
-
-        // Adding the "general" fieldset, where all the common settings are shown.
-        $mform->addElement('header', 'general', get_string('general', 'form'));
-
-        // Discussion URL
-        $mform->addElement("url", "discussion_url", get_string("discussion_url", "mod_kialo"), array("size" => "64"));
-        $mform->setType("discussion_url", PARAM_RAW);
-        $mform->addRule('discussion_url', null, 'required', null, 'client');
-        $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-
-        // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
-        // which means the user successfully linked the discussion via the deeplinking button.
-        $mform->addElement("hidden", "discussion_url_hidden", "");
-        $mform->setType("discussion_url_hidden", PARAM_RAW);
-
-        // TODO PM-42186: When the deeplink was finished, display the title of the selected discussion here
-
-        // Deployment ID, filled when selecting the discussion
 
         // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
         // when the deep linking happens, we need to use a different deployment id.
         $deploymentid = uniqid($COURSE->id . $USER->id, true);
         $_SESSION["kialo_deployment_id"] = $deploymentid;
 
-        $mform->addElement("hidden", "deployment_id", $deploymentid);
-        $mform->setType("deployment_id", PARAM_RAW);
+        return $deploymentid;
+    }
 
-        // TODO: show an error when the hidden fields weren't filled (because deeplinking didn't happen yet)
+    /**
+     * Defines forms elements
+     */
+    public function definition()
+    {
+        // see https://github.com/moodle/moodle/blob/master/course/edit_form.php for an example
+        global $CFG;
+        global $COURSE;
 
-        // Deep Linking Button
-        $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
-            "deploymentid" => $deploymentid,
-            "courseid" => $COURSE->id,
-        ]))->out(false);
-        $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
-        $mform->addElement("html", sprintf('
-        <script>
-        var selectWindow = null;
-        function start_deeplink() {
-            var starturl = "%s&pdu=" + encodeURIComponent(document.getElementById("id_discussion_url").value);
-            selectWindow = window.open(starturl, "_blank");
-        }
-        window.addEventListener(
-          "message",
-          (event) => {
-              console.log(event);
-              if (event.data.type !== "selected") return;
-            
-              document.querySelector("input[name=discussion_url_hidden]").value = event.data.discussion_url;
-              document.querySelector("input[name=deployment_id]").value = event.data.deployment_id;
-              // trigger closing of the selection tab
-              console.log("SENDING ACK");
-              selectWindow.postMessage({ type: "acknowledged" }, "*");
-          },
-          false,
-        );
-        document.getElementById("id_kialo_select_discussion").addEventListener("click", start_deeplink);
-        </script>
-        ', $deeplinkurl));
+        $mform = $this->_form;
+
+        // Adding the "general" fieldset, where all the common settings are shown.
+        $mform->addElement('header', 'general', get_string('general', 'form'));
+
         // Adding the standard "name" field.
         $mform->addElement('text', 'name', get_string('kialoname', 'mod_kialo'), array('size' => '64'));
 
@@ -118,10 +74,68 @@ class mod_kialo_mod_form extends moodleform_mod
         } else {
             $mform->setType('name', PARAM_CLEANHTML);
         }
-
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'kialoname', 'mod_kialo');
+
+        // Discussion URL
+        $mform->addElement("text", "discussion_url", get_string("discussion_url", "mod_kialo"), array("size" => "64"));
+        $mform->setType("discussion_url", PARAM_RAW);
+        $mform->addRule('discussion_url', null, 'required', null, 'client');
+        $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+        // TODO PM-42265: make discussion_Url readonly or hide the field alltogether
+
+        // Discussion Title
+        $mform->addElement("text", "discussion_title", get_string("discussion_title", "mod_kialo"), array("size"=>"64", "readonly"=>true));
+        $mform->setType("discussion_title", PARAM_TEXT);
+
+        // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
+        // which means the user successfully linked the discussion via the deeplinking button.
+        $mform->addElement("hidden", "discussion_url_hidden", "");
+        $mform->setType("discussion_url_hidden", PARAM_RAW);
+
+        // TODO PM-42262: When the deeplink was finished, display the title of the selected discussion here
+
+        // Deployment ID, filled when selecting the discussion
+        $deploymentid = $this->get_deployment_id();
+        $mform->addElement("hidden", "deployment_id", $deploymentid);
+        $mform->setType("deployment_id", PARAM_RAW);
+
+        // TODO: show an error when the hidden fields weren't filled (because deeplinking didn't happen yet)
+
+        // Deep Linking Button, allowing the user to select a discussion on Kialo
+        $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
+            "deploymentid" => $deploymentid,
+            "courseid" => $COURSE->id,
+        ]))->out(false);
+        $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
+        $mform->addElement("html", "
+        <script>
+        var selectWindow = null;
+        function start_deeplink() {
+            // pdu = preselected discussion url
+            var starturl = \"{$deeplinkurl}&pdu=\" + encodeURIComponent(document.getElementById(\"id_discussion_url\").value);
+            selectWindow = window.open(starturl, \"_blank\");
+        }
+        window.addEventListener(
+          \"message\",
+          (event) => {
+              if (event.data.type !== \"selected\") return;
+            
+              // fill in the deep-linked details
+              document.querySelector(\"input[name=discussion_url_hidden]\").value = event.data.discussion_url;
+              document.querySelector(\"input[name=deployment_id]\").value = event.data.deployment_id;
+              document.querySelector(\"input[name=discussion_title]\").value = event.data.discussion_title;
+              
+              // trigger closing of the selection tab
+              selectWindow.postMessage({ type: \"acknowledged\" }, \"*\");
+          },
+          false,
+        );
+        document.getElementById(\"id_kialo_select_discussion\").addEventListener(\"click\", start_deeplink);
+        </script>
+        ");
+        $mform->addHelpButton("kialo_select_discussion", "select_discussion", "mod_kialo");
 
         // Add standard elements.
         $this->standard_coursemodule_elements();
