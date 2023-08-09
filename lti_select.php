@@ -26,6 +26,7 @@ use OAT\Library\Lti1p3Core\Exception\LtiException;
 
 $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
+$deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
 require_login($courseid, false);
 
@@ -34,11 +35,6 @@ if ($courseid) {
 
     // TODO PM-42182: Remove these lines
     $preselecteddiscussionurl = required_param('pdu', PARAM_URL);
-
-    // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
-    // when the deep linking happens, we need to use a different deployment id.
-    $deploymentid = uniqid($courseid . $USER->id, true);
-    $_SESSION["kialo_deployment_id"] = $deploymentid;
 
     $deeplinkmsg = lti_flow::init_deep_link(
             $courseid,
