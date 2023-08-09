@@ -83,7 +83,7 @@ class mod_kialo_mod_form extends moodleform_mod
         $mform->setType("discussion_url", PARAM_RAW);
         $mform->addRule('discussion_url', null, 'required', null, 'client');
         $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        // TODO PM-42265: make discussion_Url readonly or hide the field alltogether
+        // TODO PM-42266: make discussion_Url readonly or hide the field alltogether
 
         // Discussion Title
         $mform->addElement("text", "discussion_title", get_string("discussion_title", "mod_kialo"), array("size"=>"64", "readonly"=>true));

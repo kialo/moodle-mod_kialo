@@ -152,7 +152,7 @@ class lti_flow {
      * @param int $course_id
      * @param int $course_module_id
      * @param string $moodle_user_id
-     * @param string $discussion_url TODO PM-42182: Remove this parameter
+     * @param string $discussion_url TODO PM-42266: Remove this parameter
      * @return LtiMessageInterface
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
