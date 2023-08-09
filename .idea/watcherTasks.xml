@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectTasksOptions">
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="-a --exclude development $ProjectFileDir$/ $ProjectFileDir$/development/moodle/mod/kialo" />
+      <option name="arguments" value="" />
       <option name="checkSyntaxErrors" value="false" />
       <option name="description" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -14,7 +14,7 @@
         <array />
       </option>
       <option name="outputFromStdout" value="true" />
-      <option name="program" value="rsync" />
+      <option name="program" value="$ProjectFileDir$/development/sync.sh" />
       <option name="runOnExternalChanges" value="true" />
       <option name="scopeName" value="Module 'mod_kialo'" />
       <option name="trackOnlyRoot" value="false" />
