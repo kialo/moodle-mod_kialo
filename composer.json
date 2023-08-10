@@ -36,6 +36,7 @@
     ],
     "lint": "phpcs --standard=moodle --ignore=vendor,development .",
     "test": [
+      "./development/sync.sh",
       "./development/tests-init.sh",
       "./development/tests-run-all.sh"
     ]
