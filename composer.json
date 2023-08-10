@@ -20,6 +20,20 @@
   "config": {
     "platform": {
       "php": "7.4"
+    },
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
+    "moodlehq/moodle-cs": "^3.2"
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=moodle",
+    "post-install-cmd": [
+      "phpcs --config-set default_standard moodle"
+    ],
+    "lint": "phpcs --standard=moodle --ignore=vendor,development ."
   }
 }

@@ -1,119 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="LaravelPintOptionsConfiguration">
+    <option name="ruleset" value="laravel" />
+  </component>
+  <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="codingStandard" value="moodle" />
+    <option name="customRuleset" value="$PROJECT_DIR$/vendor/moodlehq/moodle-cs/phpunit.xml.dist" />
+    <option name="highlightLevel" value="WARNING" />
+    <option name="showSniffs" value="true" />
+  </component>
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <PhpCSConfiguration beautifier_path="$PROJECT_DIR$/vendor/bin/phpcbf" standards="MySource;PEAR;PHPCompatibility;PSR1;PSR12;PSR2;Squiz;Zend;moodle" tool_path="$PROJECT_DIR$/vendor/bin/phpcs" />
+    </phpcs_settings>
+  </component>
   <component name="PhpIncludePathManager">
     <include_path>
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/yaml" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/monolog/monolog" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/composer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/psr/log" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/polyfill-ctype" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/ralouphie/getallheaders" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/guzzlehttp/promises" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/guzzlehttp/psr7" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/guzzlehttp/guzzle" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/composer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/cache" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/clock" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/http-factory" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/brick/math" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/polyfill-ctype" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/defuse/php-encryption" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/polyfill-php81" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/http-server-handler" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/http-message" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/http-client" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/psr/log" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/nesbot/carbon" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/nyholm/psr7" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/oat-sa/lib-lti1p3-core" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/ramsey/collection" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/league/oauth2-server" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/league/uri-interfaces" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/league/uri" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/league/event" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/polyfill-mbstring" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/codercat/jwk-to-pem" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/ramsey/uuid" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/polyfill-php80" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/translation" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/symfony/translation-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/lcobucci/clock" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/php-http/message-factory" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/paragonie/random_compat" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/phpseclib/phpseclib" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/mod/kialo/vendor/lcobucci/jwt" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/comparator" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/global-state" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/object-enumerator" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/event-dispatcher" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/object-reflector" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/complexity" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/filesystem" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-intl-idn" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-intl-normalizer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/code-unit-reverse-lookup" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/diff" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/css-selector" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/recursion-context" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/friends-of-behat/mink-extension" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/lines-of-code" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/event-dispatcher-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/type" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/dom-crawler" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/transliterator" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/version" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/http-client" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/cli-parser" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/mink" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/myclabs/deep-copy" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/php-text-template" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/code-unit" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/php-code-coverage" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/yaml" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/environment" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/exporter" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/mink-goutte-driver" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/sebastian/resource-operations" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/mime" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/mink-browserkit-driver" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/nikic/php-parser" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/php-webdriver/webdriver" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/php-invoker" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/php-file-iterator" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/string" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phar-io/manifest" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/deprecation-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phar-io/version" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/service-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/http-client-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/mikey179/vfsstream" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/psr/event-dispatcher" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/psr/container" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/dependency-injection" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/psr/log" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/theseer/tokenizer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/oleg-andreyev/mink-phpwebdriver" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/fabpot/goutte" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/composer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/gherkin" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-php80" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/process" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-ctype" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-php81" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/console" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-php72" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/behat/behat" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/browser-kit" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/doctrine/instantiator" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/translation" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/php-timer" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/phpunit/phpunit" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-mbstring" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/translation-contracts" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/config" />
-      <path value="$PROJECT_DIR$/../moodle/moodle/vendor/symfony/polyfill-intl-grapheme" />
       <path value="$PROJECT_DIR$/kialo/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/kialo/vendor/codercat/jwk-to-pem" />
       <path value="$PROJECT_DIR$/kialo/vendor/defuse/php-encryption" />
@@ -257,6 +159,7 @@
       <path value="$PROJECT_DIR$/development/moodle/vendor/psr/container" />
       <path value="$PROJECT_DIR$/development/moodle/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/development/moodle/vendor/composer" />
+      <path value="$PROJECT_DIR$/development/moodle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">

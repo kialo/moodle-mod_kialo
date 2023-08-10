@@ -83,6 +83,16 @@ If you are using IntelliJ IDEA, the project files included in this project alrea
 
 Each time you add new test files, you need to run `development/tests-init.sh` again.
 
+## Linting
+
+We use PHP CodeSniffer to lint the code. To run the linter, execute `composer lint`.
+
+IntelliJ IDEA or PhpStorm have built-in support for PHP CodeSniffer, 
+and the included project files already include the necessary configuration.
+You can use "Inspect Code" to find linting issues.
+
+If you use Visual Studio Code, there as an [extension](https://marketplace.visualstudio.com/items?itemName=obliviousharmony.vscode-php-codesniffer#:~:text=Integrates%20PHP_CodeSniffer%20into%20VS%20Code,utilizes%20VS%20Code's%20available%20features.) for that, too.
+
 # Random Notes (temporary, should be removed/updated before release)
 
 ## Moodle 3 / 4 compatibility
