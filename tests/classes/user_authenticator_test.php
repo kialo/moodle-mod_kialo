@@ -114,15 +114,13 @@ class user_authenticator_test extends \advanced_testcase {
     }
 
     public function test_doesnt_work_for_guest_users() {
+        global $USER;
         $this->setGuestUser();
-        $this->resetAfterTest();
+        $this->getDataGenerator()->enrol_user($USER->id, $this->course->id, "student");
 
-        try {
-            $this->authenticate_user("69");
-            $this->fail('Exception expected because user is not logged-in as a real user.');
-        } catch (\moodle_exception $e) {
-            $this->assertEquals('redirecterrordetected', $e->errorcode);
-        }
+        $data = $this->authenticate_user("69");
+        $this->assertFalse($data->isSuccess());
+        $this->assertTrue($data->isAnonymous());
     }
 
     public function test_fails_when_not_logged_in() {

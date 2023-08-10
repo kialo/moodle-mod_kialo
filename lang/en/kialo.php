@@ -37,7 +37,8 @@ $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['discussion_url'] = 'Discussion URL';
 $string['select_discussion'] = 'Select Discussion';
-$string['select_discussion_help'] = 'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';
+$string['select_discussion_help'] =
+        'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';
 $string['discussion_title'] = 'Discussion Title';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
@@ -56,3 +57,6 @@ $string['view_redirect_loading'] = "Loading";
 // Displayed when users were redirected back from Kialo's LTI login to Moodle, redirecting now to Kialo's LTI launch endpoint.
 $string['lti_auth_redirect_title'] = "Loading";
 $string['lti_auth_redirect_loading'] = "Loading";
+
+// Errors.
+$string["nopermissiontoview"] = "You do not have permission to view this activity.";

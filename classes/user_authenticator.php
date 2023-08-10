@@ -4,6 +4,7 @@ namespace mod_kialo;
 
 defined('MOODLE_INTERNAL') || die();
 
+use context_course;
 use core_date;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterface;
@@ -17,10 +18,13 @@ class user_authenticator implements UserAuthenticatorInterface {
 
         // The login hint is in the form of "course_id/moodle_user_id".
         [$courseid, $userid] = explode("/", $loginhint);
+        $courseid = intval($courseid);
 
-        require_login(intval($courseid), false);
+        require_login($courseid, false);
 
-        if ($userid !== $USER->id) {
+        $context = context_course::instance($courseid);
+
+        if ($userid !== $USER->id || !has_capability("mod/kialo:view", $context)) {
             return new user_authentication_result(false);
         }
 

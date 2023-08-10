@@ -31,6 +31,8 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
+global $CFG;
+
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
 
@@ -51,6 +53,12 @@ if ($id) {
 }
 
 require_login($course, false, $cm);
+
+$context = context_module::instance($cm->id);
+
+if (!has_capability("mod/kialo:view", $context)) {
+    throw new \moodle_exception('nopermissiontoview', 'kialo');
+}
 
 $message = lti_flow::init_resource_link(
         $course->id,
