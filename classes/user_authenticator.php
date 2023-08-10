@@ -4,21 +4,18 @@ namespace mod_kialo;
 
 defined('MOODLE_INTERNAL') || die();
 
+use core_date;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterface;
 use OAT\Library\Lti1p3Core\Security\User\UserAuthenticatorInterface;
 use OAT\Library\Lti1p3Core\User\UserIdentity;
 
 class user_authenticator implements UserAuthenticatorInterface {
-    public function authenticate(
-            RegistrationInterface $registration,
-            string $loginHint
-    ): UserAuthenticationResultInterface {
+    public function authenticate(RegistrationInterface $registration, string $loginhint): UserAuthenticationResultInterface {
         global $USER;
         global $PAGE;
 
-        // the login hint is in the form of "course_id/moodle_user_id"
-        $loginhint = $_GET['login_hint'] ?? "";
+        // The login hint is in the form of "course_id/moodle_user_id".
         [$courseid, $userid] = explode("/", $loginhint);
 
         require_login(intval($courseid), false);
@@ -28,7 +25,6 @@ class user_authenticator implements UserAuthenticatorInterface {
         }
 
         return new user_authentication_result(true,
-                # TODO PM-42104: Add language and timezone
                 new UserIdentity(
                         $USER->username,
                         fullname($USER),
@@ -36,8 +32,11 @@ class user_authenticator implements UserAuthenticatorInterface {
                         $USER->firstname,
                         $USER->lastname,
                         $USER->middlename,
-                        null,
+                        $USER->lang,
                         (new \user_picture($USER))->get_url($PAGE),
+                        [
+                                "zoneinfo" => core_date::get_user_timezone_object()->getName(),
+                        ]
                 ));
     }
 }
