@@ -1,5 +1,7 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die();
+
 $capabilities = [
         // Add a Kialo activity to a course.
     'mod/kialo:addinstance' => [

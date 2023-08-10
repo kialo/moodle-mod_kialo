@@ -106,8 +106,8 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Deep Linking Button, allowing the user to select a discussion on Kialo.
         $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
-            "deploymentid" => $deploymentid,
-            "courseid" => $COURSE->id,
+                "deploymentid" => $deploymentid,
+                "courseid" => $COURSE->id,
         ]))->out(false);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
         $mform->addElement("html", "
