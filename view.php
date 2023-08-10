@@ -31,8 +31,8 @@ require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
-use mod_kialo\kialo_config;
 use mod_kialo\lti_flow;
+use mod_kialo\output\loading_page;
 
 // Course module id.
 $id = optional_param('id', 0, PARAM_INT);
@@ -52,19 +52,19 @@ if ($id) {
 
 require_login($course, false, $cm);
 
-$message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id, $moduleinstance->discussion_url);
+$message = lti_flow::init_resource_link(
+        $course->id,
+        $cm->id,
+        $moduleinstance->deployment_id,
+        $USER->id,
+        $moduleinstance->discussion_url
+);
 
-# TODO PM-41780: If something goes wrong above, show a helpful error
-# TODO PM-42133: Improve the loading screen below
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Redirecting to Kialo...</title>
-</head>
-<body>
-<?php
-echo $message->toHtmlRedirectForm();
-?>
-</body>
-</html>
+$output = $PAGE->get_renderer('mod_kialo');
+echo $output->render(new loading_page(
+        get_string("view_redirect_title", "mod_kialo"),
+        get_string("view_redirect_loading", "mod_kialo"),
+        $message->toHtmlRedirectForm()
+));
+
+// TODO PM-41780: If something goes wrong above, show a helpful error.

@@ -61,6 +61,10 @@ Project files for IntelliJ IDEA / PhpStorm are already included in the `.idea` f
 The IDEA project also includes a file watcher that automatically copies over the plugin files
 into the mounted moodle plugin folder on every change.
 
+## Moodle Activity Plugin Development
+
+* https://docs.moodle.org/dev/Activity_modules
+
 ## Testing
 
 Tests for the plugin are located in the `tests` folder. This need to be executed in the docker compose context,

@@ -19,9 +19,8 @@ require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 use GuzzleHttp\Psr7\ServerRequest;
-use mod_kialo\deep_linking_result;
-use mod_kialo\kialo_config;
 use mod_kialo\lti_flow;
+use mod_kialo\output\loading_page;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
 
 $courseid = optional_param('courseid', 0, PARAM_INT);
@@ -31,9 +30,9 @@ $deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 require_login($courseid, false);
 
 if ($courseid) {
-    // called by our activity creation form in Moodle to start the deeplinking flow
+    // Called by our activity creation form in Moodle to start the deeplinking flow.
 
-    // TODO PM-42182: Remove these lines
+    // TODO PM-42182: Remove these lines.
     $preselecteddiscussionurl = required_param('pdu', PARAM_URL);
 
     $deeplinkmsg = lti_flow::init_deep_link(
@@ -43,17 +42,19 @@ if ($courseid) {
             $preselecteddiscussionurl,
     );
 
-    echo sprintf("<html><head><title>%s</title></head><body>", get_string("deeplinking_redirect", "mod_kialo"));
-    // TODO: Should we show a loading screen here? right now it will just be a blank page
-    echo $deeplinkmsg->toHtmlRedirectForm();
-    echo "</body></html>";
+    $output = $PAGE->get_renderer('mod_kialo');
+    echo $output->render(new loading_page(
+            get_string("lti_select_redirect_title", "mod_kialo"),
+            get_string("lti_select_redirect_loading", "mod_kialo"),
+            $deeplinkmsg->toHtmlRedirectForm()
+    ));
 } else if ($idtoken) {
-    // received LtiDeepLinkingResponse from Kialo
+    // Received LtiDeepLinkingResponse from Kialo.
     try {
         $deploymentid = $_SESSION["kialo_deployment_id"];
         $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
     } catch (LtiException $e) {
-        // TODO PM-42186 error handling
+        // TODO PM-42186 error handling.
         echo 'LTI ERROR: ' . $e->getMessage();
         echo "<br>";
         echo $e->getTraceAsString();
@@ -77,10 +78,10 @@ if ($courseid) {
         }, \"*\");
     </script>";
 
-    // the user should basically not see this, or just very briefly
+    // The user should basically not see this, or just very briefly.
     echo '<br><br><br><br><center>You can close this window now.</center>';
 } else {
-    // should not happen. display moodle error page
+    // Should not happen. display moodle error page.
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string("deeplinking_error_generic_title", "mod_kialo"));
     echo $OUTPUT->error_text(get_string("deeplinking_error_generic_description", "mod_kialo"));
