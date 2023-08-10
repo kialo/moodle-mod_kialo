@@ -34,6 +34,10 @@
     "post-install-cmd": [
       "phpcs --config-set default_standard moodle"
     ],
-    "lint": "phpcs --standard=moodle --ignore=vendor,development ."
+    "lint": "phpcs --standard=moodle --ignore=vendor,development .",
+    "test": [
+      "./development/tests-init.sh",
+      "./development/tests-run-all.sh"
+    ]
   }
 }

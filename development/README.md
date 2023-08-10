@@ -77,6 +77,7 @@ To run all tests, follow these steps:
 
    * To run all tests, execute `development/tests-run-all.sh`
    * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
+   * Alternatively, you can use `composer test` to run both init and all tests.
 
 Each time you change the plugin code or a test, you need to run `development/sync.sh` again.
 If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
