@@ -59,6 +59,9 @@ $CFG->langstringcache = false;
 // This setting is only used during the installation process. So once the Moodle site is installed, it is ignored.
 $CFG->setsitepresetduringinstall = 'kialo-admin-preset.xml';
 
+// Make sure that the temp directories are not deleted during the backup process. Allows easier testing of the backup process.
+$CFG->keeptempdirectoriesonbackup = true;
+
 require_once(__DIR__ . '/lib/setup.php');
 
 // There is no php closing tag in this file,

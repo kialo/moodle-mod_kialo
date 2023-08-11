@@ -26,7 +26,7 @@
 /**
  * Custom uninstallation procedure.
  */
-function xmldb_kialox_uninstall() {
+function xmldb_kialo_uninstall() {
 
     return true;
 }
