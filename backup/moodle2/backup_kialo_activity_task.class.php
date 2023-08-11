@@ -50,11 +50,11 @@ class backup_kialo_activity_task extends \backup_activity_task {
 
         // Link to the list of choices.
         $search = "/(" . $base . "\/mod\/kialo\/index.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@KIALOACTIVITYINDEX*$2@$', $content);
+        $content = preg_replace($search, '$@KIALOINDEX*$2@$', $content);
 
         // Link to choice view by moduleid.
         $search = "/(" . $base . "\/mod\/kialo\/view.php\?id\=)([0-9]+)/";
-        $content = preg_replace($search, '$@KIALOACTIVITYVIEWBYID*$2@$', $content);
+        $content = preg_replace($search, '$@KIALOVIEWBYID*$2@$', $content);
 
         return $content;
     }
