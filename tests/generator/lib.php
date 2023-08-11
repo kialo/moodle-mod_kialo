@@ -5,6 +5,9 @@ class mod_kialo_generator extends testing_module_generator {
         $record = (object) (array) $record;
 
         // Set some useful defaults for tests.
+        if (!isset($record->name)) {
+            $record->name = "Some Kialo Discussion Activity";
+        }
         if (!isset($record->deployment_id)) {
             $record->deployment_d = "random string 1234";
         }
