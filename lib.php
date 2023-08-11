@@ -26,9 +26,14 @@
  * Return if the plugin supports $feature.
  *
  * @param string $feature Constant representing the feature.
- * @return true | null True if the feature is supported, null otherwise.
+ * @return true | string | null True if the feature is supported, null otherwise.
  */
 function kialo_supports($feature) {
+    if (defined("FEATURE_MOD_PURPOSE") && $feature === FEATURE_MOD_PURPOSE) {
+        // Moodle 4.0 and newer.
+        return MOD_PURPOSE_COLLABORATION;
+    }
+
     switch ($feature) {
         default:
             return null;
