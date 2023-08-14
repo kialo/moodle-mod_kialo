@@ -60,3 +60,24 @@ $string['lti_auth_redirect_loading'] = "Loading";
 
 // Errors.
 $string["nopermissiontoview"] = "You do not have permission to view this activity.";
+
+// Privacy API.
+$string['privacy:metadata:kialo'] = <<<TXT
+User data needs to be exchanged with Kialo Edu in order to automatically create accounts for Moodle users on kialo-edu.com,
+and to make the user experience is as seamless as possible.
+TXT;
+
+$string['privacy:metadata:kialo:userid'] = 'The userid is sent from Moodle to allow you to access your data on Kialo Edu.';
+$string['privacy:metadata:kialo:email'] = 'The email address is sent from Moodle to allow you to access your data on Kialo Edu.';
+$string['privacy:metadata:kialo:username'] = 'The user name is sent from Moodle to set the default user name Kialo Edu.';
+$string['privacy:metadata:kialo:fullname'] = 'Your full name is sent to Kialo Edu to allow a better user experience.';
+$string['privacy:metadata:kialo:language'] =
+        'Your language preference is sent to Kialo Edu to automatically set the user interface language.';
+$string['privacy:metadata:kialo:timezone'] =
+        'Your time zone preference is sent to Kialo Edu to automatically set the user time zone.';
+$string['privacy:metadata:kialo:picture'] = 'Your account picture is sent to Kialo Edu to allow a better user experience.';
+$string['privacy:metadata:kialo:role'] =
+        'The user\'s role in the course is used to determine the correct permissions in the Kialo discussion.';
+$string['privacy:metadata:kialo:courseid'] = 'The ID of the course the user is accessing Kialo Edu from.';
+$string['privacy:metadata:kialo:nullproviderreason'] =
+        'No user data is stored by our plugin in the Moodle database. Any data we use is stored externally on kialo-edu.com.';

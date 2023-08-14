@@ -64,6 +64,7 @@ into the mounted moodle plugin folder on every change.
 ## Moodle Activity Plugin Development
 
 * https://docs.moodle.org/dev/Activity_modules
+* https://moodledev.io/general/development/policies/codingstyle
 
 ## Testing
 
@@ -136,3 +137,7 @@ Try deleting both the docker images, and the folder `development/moodle`, and th
 * the plugin content should be at the root of the repo, not its own folder
 * the git repo should be called `moodle-mod_kialo`
 * configure CI to run the tests for different moodle versions, at least 3.9 (current LTS), 4.0 (next LTS), and latest moodle (4.2)
+* add default header to all files: https://moodledev.io/general/development/policies/codingstyle#files
+* add docblock to all PHP classes: https://moodledev.io/general/development/policies/codingstyle#phpdoc-classes
+* add docblock to all PHP functions https://moodledev.io/general/development/policies/codingstyle#functions
+* exceptions: https://moodledev.io/general/development/policies/codingstyle#exceptions
