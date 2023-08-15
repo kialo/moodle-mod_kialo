@@ -11,11 +11,20 @@ use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterfac
 use stdClass;
 
 class user_authenticator_test extends \advanced_testcase {
-    private stdClass $course;
+    /**
+     * @var stdClass The course that the activity is in.
+     */
+    private $course;
 
-    private stdClass $module;
+    /**
+     * @var stdClass The activity module.
+     */
+    private $module;
 
-    private RegistrationInterface $registrationstub;
+    /**
+     * @var RegistrationInterface
+     */
+    private $registrationstub;
 
     protected function setUp(): void {
         parent::setUp();

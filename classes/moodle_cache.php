@@ -11,7 +11,10 @@ use Cache\Adapter\Common\PhpCacheItem;
  * @see https://docs.moodle.org/dev/Cache_API
  */
 class moodle_cache extends AbstractCachePool {
-    private cache $moodlecache;
+    /**
+     * @var cache|\cache_application|\cache_session|\cache_store Moodle cache instance.
+     */
+    private $moodlecache;
 
     /**
      * Session-based cache for nonces.

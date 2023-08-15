@@ -8,7 +8,11 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 
 class static_registration_repository implements RegistrationRepositoryInterface {
-    private RegistrationInterface $registration;
+
+    /**
+     * @var RegistrationInterface
+     */
+    private $registration;
 
     public function __construct(RegistrationInterface $registration) {
         $this->registration = $registration;

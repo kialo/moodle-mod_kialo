@@ -23,13 +23,13 @@ use templatable;
 
 class loading_page implements renderable, templatable {
     /** @var string $sometext Title of the loading page (displayed in the window/tab title bar). */
-    private string $htmltitle = "";
+    private $htmltitle = "";
 
     /** @var string $loadingtext Text displayed on the loading page. */
-    private string $loadingtext = "";
+    private $loadingtext = "";
 
     /** @var string $extrahtml Arbitrary HTML to be inserted into the page. Used for redirect forms. */
-    private string $extrahtml = "";
+    private $extrahtml = "";
 
     public function __construct(string $htmltitle, string $loadingtext, string $extrahtml) {
         $this->htmltitle = $htmltitle;

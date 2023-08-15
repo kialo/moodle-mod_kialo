@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=7.4.0",
+    "php": ">=7.2.0",
     "oat-sa/lib-lti1p3-core": "^6.9",
     "guzzlehttp/guzzle": "^6.5 || ^7.0",
     "ext-openssl": "*",
@@ -19,7 +19,7 @@
   },
   "config": {
     "platform": {
-      "php": "7.4"
+      "php": "7.2"
     },
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true

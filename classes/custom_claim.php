@@ -9,7 +9,10 @@ use OAT\Library\Lti1p3Core\Message\Payload\Claim\MessagePayloadClaimInterface;
  */
 class custom_claim implements MessagePayloadClaimInterface {
 
-    private array $custom;
+    /**
+     * @var array any list of custom claims
+     */
+    private $custom;
 
     public static function getClaimName(): string {
         return "https://purl.imsglobal.org/spec/lti/claim/custom";
