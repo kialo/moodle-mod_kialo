@@ -157,7 +157,7 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id, int $discussion_id) {
+    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id, string $discussion_id) {
         $kialoconfig = kialo_config::get_instance();
 
         $registration = $kialoconfig->create_registration($deployment_id);
