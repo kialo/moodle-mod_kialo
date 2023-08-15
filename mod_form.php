@@ -78,12 +78,12 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'kialoname', 'mod_kialo');
 
-        // Discussion URL.
-        $mform->addElement("text", "discussion_url", get_string("discussion_url", "mod_kialo"), array("size" => "64"));
-        $mform->setType("discussion_url", PARAM_RAW);
-        $mform->addRule('discussion_url', null, 'required', null, 'client');
-        $mform->addRule('discussion_url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        // TODO PM-42266: make discussion_Url readonly or hide the field alltogether.
+        // Discussion Id.
+        $mform->addElement("text", "discussion_id", get_string("discussion_id", "mod_kialo"), array("size" => "64"));
+        $mform->setType("discussion_id", PARAM_RAW);
+        $mform->addRule('discussion_id', null, 'required', null, 'client');
+        $mform->addRule('discussion_id', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+        // TODO PM-42266: make discussion_id readonly or hide the field alltogether.
 
         // Discussion Title.
         $mform->addElement("text", "discussion_title", get_string("discussion_title", "mod_kialo"),
@@ -114,8 +114,8 @@ class mod_kialo_mod_form extends moodleform_mod {
         <script>
         var selectWindow = null;
         function start_deeplink() {
-            // pdu = preselected discussion url
-            var starturl = \"{$deeplinkurl}&pdu=\" + encodeURIComponent(document.getElementById(\"id_discussion_url\").value);
+            // pdi = preselected discussion id
+            var starturl = \"{$deeplinkurl}&pdi=\" + document.getElementById(\"id_discussion_id\").value;
             selectWindow = window.open(starturl, \"_blank\");
         }
         window.addEventListener(

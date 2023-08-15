@@ -35,7 +35,7 @@ $string['kialoname'] = 'Activity Name';
 $string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
-$string['discussion_url'] = 'Discussion URL';
+$string['discussion_id'] = 'Discussion Id';
 $string['select_discussion'] = 'Select Discussion';
 $string['select_discussion_help'] =
         'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';

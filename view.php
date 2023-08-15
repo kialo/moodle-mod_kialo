@@ -60,13 +60,7 @@ if (!has_capability("mod/kialo:view", $context)) {
     throw new \moodle_exception('nopermissiontoview', 'kialo');
 }
 
-$message = lti_flow::init_resource_link(
-        $course->id,
-        $cm->id,
-        $moduleinstance->deployment_id,
-        $USER->id,
-        $moduleinstance->discussion_url
-);
+$message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id);
 
 $output = $PAGE->get_renderer('mod_kialo');
 echo $output->render(new loading_page(

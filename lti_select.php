@@ -33,13 +33,13 @@ if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
 
     // TODO PM-42182: Remove these lines.
-    $preselecteddiscussionurl = required_param('pdu', PARAM_URL);
+    $preselecteddiscussionid = required_param('pdi', PARAM_TEXT);
 
     $deeplinkmsg = lti_flow::init_deep_link(
             $courseid,
             $USER->id,
             $deploymentid,
-            $preselecteddiscussionurl,
+            $preselecteddiscussionid,
     );
 
     $output = $PAGE->get_renderer('mod_kialo');
