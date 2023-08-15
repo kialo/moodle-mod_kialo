@@ -32,7 +32,7 @@ require_login($courseid, false);
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
 
-    // TODO PM-42182: Remove these lines.
+    // TODO PM-42266: Remove this line.
     $preselecteddiscussionid = required_param('pdi', PARAM_TEXT);
 
     $deeplinkmsg = lti_flow::init_deep_link(
