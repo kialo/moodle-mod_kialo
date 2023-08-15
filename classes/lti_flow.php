@@ -53,8 +53,7 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_resource_link(int $course_id, int $course_module_id, string $deployment_id, string $moodle_user_id,
-            ?string $target_link_uri = null) {
+    public static function init_resource_link(int $course_id, int $course_module_id, string $deployment_id, string $moodle_user_id) {
         $kialo_config = kialo_config::get_instance();
         $registration = $kialo_config->create_registration($deployment_id);
         $context = context_module::instance($course_module_id);
@@ -68,7 +67,7 @@ class lti_flow {
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-                $target_link_uri ?? 'TBD', // the final destination URL will decided by our backend
+                $kialo_config->get_tool_url(), // unused, as the final destination URL will be decided by our backend
                 $login_hint, // login hint that will be used afterwards by the platform to perform authentication
                 $deployment_id,
                 $roles,
