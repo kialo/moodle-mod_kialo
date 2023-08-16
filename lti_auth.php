@@ -43,8 +43,8 @@ $redirectform = preg_replace("/action=\".*?\"/i", 'action="' . $tool->getLaunchU
 
 $output = $PAGE->get_renderer('mod_kialo');
 echo $output->render(new loading_page(
-        get_string("lti_auth_redirect_title", "mod_kialo"),
-        get_string("lti_auth_redirect_loading", "mod_kialo"),
+        get_string("redirect_title", "mod_kialo"),
+        get_string("redirect_loading", "mod_kialo"),
         $redirectform
 ));
 

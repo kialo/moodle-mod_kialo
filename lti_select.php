@@ -44,8 +44,8 @@ if ($courseid) {
 
     $output = $PAGE->get_renderer('mod_kialo');
     echo $output->render(new loading_page(
-            get_string("lti_select_redirect_title", "mod_kialo"),
-            get_string("lti_select_redirect_loading", "mod_kialo"),
+            get_string("redirect_title", "mod_kialo"),
+            get_string("redirect_loading", "mod_kialo"),
             $deeplinkmsg->toHtmlRedirectForm()
     ));
 } else if ($idtoken) {

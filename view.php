@@ -64,8 +64,8 @@ $message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->d
 
 $output = $PAGE->get_renderer('mod_kialo');
 echo $output->render(new loading_page(
-        get_string("view_redirect_title", "mod_kialo"),
-        get_string("view_redirect_loading", "mod_kialo"),
+        get_string("redirect_title", "mod_kialo"),
+        get_string("redirect_loading", "mod_kialo"),
         $message->toHtmlRedirectForm()
 ));
 

@@ -46,17 +46,9 @@ $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI reque
 $string['deeplinking_error_generic_title'] = "Discussion Selection Error";
 $string['deeplinking_error_generic_description'] = "Something went wrong with the discussion selection. Please try again.";
 
-// Displayed while redirecting to Kialo during the deeplinking flow.
-$string['lti_select_redirect_title'] = "Loading";
-$string['lti_select_redirect_loading'] = "Loading";
-
-// Displayed initially when the student opens the activity, redirecting to Kialo's LTI login endpoint.
-$string['view_redirect_title'] = "Loading";
-$string['view_redirect_loading'] = "Loading";
-
-// Displayed when users were redirected back from Kialo's LTI login to Moodle, redirecting now to Kialo's LTI launch endpoint.
-$string['lti_auth_redirect_title'] = "Loading";
-$string['lti_auth_redirect_loading'] = "Loading";
+// Displayed while redirecting to Kialo during the LTI flows.
+$string['redirect_title'] = "Loading";
+$string['redirect_loading'] = "Loading";
 
 // Errors.
 $string["nopermissiontoview"] = "You do not have permission to view this activity.";
