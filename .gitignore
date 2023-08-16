@@ -39,3 +39,6 @@ vendor/
 
 # Local History for Visual Studio Code
 .history/
+
+# macOS
+.DS_Store
