@@ -32,7 +32,7 @@ function mod_kialo_verify_private_key() {
     $key = get_config('mod_kialo', 'privatekey');
 
     // If we already generated a valid key, no need to check.
-    if (empty($key)) {
+    if (empty($key) || true) {
 
         // Create the private key.
         $kid = bin2hex(openssl_random_pseudo_bytes(10));
