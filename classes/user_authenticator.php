@@ -30,7 +30,7 @@ class user_authenticator implements UserAuthenticatorInterface {
 
         return new user_authentication_result(true,
                 new UserIdentity(
-                        $USER->username,
+                        $USER->id,
                         fullname($USER),
                         $USER->email,
                         $USER->firstname,
@@ -38,8 +38,11 @@ class user_authenticator implements UserAuthenticatorInterface {
                         $USER->middlename,
                         $USER->lang,
                         (new \user_picture($USER))->get_url($PAGE),
+                        // Additional claims our app needs, but which are not required fields in LTI.
+                        // Using ODIC standard claims, see https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims.
                         [
                                 "zoneinfo" => core_date::get_user_timezone_object()->getName(),
+                                "preferred_username" => $USER->username,
                         ]
                 ));
     }

@@ -65,7 +65,8 @@ class user_authenticator_test extends \advanced_testcase {
 
         // The user details should be returned correctly.
         $identity = $data->getUserIdentity();
-        $this->assertEquals("hoschi", $identity->getIdentifier());
+        $this->assertEquals($user->id, $identity->getIdentifier());
+        $this->assertEquals("hoschi", $identity->getAdditionalProperties()->get('preferred_username'));
         $this->assertEquals("hoschi@mustermann.com", $identity->getEmail());
         $this->assertEquals("Horscht", $identity->getGivenName());
         $this->assertEquals("Mustermann", $identity->getFamilyName());
