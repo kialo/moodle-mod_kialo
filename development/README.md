@@ -44,7 +44,7 @@ To use the local Moodle instance with the mobile app, you need to change the app
 and enable web services following these instructions: https://docs.moodle.org/402/en/Mobile_web_services.
 If you imported the admin preset from `/development/config/kialo-admin-preset.xml`, this should already be done.
 
-## Used hosted Moodle instances
+## Use hosted Moodle instances
 
 If you don't want to or can't run Moodle locally, you can also use Moodle's hosted versions:
 
@@ -98,6 +98,16 @@ and the included project files already include the necessary configuration.
 You can use "Inspect Code" to find linting issues.
 
 If you use Visual Studio Code, there as an [extension](https://marketplace.visualstudio.com/items?itemName=obliviousharmony.vscode-php-codesniffer#:~:text=Integrates%20PHP_CodeSniffer%20into%20VS%20Code,utilizes%20VS%20Code's%20available%20features.) for that, too.
+
+## Creating Releases
+
+To release a new version, follow these steps:
+
+1. Ensure the version in `version.php` has been incremented.
+2. Run `composer bundle`. This will create the file `development/mod_kialo.zip`.
+3. Create a new release on GitHub, and upload the zip file as an asset. The release should be tagged with the version number (e.g. v0.3.1).
+
+    * Check "Set as a pre-release" and add a tag "-alpha" to the tag while we haven't published the plugin yet.
 
 # Random Notes (temporary, should be removed/updated before release)
 

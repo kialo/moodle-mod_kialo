@@ -160,6 +160,17 @@
       <path value="$PROJECT_DIR$/development/moodle/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/development/moodle/vendor/composer" />
       <path value="$PROJECT_DIR$/development/moodle" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/monolog/monolog" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/composer" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/../moodle/moodle/admin/tool/pluginskel/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/vendor/squizlabs/php_codesniffer" />
+      <path value="$PROJECT_DIR$/vendor/phpcompatibility/php-compatibility" />
+      <path value="$PROJECT_DIR$/vendor/moodlehq/moodle-cs" />
+      <path value="$PROJECT_DIR$/vendor/dealerdirect/phpcodesniffer-composer-installer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">
@@ -168,7 +179,6 @@
   <component name="PhpUnit">
     <phpunit_settings>
       <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/../moodle/moodle/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/../moodle/moodle/vendor/autoload.php" use_configuration_file="true" />
-      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/kialo/vendor/codercat/jwk-to-pem/phpunit.xml" custom_loader_path="$PROJECT_DIR$/kialo/vendor/autoload.php" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>

@@ -20,4 +20,4 @@ cd ../../..
 composer install
 
 echo "-----------------------------"
-echo "Bundle created: mod_kialo.zip"
+echo "Bundle created: development/mod_kialo.zip"

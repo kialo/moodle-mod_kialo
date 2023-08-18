@@ -44,6 +44,9 @@
       "cd development && ./sync.sh",
       "cd development && ./tests-init.sh",
       "cd development && ./tests-run.sh"
+    ],
+    "bundle": [
+      "cd development && ./bundle.sh"
     ]
   }
 }
