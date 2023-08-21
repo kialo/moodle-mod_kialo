@@ -26,7 +26,7 @@
  * Return if the plugin supports $feature.
  *
  * @param string $feature Constant representing the feature.
- * @return true | string | null True if the feature is supported, null otherwise.
+ * @return true | string | null Truthy if the feature is supported, null otherwise.
  */
 function kialo_supports($feature) {
     if (defined("FEATURE_MOD_PURPOSE") && $feature === FEATURE_MOD_PURPOSE) {
@@ -128,7 +128,9 @@ function kialo_get_coursemodule_info($coursemodule) {
  */
 function kialo_pre_enable_plugin_actions(): bool {
     // If the admin hasn't accepted the terms of service, don't enable the plugin.
-    if (get_config('mod_kialo', 'acceptterms') != '1') {
+    $acceptterms = get_config('mod_kialo', 'acceptterms');
+
+    if (!$acceptterms) {
         return false;
     }
 
