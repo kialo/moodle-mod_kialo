@@ -42,15 +42,15 @@ $string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 
-$string['deeplinking_error_generic_title'] = "Discussion Selection Error";
-$string['deeplinking_error_generic_description'] = "Something went wrong with the discussion selection. Please try again.";
-
 // Displayed while redirecting to Kialo during the LTI flows.
 $string['redirect_title'] = "Loading";
 $string['redirect_loading'] = "Loading";
 
 // Errors.
-$string["nopermissiontoview"] = "You do not have permission to view this activity.";
+$string["errors:nopermissiontoview"] = "You do not have permission to view this activity.";
+$string["errors:ltiauth"] = "Authentication failed due to an unexpected error. Please try again.";
+$string["errors:resourcelink"] = "Activity cannot be displayed, due to an unexpected error. Please try again.";
+$string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
 
 // Privacy API.
 $string['privacy:metadata:kialo'] =

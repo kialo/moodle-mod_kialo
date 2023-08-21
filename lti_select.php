@@ -31,11 +31,17 @@ require_login($courseid, false);
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
 
-    $deeplinkmsg = lti_flow::init_deep_link(
-            $courseid,
-            $USER->id,
-            $deploymentid,
-    );
+    // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
+    try {
+        $deeplinkmsg = lti_flow::init_deep_link(
+                $courseid,
+                $USER->id,
+                $deploymentid,
+        );
+    } catch (Throwable $e) {
+        // Show Moodle's default error page including some debug info.
+        throw new \moodle_exception('errors:deeplinking', 'kialo', '', null, $e->getMessage());
+    }
 
     $output = $PAGE->get_renderer('mod_kialo');
     echo $output->render(new loading_page(
@@ -47,8 +53,12 @@ if ($courseid) {
     // Received LtiDeepLinkingResponse from Kialo.
     $deploymentid = $_SESSION["kialo_deployment_id"];
 
-    // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
-    $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
+    try {
+        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
+    } catch (Throwable $e) {
+        // Show Moodle's default error page including some debug info.
+        throw new \moodle_exception('errors:deeplinking', 'kialo', '', null, $e->getMessage());
+    }
 
     // Inform the activity form about the successful selection. When acknowledged by the form, close the window.
     echo "<script>
@@ -72,8 +82,5 @@ if ($courseid) {
     echo '<br><br><br><br><center>You can close this window now.</center>';
 } else {
     // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
-    echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string("deeplinking_error_generic_title", "mod_kialo"));
-    echo $OUTPUT->error_text(get_string("deeplinking_error_generic_description", "mod_kialo"));
-    echo $OUTPUT->footer();
+    throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, "Invalid request.");
 }

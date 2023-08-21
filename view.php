@@ -57,16 +57,19 @@ require_login($course, false, $cm);
 $context = context_module::instance($cm->id);
 
 if (!has_capability("mod/kialo:view", $context)) {
-    throw new \moodle_exception('nopermissiontoview', 'kialo');
+    throw new \moodle_exception('errors:nopermissiontoview', 'kialo');
 }
 
-$message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id);
+try {
+    $message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id);
 
-$output = $PAGE->get_renderer('mod_kialo');
-echo $output->render(new loading_page(
-        get_string("redirect_title", "mod_kialo"),
-        get_string("redirect_loading", "mod_kialo"),
-        $message->toHtmlRedirectForm()
-));
-
-// TODO PM-42210: If something goes wrong above, show a helpful error.
+    $output = $PAGE->get_renderer('mod_kialo');
+    echo $output->render(new loading_page(
+            get_string("redirect_title", "mod_kialo"),
+            get_string("redirect_loading", "mod_kialo"),
+            $message->toHtmlRedirectForm()
+    ));
+} catch (Throwable $e) {
+    // Show Moodle's default error page including some debug info.
+    throw new \moodle_exception('errors:resourcelink', 'kialo', '', null, $e->getMessage());
+}
