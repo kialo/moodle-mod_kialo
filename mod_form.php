@@ -82,6 +82,7 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("text", "discussion_title", get_string("discussion_title", "mod_kialo"),
                 array("size" => "64", "readonly" => true));
         $mform->setType("discussion_title", PARAM_TEXT);
+        $mform->addRule('discussion_title', null, 'required', null, 'client');
 
         // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
         // which means the user successfully linked the discussion via the deeplinking button.
