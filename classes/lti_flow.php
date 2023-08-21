@@ -153,12 +153,11 @@ class lti_flow {
      * @param int $course_id
      * @param int $course_module_id
      * @param string $moodle_user_id
-     * @param string $discussion_id TODO PM-42266: Remove this parameter
      * @return LtiMessageInterface
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id, string $discussion_id) {
+    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id) {
         $kialoconfig = kialo_config::get_instance();
 
         $registration = $kialoconfig->create_registration($deployment_id);
@@ -197,7 +196,6 @@ class lti_flow {
                                 null, // text, unused
                                 $datatoken,
                         ),
-                        new custom_claim(["preselected_discussion_id" => $discussion_id]),
                 ]
         );
     }

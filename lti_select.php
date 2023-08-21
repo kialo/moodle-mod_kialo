@@ -32,14 +32,10 @@ require_login($courseid, false);
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
 
-    // TODO PM-42266: Remove this line.
-    $preselecteddiscussionid = required_param('pdi', PARAM_TEXT);
-
     $deeplinkmsg = lti_flow::init_deep_link(
             $courseid,
             $USER->id,
             $deploymentid,
-            $preselecteddiscussionid,
     );
 
     $output = $PAGE->get_renderer('mod_kialo');
@@ -70,10 +66,10 @@ if ($courseid) {
             }
         },
         false );
-        window.opener.postMessage({ 
-            type: \"selected\", 
-            deployment_id: \"{$link->deploymentid}\", 
-            discussion_url: \"{$link->discussionurl}\", 
+        window.opener.postMessage({
+            type: \"selected\",
+            deployment_id: \"{$link->deploymentid}\",
+            discussion_url: \"{$link->discussionurl}\",
             discussion_title: \"{$link->discussiontitle}\"
         }, \"*\");
     </script>";

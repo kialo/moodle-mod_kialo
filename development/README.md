@@ -77,14 +77,14 @@ To run all tests, follow these steps:
 
 1. Start the docker compose setup: `cd development; docker compose up`
 2. Initialise the test environment: `development/tests-init.sh`
-3. Ensure the plugin files are synchronized with the Moodle instance: `development/sync.sh`
+3. Ensure the plugin files are synchronized with the Moodle instance: `cd development; sync.sh`
 4. Run the tests:
 
    * To run all tests, execute `development/tests-run-all.sh`
    * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
    * Alternatively, you can use `composer test` to run both init and all tests.
 
-Each time you change the plugin code or a test, you need to run `development/sync.sh` again.
+Each time you change the plugin code or a test, you need to run `cd development; sync.sh` again.
 If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
 
 Each time you add new test files, you need to run `development/tests-init.sh` again.
@@ -93,7 +93,7 @@ Each time you add new test files, you need to run `development/tests-init.sh` ag
 
 We use PHP CodeSniffer to lint the code. To run the linter, execute `composer lint`.
 
-IntelliJ IDEA or PhpStorm have built-in support for PHP CodeSniffer, 
+IntelliJ IDEA or PhpStorm have built-in support for PHP CodeSniffer,
 and the included project files already include the necessary configuration.
 You can use "Inspect Code" to find linting issues.
 
