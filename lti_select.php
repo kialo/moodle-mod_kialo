@@ -21,7 +21,6 @@ require_once('vendor/autoload.php');
 use GuzzleHttp\Psr7\ServerRequest;
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
-use OAT\Library\Lti1p3Core\Exception\LtiException;
 
 $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
@@ -44,19 +43,14 @@ if ($courseid) {
             get_string("redirect_loading", "mod_kialo"),
             $deeplinkmsg->toHtmlRedirectForm()
     ));
-} else if ($idtoken) {
+} else if ($idtoken && isset($_SESSION["kialo_deployment_id"])) {
     // Received LtiDeepLinkingResponse from Kialo.
-    try {
-        $deploymentid = $_SESSION["kialo_deployment_id"];
-        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
-    } catch (LtiException $e) {
-        // TODO PM-42186 error handling.
-        echo 'LTI ERROR: ' . $e->getMessage();
-        echo "<br>";
-        echo $e->getTraceAsString();
-        die();
-    }
+    $deploymentid = $_SESSION["kialo_deployment_id"];
 
+    // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
+    $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
+
+    // Inform the activity form about the successful selection. When acknowledged by the form, close the window.
     echo "<script>
     window.addEventListener(
         'message',
@@ -77,7 +71,7 @@ if ($courseid) {
     // The user should basically not see this, or just very briefly.
     echo '<br><br><br><br><center>You can close this window now.</center>';
 } else {
-    // Should not happen. display moodle error page.
+    // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string("deeplinking_error_generic_title", "mod_kialo"));
     echo $OUTPUT->error_text(get_string("deeplinking_error_generic_description", "mod_kialo"));
