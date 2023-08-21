@@ -120,3 +120,30 @@ function kialo_get_coursemodule_info($coursemodule) {
 
     return $info;
 }
+
+/**
+ * Callback method executed prior to enabling the activity module.
+ *
+ * @return bool Whether to proceed and enable the plugin or not.
+ */
+function kialo_pre_enable_plugin_actions(): bool {
+    // If the admin hasn't accepted the terms of service, don't enable the plugin.
+    if (get_config('mod_kialo', 'acceptterms') != '1') {
+        return false;
+    }
+
+    // Otherwise, continue and enable the plugin.
+    return true;
+}
+
+/**
+ * Ensures the activity is only enabled when the terms have been accepted.
+ *
+ * @return void
+ * @throws dml_exception
+ */
+function kialo_update_visibility_depending_on_accepted_terms(): void {
+    global $DB;
+    $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
+    $DB->set_field('modules', 'visible', $visible, ['name' => 'kialo']);
+}

@@ -38,7 +38,7 @@ $string['kialofieldset'] = 'Kialo Fieldset';
 $string['select_discussion'] = 'Select Discussion';
 $string['select_discussion_help'] =
         'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';
-$string['discussion_title'] = 'Discussion Title';
+$string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 
@@ -71,3 +71,12 @@ $string['privacy:metadata:kialo:role'] =
 $string['privacy:metadata:kialo:courseid'] = 'The ID of the course the user is accessing Kialo Edu from.';
 $string['privacy:metadata:kialo:nullproviderreason'] =
         'No user data is stored by our plugin in the Moodle database. Any data we use is stored externally on kialo-edu.com.';
+
+// Settings.
+$string["acceptterms"] = "Accept Terms of Service";
+$string["acceptterms_desc"] =
+        'By checking the checkbox you accept Kialo Edu’s <a href="{$a->terms}" target="_blank">terms of service</a> on behalf of ' .
+        'all users of this Moodle instance. <a href="{$a->privacy}" target="_blank">Click here</a> to have a look at our ' .
+        'Data Security and Privacy Plan.';
+$string["termsnotaccepted"] =
+        'Before enabling this plugin, you must confirm that you have read and accepted the <a href="{$a}">terms of service</a>.';

@@ -23,11 +23,13 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->dirroot . '/mod/kialo/lib.php');
+
 /**
  * Custom code to be run on installing the plugin.
  */
 function xmldb_kialo_install() {
-    global $CFG, $OUTPUT;
+    global $CFG, $OUTPUT, $DB;
 
     // Create the private key.
     require_once($CFG->dirroot . '/mod/kialo/upgradelib.php');
@@ -36,5 +38,8 @@ function xmldb_kialo_install() {
     if (!empty($warning)) {
         echo $OUTPUT->notification($warning, 'notifyproblem');
     }
+
+    kialo_update_visibility_depending_on_accepted_terms();
+
     return true;
 }
