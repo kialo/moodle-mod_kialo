@@ -1,4 +1,4 @@
-# Kialo Debates #
+# Kialo Discussions #
 
 TODO Describe the plugin shortly here.
 

@@ -25,12 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['modulename'] = 'Kialo Debate';
-$string['modulenameplural'] = 'Kialo Debates';
-$string['pluginname'] = 'Kialo Debate';
+$string['modulename'] = 'Kialo Discussion';
+$string['modulenameplural'] = 'Kialo Discussions';
+$string['pluginname'] = 'Kialo Discussion';
 $string['hello'] = 'Hello World!';
-$string['kialo:addinstance'] = 'Add a new Kialo Debate';
-$string['pluginadministration'] = 'Edit Kialo Debate';
+$string['kialo:addinstance'] = 'Add a new Kialo Discussion';
+$string['pluginadministration'] = 'Edit Kialo Discussion';
 $string['kialoname'] = 'Activity Name';
 $string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
