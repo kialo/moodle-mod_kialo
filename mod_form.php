@@ -94,36 +94,43 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("hidden", "deployment_id", $deploymentid);
         $mform->setType("deployment_id", PARAM_RAW);
 
-        // TODO: Show an error when the hidden fields weren't filled (because deeplinking didn't happen yet).
-
         // Deep Linking Button, allowing the user to select a discussion on Kialo.
         $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
                 "deploymentid" => $deploymentid,
                 "courseid" => $COURSE->id,
         ]))->out(false);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
+
+        // Scripts that handle the deeplinking response from the other tab via postMessage.
+        $defaultnameprefix = get_string('defaultactivitynameprefix', 'mod_kialo');
         $mform->addElement("html", "
         <script>
-        var selectWindow = null;
+        var kialoSelectWindow = null;
         function start_deeplink() {
-            selectWindow = window.open(\"{$deeplinkurl}\", \"_blank\");
+            kialoSelectWindow = window.open('{$deeplinkurl}', '_blank');
         }
         window.addEventListener(
-          \"message\",
+          'message',
           (event) => {
-              if (event.data.type !== \"selected\") return;
+              if (event.data.type !== 'selected') return;
 
-              // fill in the deep-linked details
-              document.querySelector(\"input[name=discussion_url]\").value = event.data.discussion_url;
-              document.querySelector(\"input[name=deployment_id]\").value = event.data.deployment_id;
-              document.querySelector(\"input[name=discussion_title]\").value = event.data.discussion_title;
+              // Fill in the deep-linked details.
+              document.querySelector('input[name=discussion_url]').value = event.data.discussion_url;
+              document.querySelector('input[name=deployment_id]').value = event.data.deployment_id;
+              document.querySelector('input[name=discussion_title]').value = event.data.discussion_title;
+              
+              // Prefill activity name based on discussion title if user hasn't entered one yet.
+              const nameInput = document.querySelector('input[name=name]');
+              if (!nameInput.value) {
+                  nameInput.value = ['{$defaultnameprefix}', event.data.discussion_title].join(' ');
+              }
 
-              // trigger closing of the selection tab
-              selectWindow.postMessage({ type: \"acknowledged\" }, \"*\");
+              // Trigger closing of the selection tab.
+              kialoSelectWindow.postMessage({ type: 'acknowledged' }, '*');
           },
           false,
         );
-        document.getElementById(\"id_kialo_select_discussion\").addEventListener(\"click\", start_deeplink);
+        document.getElementById('id_kialo_select_discussion').addEventListener('click', start_deeplink);
         </script>
         ");
         $mform->addHelpButton("kialo_select_discussion", "select_discussion", "mod_kialo");

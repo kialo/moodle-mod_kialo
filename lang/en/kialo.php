@@ -41,6 +41,7 @@ $string['select_discussion_help'] =
 $string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
+$string['defaultactivitynameprefix'] = "Kialo Discussion:";
 
 // Displayed while redirecting to Kialo during the LTI flows.
 $string['redirect_title'] = "Loading";
