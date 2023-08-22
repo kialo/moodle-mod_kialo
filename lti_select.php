@@ -61,21 +61,15 @@ if ($courseid) {
     }
 
     // Inform the activity form about the successful selection. When acknowledged by the form, close the window.
+    $message = json_encode([
+            "type" => "kialo_discussion_selected",
+            "deploymentid" => $link->deploymentid,
+            "discussionurl" => $link->discussionurl,
+            "discussiontitle" => $link->discussiontitle
+    ]);
     echo "<script>
-    window.addEventListener(
-        'message',
-        (event) => {
-            if (event.data.type === 'acknowledged') {
-                window.close();
-            }
-        },
-        false );
-        window.opener.postMessage({
-            type: \"selected\",
-            deployment_id: \"{$link->deploymentid}\",
-            discussion_url: \"{$link->discussionurl}\",
-            discussion_title: \"{$link->discussiontitle}\"
-        }, \"*\");
+        window.addEventListener('message', (event) => event.data.type === 'kialo_selection_acknowledged' && window.close());
+        window.opener.postMessage({$message}, '*');
     </script>";
 
     // The user should basically not see this, or just very briefly.
