@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\plugininfo\mod;
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -148,7 +150,6 @@ function kialo_pre_enable_plugin_actions(): bool {
  * @throws dml_exception
  */
 function kialo_update_visibility_depending_on_accepted_terms(): void {
-    global $DB;
     $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
-    $DB->set_field('modules', 'visible', $visible, ['name' => 'kialo']);
+    mod::enable_plugin("kialo", $visible);
 }
