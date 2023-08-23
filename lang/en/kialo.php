@@ -17,6 +17,10 @@
 /**
  * Plugin strings are defined here.
  *
+ * Note: Due to technical limitations of Moodle's translation system AMOS,
+ * string concatenation, interpolation, and some other string features are not allowed.
+ * All strings must be simple assignments of scalar values, i.e. `$string['key'] = 'value';`.
+ *
  * @package     mod_kialo
  * @category    string
  * @copyright   2023 Kialo Inc. <support@kialo-edu.com>
@@ -32,7 +36,6 @@ $string['hello'] = 'Hello World!';
 $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['pluginadministration'] = 'Edit Kialo Discussion';
 $string['kialoname'] = 'Activity Name';
-$string['kialoname_help'] = 'Get help';
 $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['select_discussion'] = 'Select Discussion';
@@ -42,6 +45,11 @@ $string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 $string['defaultactivitynameprefix'] = "Kialo Discussion:";
+
+// Help texts.
+$string['modulename_help'] =
+        'The Kialo activity allows you to embed a Kialo discussion into your Moodle course. Students can participate in the discussion directly from Moodle, without having to create a separate Kialo account. The Kialo activity is a great way to foster critical thinking and collaborative learning.';
+$string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
 
 // Displayed while redirecting to Kialo during the LTI flows.
 $string['redirect_title'] = "Loading";
