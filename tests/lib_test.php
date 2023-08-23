@@ -49,7 +49,7 @@ class lib_test extends \advanced_testcase {
 
         $this->assertTrue(kialo_supports(FEATURE_BACKUP_MOODLE2));
 
-        $this->assertNull(kialo_supports(FEATURE_MOD_INTRO));
+        $this->assertFalse(kialo_supports(FEATURE_MOD_INTRO));
 
         // Grades and groups are not supported yet, but will be in the future.
         $this->assertNull(kialo_supports(FEATURE_GROUPS));
