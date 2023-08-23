@@ -28,12 +28,11 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @return string A warning message if a private key does not exist and cannot be generated.
  */
-function mod_kialo_verify_private_key() {
+function mod_kialo_verify_private_key(): string {
     $key = get_config('mod_kialo', 'privatekey');
 
     // If we already generated a valid key, no need to check.
-    if (empty($key) || true) {
-
+    if (empty($key)) {
         // Create the private key.
         $kid = bin2hex(openssl_random_pseudo_bytes(10));
         set_config('kid', $kid, 'mod_kialo');
