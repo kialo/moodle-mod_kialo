@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    // Add a Kialo activity to a course.
+        // Add a Kialo activity to a course.
         'mod/kialo:addinstance' => [
                 'riskbitmask' => RISK_SPAM,
                 'captype' => 'write',
@@ -38,7 +38,7 @@ $capabilities = [
                 'clonepermissionsfrom' => 'moodle/course:manageactivities',
         ],
 
-    // Whether the user can see the link to the Kialo discussion and follow it.
+        // Whether the user can see the link to the Kialo discussion and follow it.
         'mod/kialo:view' => [
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_MODULE,
@@ -50,9 +50,9 @@ $capabilities = [
                 ],
         ],
 
-    // When the user arrives at Kialo, if they have this capability
-    // in Moodle, then they are given the Admin role in the linked Kialo discussion.
-    // Otherwise they are given Writer permissions. See lti_flow::assign_lti_roles.
+        // When the user arrives at Kialo, if they have this capability
+        // in Moodle, then they are given the Admin role in the linked Kialo discussion.
+        // Otherwise they are given Writer permissions. See lti_flow::assign_lti_roles.
         'mod/kialo:kialo_admin' => [
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_MODULE,
