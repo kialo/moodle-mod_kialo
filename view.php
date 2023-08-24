@@ -52,10 +52,14 @@ if ($id) {
     $cm = get_coursemodule_from_instance('kialo', $moduleinstance->id, $course->id, false, MUST_EXIST);
 }
 
-require_login($course, false, $cm);
-require_capability('mod/kialo:view', context_module::instance($cm->id));
-
 $context = context_module::instance($cm->id);
+
+require_login($course, false, $cm);
+require_capability('mod/kialo:view', $context);
+
+if (isguestuser() || is_guest($context)) {
+    throw new \moodle_exception('errors:noguestaccess', 'kialo');
+}
 
 try {
     $message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id);

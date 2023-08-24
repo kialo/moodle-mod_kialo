@@ -62,6 +62,7 @@ $string["errors:nopermissiontoview"] = "You do not have permission to view this 
 $string["errors:ltiauth"] = "Authentication failed due to an unexpected error. Please try again.";
 $string["errors:resourcelink"] = "Activity cannot be displayed, due to an unexpected error. Please try again.";
 $string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
+$string['errors:noguestaccess'] = "Guests cannot access this activity. Please log in.";
 
 // Privacy API.
 $string['privacy:metadata:kialo'] =
