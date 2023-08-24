@@ -27,6 +27,7 @@ $idtoken = optional_param("JWT", "", PARAM_TEXT);
 $deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
 require_login($courseid, false);
+require_capability('mod/kialo:addinstance', context_course::instance($courseid));
 
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
