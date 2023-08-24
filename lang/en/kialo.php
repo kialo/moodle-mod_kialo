@@ -33,7 +33,6 @@ $string['modulename'] = 'Kialo Discussion';
 $string['modulenameplural'] = 'Kialo Discussions';
 $string['pluginname'] = 'Kialo Discussion';
 $string['hello'] = 'Hello World!';
-$string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['pluginadministration'] = 'Edit Kialo Discussion';
 $string['kialoname'] = 'Activity Name';
 $string['kialosettings'] = 'Settings';
@@ -45,6 +44,9 @@ $string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 $string['defaultactivitynameprefix'] = "Kialo Discussion:";
+$string['kialo:addinstance'] = 'Add a new Kialo Discussion';
+$string['kialo:view'] = 'View Kialo Discussion';
+$string['kialo:kialo_admin'] = 'Administrate Kialo Discussion';
 
 // Help texts.
 $string['modulename_help'] =
