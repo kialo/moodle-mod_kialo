@@ -40,7 +40,10 @@ $capabilities = [
 
         // Whether the user can see the link to the Kialo discussion and follow it.
         'mod/kialo:view' => [
-                'captype' => 'read',
+                // Despite being called "view", this is a write capability, since users that access the
+                // Kialo discussion get Writer permissions on it, as well. Therefore they can add claims (write to it).
+                // This explicitly excludes guests and non-logged-in Moodle users.
+                'captype' => 'write',
                 'contextlevel' => CONTEXT_MODULE,
                 'archetypes' => [
                         'student' => CAP_ALLOW,

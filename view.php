@@ -53,12 +53,9 @@ if ($id) {
 }
 
 require_login($course, false, $cm);
+require_capability('mod/kialo:view', context_module::instance($cm->id));
 
 $context = context_module::instance($cm->id);
-
-if (!has_capability("mod/kialo:view", $context)) {
-    throw new \moodle_exception('errors:nopermissiontoview', 'kialo');
-}
 
 try {
     $message = lti_flow::init_resource_link($course->id, $cm->id, $moduleinstance->deployment_id, $USER->id);
