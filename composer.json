@@ -46,6 +46,11 @@
       "cd development && ./tests-init.sh",
       "cd development && ./tests-run.sh"
     ],
+    "test-privacy": [
+      "cd development && ./sync.sh",
+      "cd development && ./tests-init.sh",
+      "cd development && ./tests-privacy.sh"
+    ],
     "bundle": [
       "cd development && ./bundle.sh"
     ]
