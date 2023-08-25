@@ -101,7 +101,6 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
 
         // Scripts that handle the deeplinking response from the other tab via postMessage.
-        $defaultnameprefix = get_string('defaultactivitynameprefix', 'mod_kialo');
         $mform->addElement("html", "<script>
             var kialoSelectWindow = null;
             document.getElementById('id_kialo_select_discussion').addEventListener('click', () => {
@@ -120,7 +119,7 @@ class mod_kialo_mod_form extends moodleform_mod {
                   // Prefill activity name based on discussion title if user hasn't entered one yet.
                   const nameInput = document.querySelector('input[name=name]');
                   if (!nameInput.value) {
-                      nameInput.value = ['{$defaultnameprefix}', event.data.discussiontitle].join(' ');
+                      nameInput.value = event.data.discussiontitle];
                   }
 
                   // Trigger closing of the selection tab.

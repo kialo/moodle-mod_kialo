@@ -43,7 +43,6 @@ $string['select_discussion_help'] =
 $string['discussion_title'] = 'Discussion Name';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
-$string['defaultactivitynameprefix'] = "Kialo Discussion:";
 $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['kialo:view'] = 'View Kialo Discussion';
 $string['kialo:kialo_admin'] = 'Administrate Kialo Discussion';
