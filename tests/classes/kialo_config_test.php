@@ -64,7 +64,7 @@ class kialo_config_test extends \advanced_testcase {
 
         $this->assertEquals("https://www.example.com/moodle/mod/kialo", $platform->getAudience());
         $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_auth.php", $platform->getOidcAuthenticationUrl());
-        $this->assertEquals("kialo-moodle-plguin", $platform->getIdentifier());
+        $this->assertEquals("kialo-moodle-plugin", $platform->getIdentifier());
         $this->assertEquals("Kialo Moodle Plugin", $platform->getName());
     }
 

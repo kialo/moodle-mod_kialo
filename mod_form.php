@@ -119,7 +119,7 @@ class mod_kialo_mod_form extends moodleform_mod {
                   // Prefill activity name based on discussion title if user hasn't entered one yet.
                   const nameInput = document.querySelector('input[name=name]');
                   if (!nameInput.value) {
-                      nameInput.value = event.data.discussiontitle];
+                      nameInput.value = event.data.discussiontitle;
                   }
 
                   // Trigger closing of the selection tab.

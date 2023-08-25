@@ -65,7 +65,7 @@ class kialo_config {
      */
     public function get_platform(): Platform {
         return new Platform(
-                'kialo-moodle-plguin',                              // Identifier.
+                'kialo-moodle-plugin',                              // Identifier.
                 'Kialo Moodle Plugin',                              // Name.
                 (new moodle_url('/mod/kialo'))->out(),              // Audience.
                 (new moodle_url('/mod/kialo/lti_auth.php'))->out(), // OIDC authentication url.
