@@ -13,6 +13,7 @@ use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
 use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
+use OAT\Library\Lti1p3Core\Security\Jwt\Validator\ValidatorInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
@@ -200,7 +201,7 @@ class lti_flow {
         );
     }
 
-    public static function lti_auth(): LtiMessageInterface {
+    public static function lti_auth(?ValidatorInterface $validator = null): LtiMessageInterface {
         $kialo_config = kialo_config::get_instance();
         $registration = $kialo_config->create_registration();
 
@@ -216,7 +217,7 @@ class lti_flow {
         $payloadBuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
 
         // Create the OIDC authenticator
-        $authenticator = new OidcAuthenticator($registrationRepository, $userAuthenticator, $payloadBuilder);
+        $authenticator = new OidcAuthenticator($registrationRepository, $userAuthenticator, $payloadBuilder, $validator);
 
         // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint')
         return $authenticator->authenticate($request);
