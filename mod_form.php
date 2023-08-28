@@ -83,11 +83,6 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->setType("discussion_title", PARAM_TEXT);
         $mform->addRule('discussion_title', null, 'required', null, 'client');
 
-        // Hidden copy of discussion URL filled by deeplinking. Form can only be submitted if this matches the field above,
-        // which means the user successfully linked the discussion via the deeplinking button.
-        $mform->addElement("hidden", "discussion_url", "");
-        $mform->setType("discussion_url", PARAM_RAW);
-
         // Deployment ID, filled when selecting the discussion.
         $deploymentid = $this->get_deployment_id();
         $mform->addElement("hidden", "deployment_id", $deploymentid);
@@ -112,7 +107,6 @@ class mod_kialo_mod_form extends moodleform_mod {
                   if (event.data.type !== 'kialo_discussion_selected') return;
 
                   // Fill in the deep-linked details.
-                  document.querySelector('input[name=discussion_url]').value = event.data.discussionurl;
                   document.querySelector('input[name=deployment_id]').value = event.data.deploymentid;
                   document.querySelector('input[name=discussion_title]').value = event.data.discussiontitle;
                   

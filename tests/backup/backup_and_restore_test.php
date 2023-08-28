@@ -68,7 +68,6 @@ class backup_and_restore_test extends advanced_testcase {
                 'course' => $course,
                 'name' => 'Some Kialo Discussion Activity',
                 'deployment_id' => '42lashf13.34ih',
-                'discussion_url' => 'https://www.kialo-edu.com/slug-123',
                 'discussion_title' => 'Test discussion',
         ]);
 
@@ -82,7 +81,6 @@ class backup_and_restore_test extends advanced_testcase {
         $this->assertEquals($activity->intro, $activity2->intro);
         $this->assertEquals($activity->introformat, $activity2->introformat);
         $this->assertEquals($activity->deployment_id, $activity2->deployment_id);
-        $this->assertEquals($activity->discussion_url, $activity2->discussion_url);
     }
 
     /**
