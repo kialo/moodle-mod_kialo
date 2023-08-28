@@ -25,6 +25,9 @@
  * @category    string
  * @copyright   2023 Kialo Inc. <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
+ * phpcs:disable moodle.Files.LineLength.MaxExceeded
+ * phpcs:disable moodle.Files.LineLength.TooLong
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -87,8 +90,6 @@ $string['privacy:metadata:kialo:nullproviderreason'] =
 // Settings.
 $string["acceptterms"] = "Accept Terms of Service";
 $string["acceptterms_desc"] =
-        'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of ' .
-        'all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our ' .
-        '<a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
+        'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our <a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
 $string["termsnotaccepted"] =
         'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
