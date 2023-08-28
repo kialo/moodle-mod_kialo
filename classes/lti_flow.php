@@ -35,9 +35,9 @@ class lti_flow {
 
         $roles = [];
         if (has_capability('mod/kialo:kialo_admin', $context)) {
-            array_push($roles, 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor');
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor';
         } else {
-            array_push($roles, 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner');
+            $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner';
         }
 
         return $roles;

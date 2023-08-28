@@ -28,7 +28,7 @@ namespace mod_kialo\backup;
 use advanced_testcase;
 use backup;
 use backup_controller;
-use backup_setting;
+use base_setting;
 use restore_controller;
 use restore_dbops;
 use stdClass;
@@ -104,7 +104,7 @@ class backup_and_restore_test extends advanced_testcase {
                 $USER->id);
 
         // Don't need userdata.
-        $bc->get_plan()->get_setting('users')->set_status(backup_setting::NOT_LOCKED);
+        $bc->get_plan()->get_setting('users')->set_status(base_setting::NOT_LOCKED);
         $bc->get_plan()->get_setting('users')->set_value(false);
 
         $backupid = $bc->get_backupid();
@@ -120,7 +120,7 @@ class backup_and_restore_test extends advanced_testcase {
                 backup::TARGET_NEW_COURSE);
 
         // Don't need userdata.
-        $rc->get_plan()->get_setting('users')->set_status(backup_setting::NOT_LOCKED);
+        $rc->get_plan()->get_setting('users')->set_status(base_setting::NOT_LOCKED);
         $rc->get_plan()->get_setting('users')->set_value(false);
 
         $this->assertTrue($rc->execute_precheck());
