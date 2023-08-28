@@ -8,7 +8,10 @@ use Cache\Adapter\Common\PhpCacheItem;
 
 /**
  * Uses Moodle's Cache API to implement a PSR-6 compatible cache.
+ *
  * @see https://docs.moodle.org/dev/Cache_API
+ *
+ * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
  */
 class moodle_cache extends AbstractCachePool {
     /**
@@ -32,7 +35,7 @@ class moodle_cache extends AbstractCachePool {
     }
 
     protected function storeItemInCache(PhpCacheItem $item, $ttl): bool {
-        // Moodle's Cache API does not support TTL, so we ignore it
+        // Moodle's Cache API does not support TTL, so we ignore it.
         return $this->moodlecache->set($item->getKey(), $item->get());
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-# TODO: Consider implementing key rotation
+// TODO: Consider implementing key rotation
 
 require(__DIR__.'/../../config.php');
 require_once(__DIR__.'/lib.php');
@@ -11,22 +11,20 @@ use OAT\Library\Lti1p3Core\Security\Key\KeyChainFactory;
 use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
 
 $kid = get_config("mod_kialo", "kid");
-$privatekey_str = get_config("mod_kialo", "privatekey");
+$privatekeystr = get_config("mod_kialo", "privatekey");
 
-$privatekey = openssl_pkey_get_private($privatekey_str);
+$privatekey = openssl_pkey_get_private($privatekeystr);
 $pk = openssl_pkey_get_details($privatekey);
-$publickey_str = $pk['key'];
+$publickeystr = $pk['key'];
 
-$platformKeyChain = (new KeyChainFactory)->create(
-        $kid,                                // [required] identifier (used for JWT kid header)
-        'kialo',                        // [required] key set name (for grouping)
-        $publickey_str, // [required] public key (file or content)
-        $privatekey_str,     // [optional] private key (file or content)
-        '',                             // [optional] private key passphrase (if existing)
-        KeyInterface::ALG_RS256            // [optional] algorithm (default: RS256)
+$platformkeychain = (new KeyChainFactory)->create(
+        $kid,                       // Identifier (used for JWT kid header).
+        'kialo',                    // Key set name (for grouping).
+        $publickeystr,              // Public key (file or content).
+        $privatekeystr,             // Private key (file or content).
 );
 
-$jwkExport = (new JwkRS256Exporter())->export($platformKeyChain);
+$jwkexport = (new JwkRS256Exporter())->export($platformkeychain);
 
 header('Content-Type: application/json');
-echo json_encode(["keys" => [$jwkExport]]);
+echo json_encode(["keys" => [$jwkexport]]);

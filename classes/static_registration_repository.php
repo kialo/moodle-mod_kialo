@@ -7,6 +7,12 @@ defined('MOODLE_INTERNAL') || die();
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 
+/**
+ * A static registration repository that always returns the same registration.
+ *
+ * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
+ * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameLowerCase
+ */
 class static_registration_repository implements RegistrationRepositoryInterface {
 
     /**

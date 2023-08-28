@@ -55,28 +55,28 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_resource_link(int $course_id, int $course_module_id, string $deployment_id, string $moodle_user_id) {
-        $kialo_config = kialo_config::get_instance();
-        $registration = $kialo_config->create_registration($deployment_id);
-        $context = context_module::instance($course_module_id);
+    public static function init_resource_link(int $courseid, int $coursemoduleid, string $deploymentid, string $moodleuserid) {
+        $kialoconfig = kialo_config::get_instance();
+        $registration = $kialoconfig->create_registration($deploymentid);
+        $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
         // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
         // We also assert that it's the same moodle user that was used in the first step.
-        $login_hint = "$course_id/$moodle_user_id";
+        $loginhint = "$courseid/$moodleuserid";
 
         $builder = new PlatformOriginatingLaunchBuilder();
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-                $kialo_config->get_tool_url(), // unused, as the final destination URL will be decided by our backend
-                $login_hint, // login hint that will be used afterwards by the platform to perform authentication
-                $deployment_id,
+                $kialoconfig->get_tool_url(), // unused, as the final destination URL will be decided by our backend
+                $loginhint, // login hint that will be used afterwards by the platform to perform authentication
+                $deploymentid,
                 $roles,
                 [
                     // the resource link claim is required in the spec, but we don't use it
                     // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim
-                        new ResourceLinkClaim('resource-link-' . $deployment_id, '', ''),
+                        new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
                 ]
         );
     }
@@ -88,9 +88,9 @@ class lti_flow {
      * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
      */
     public static function validate_deep_linking_response(ServerRequestInterface $request,
-            string $deployment_id): deep_linking_result {
-        $kialo_config = kialo_config::get_instance();
-        $registration = $kialo_config->create_registration($deployment_id);
+            string $deploymentid): deep_linking_result {
+        $kialoconfig = kialo_config::get_instance();
+        $registration = $kialoconfig->create_registration($deploymentid);
         $registrationrepo = new static_registration_repository($registration);
         $noncerepo = new NonceRepository(moodle_cache::nonce_cache());
 
@@ -158,14 +158,14 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \coding_exception
      */
-    public static function init_deep_link(int $course_id, string $moodle_user_id, string $deployment_id) {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
         $kialoconfig = kialo_config::get_instance();
 
-        $registration = $kialoconfig->create_registration($deployment_id);
+        $registration = $kialoconfig->create_registration($deploymentid);
 
         // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
         // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$course_id/$moodle_user_id";
+        $loginhint = "$courseid/$moodleuserid";
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
 
@@ -183,7 +183,7 @@ class lti_flow {
                 LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
                 $targetlinkuri,
                 $loginhint, // login hint that will be used afterwards by the platform to perform authentication
-                $deployment_id,
+                $deploymentid,
                 ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // only teachers can deeplink
                 [
                         new DeepLinkingSettingsClaim(
@@ -202,24 +202,24 @@ class lti_flow {
     }
 
     public static function lti_auth(?ValidatorInterface $validator = null): LtiMessageInterface {
-        $kialo_config = kialo_config::get_instance();
-        $registration = $kialo_config->create_registration();
+        $kialoconfig = kialo_config::get_instance();
+        $registration = $kialoconfig->create_registration();
 
         // Get related registration of the launch
-        $registrationRepository = new static_registration_repository($registration);
-        $userAuthenticator = new user_authenticator();
+        $registrationrepository = new static_registration_repository($registration);
+        $userauthenticator = new user_authenticator();
 
         $request = ServerRequest::fromGlobals();
 
         // The LTI library mistakenly generates a new nonce, this works around the issue by providing our own correct nonce generator.
         // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
         $nonce = $request->getQueryParams()['nonce'];
-        $payloadBuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
+        $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
 
-        // Create the OIDC authenticator
-        $authenticator = new OidcAuthenticator($registrationRepository, $userAuthenticator, $payloadBuilder, $validator);
+        // Create the OIDC authenticator.
+        $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder, $validator);
 
-        // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint')
+        // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint').
         return $authenticator->authenticate($request);
     }
 }

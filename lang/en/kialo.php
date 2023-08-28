@@ -67,8 +67,7 @@ $string['errors:noguestaccess'] = "Guests cannot access this activity. Please lo
 
 // Privacy API.
 $string['privacy:metadata:kialo'] =
-        'User data needs to be exchanged with Kialo Edu in order to automatically create accounts' .
-        ' for Moodle users on kialo-edu.com, and to make the user experience as seamless as possible.';
+        'User data needs to be exchanged with Kialo Edu in order to automatically create accounts for Moodle users on kialo-edu.com, and to make the user experience as seamless as possible.';
 
 $string['privacy:metadata:kialo:userid'] = 'The userid is sent from Moodle to allow you to access your data on Kialo Edu.';
 $string['privacy:metadata:kialo:email'] = 'The email address is sent from Moodle to allow you to access your data on Kialo Edu.';

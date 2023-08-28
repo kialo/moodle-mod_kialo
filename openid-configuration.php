@@ -17,15 +17,12 @@
 /**
  * This file returns the OpenId/LTI Configuration for this site.
  *
- * It is part of the LTI Tool Dynamic Registration, and used by
- * tools to get the site configuration and registration end-point.
+ * It's used by Kialo to get the site configuration and registration end-point.
  *
  * @package    mod_lti
- * @copyright  2020 Claude Vervoort (Cengage), Carlos Costa, Adrian Hutchinson (Macgraw Hill)
+ * @copyright  2023 Kialo GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use mod_lti\local\ltiopenid\registration_helper;
 
 define('NO_DEBUG_DISPLAY', true);
 define('NO_MOODLE_COOKIES', true);
@@ -56,17 +53,10 @@ function lti_get_capabilities() {
             'User.username' => '$USER->username',
             'Person.name.full' => 'lis_person_name_full',
             'Person.name.given' => 'lis_person_name_given',
+            'Person.name.middle' => 'lis_person_name_given',
             'Person.name.family' => 'lis_person_name_family',
             'Person.email.primary' => 'lis_person_contact_email_primary',
             'Person.sourcedId' => 'lis_person_sourcedid',
-            'Person.name.middle' => '$USER->middlename',
-            'Person.address.street1' => '$USER->address',
-            'Person.address.locality' => '$USER->city',
-            'Person.address.country' => '$USER->country',
-            'Person.address.timezone' => '$USER->timezone',
-            'Person.phone.primary' => '$USER->phone1',
-            'Person.phone.mobile' => '$USER->phone2',
-            'Person.webaddress' => '$USER->url',
             'Membership.role' => 'roles',
             'Result.sourcedId' => 'lis_result_sourcedid',
             'Result.autocreate' => 'lis_outcome_service_url',
@@ -90,7 +80,8 @@ $conf = [
         'response_types_supported' => ['id_token'],
         'subject_types_supported' => ['public', 'pairwise'],
         'id_token_signing_alg_values_supported' => ['RS256'],
-        'claims_supported' => ['sub', 'iss', 'name', 'given_name', 'family_name', 'email'],  # TODO: Avatar?
+        'claims_supported' => ['sub', 'iss', 'name', 'given_name', 'middle_name', 'family_name', 'email', 'picture', 'locale',
+                'zoneinfo'],
         'https://purl.imsglobal.org/spec/lti-platform-configuration' => [
                 'product_family_code' => 'moodle_kialo_plugin',
                 'version' => $CFG->release,

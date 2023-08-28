@@ -175,18 +175,18 @@ class lti_flow_test extends \advanced_testcase {
         $now = new DateTimeImmutable();
         $deploymentid = "2264e897a263eae4.74875925";
         $token = $tokenbuilder
-                ->withHeader("kid", "42")
-                ->issuedBy('https://www.kialo-edu.com')
-                ->permittedFor('https://www.example.com/moodle/mod/kialo')
-                ->identifiedBy('4f1g23a12aa')
-                ->issuedAt($now)
-                ->canOnlyBeUsedAfter($now->modify('+1 minute'))
-                ->expiresAt($now->modify('+1 hour'))
-                ->withClaim('https://purl.imsglobal.org/spec/lti/claim/version', "1.3.0")
-                ->withClaim("registration_id", "kialo-moodle-registration")
-                ->withClaim("https://purl.imsglobal.org/spec/lti/claim/target_link_uri", kialo_config::get_instance()->get_tool_url())
-                ->withClaim("https://purl.imsglobal.org/spec/lti/claim/deployment_id", $deploymentid)
-                ->getToken($algorithm, $signingkey);
+            ->withHeader("kid", "42")
+            ->issuedBy('https://www.kialo-edu.com')
+            ->permittedFor('https://www.example.com/moodle/mod/kialo')
+            ->identifiedBy('4f1g23a12aa')
+            ->issuedAt($now)
+            ->canOnlyBeUsedAfter($now->modify('+1 minute'))
+            ->expiresAt($now->modify('+1 hour'))
+            ->withClaim('https://purl.imsglobal.org/spec/lti/claim/version', "1.3.0")
+            ->withClaim("registration_id", "kialo-moodle-registration")
+            ->withClaim("https://purl.imsglobal.org/spec/lti/claim/target_link_uri", kialo_config::get_instance()->get_tool_url())
+            ->withClaim("https://purl.imsglobal.org/spec/lti/claim/deployment_id", $deploymentid)
+            ->getToken($algorithm, $signingkey);
         $this->assertNotNull($token);
 
         $tokenstr = $token->toString();
