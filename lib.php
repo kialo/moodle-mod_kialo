@@ -149,6 +149,15 @@ function kialo_pre_enable_plugin_actions(): bool {
  * @throws dml_exception
  */
 function kialo_update_visibility_depending_on_accepted_terms(): void {
+    global $DB;
+
     $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
-    mod::enable_plugin("kialo", $visible);
+
+    if (function_exists('mod::enable_plugin')) {
+        // Moodle 4.0+.
+        mod::enable_plugin("kialo", $visible);
+    } else {
+        // Moodle 3.9 and older.
+        $DB->set_field('modules', 'visible', $visible, ['name' => 'kialo']);
+    }
 }
