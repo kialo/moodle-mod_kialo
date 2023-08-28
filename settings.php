@@ -39,7 +39,8 @@ if ($ADMIN->fulltree) {
             new lang_string('acceptterms', 'mod_kialo'),
             new lang_string('acceptterms_desc', 'mod_kialo', [
                     "terms" => "https://www.kialo-edu.com/terms",
-                    "privacy" => "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/"
+                    "privacy" => "https://www.kialo-edu.com/privacy",
+                    "data_security" => "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/"
             ]),
             0
     );

@@ -39,17 +39,19 @@ $string['kialosettings'] = 'Settings';
 $string['kialofieldset'] = 'Kialo Fieldset';
 $string['select_discussion'] = 'Select Discussion';
 $string['select_discussion_help'] =
-        'Opens Kialo in a new tab to select a discussion to link to this activity. Requires a Kialo account.';
-$string['discussion_title'] = 'Discussion Name';
+        'Opens Kialo in a new tab to select a discussion for this activity. You can create a Kialo account during this process if you don’t already have one.';
+$string['discussion_title'] = 'Discussion';
 $string['deploymentid'] = "Discussion Linked";
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
-$string['kialo:view'] = 'View Kialo Discussion';
-$string['kialo:kialo_admin'] = 'Administrate Kialo Discussion';
+$string['kialo:view'] = 'View Kialo discussions';
+$string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
 
 // Help texts.
 $string['modulename_help'] =
-        'The Kialo activity allows you to embed a Kialo discussion into your Moodle course. Students can participate in the discussion directly from Moodle, without having to create a separate Kialo account. The Kialo activity is a great way to foster critical thinking and collaborative learning.';
+        'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. ' .
+        'Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. ' .
+        'Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
 $string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
 
 // Displayed while redirecting to Kialo during the LTI flows.
@@ -59,7 +61,7 @@ $string['redirect_loading'] = "Loading";
 // Errors.
 $string["errors:nopermissiontoview"] = "You do not have permission to view this activity.";
 $string["errors:ltiauth"] = "Authentication failed due to an unexpected error. Please try again.";
-$string["errors:resourcelink"] = "Activity cannot be displayed, due to an unexpected error. Please try again.";
+$string["errors:resourcelink"] = "Activity cannot be displayed due to an unexpected error. Please try again.";
 $string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
 $string['errors:noguestaccess'] = "Guests cannot access this activity. Please log in.";
 
@@ -70,24 +72,24 @@ $string['privacy:metadata:kialo'] =
 
 $string['privacy:metadata:kialo:userid'] = 'The userid is sent from Moodle to allow you to access your data on Kialo Edu.';
 $string['privacy:metadata:kialo:email'] = 'The email address is sent from Moodle to allow you to access your data on Kialo Edu.';
-$string['privacy:metadata:kialo:username'] = 'The user name is sent from Moodle to set the default user name Kialo Edu.';
+$string['privacy:metadata:kialo:username'] = 'The user name is sent from Moodle to set the default user name on Kialo Edu.';
 $string['privacy:metadata:kialo:fullname'] = 'Your full name is sent to Kialo Edu to allow a better user experience.';
 $string['privacy:metadata:kialo:language'] =
         'Your language preference is sent to Kialo Edu to automatically set the user interface language.';
 $string['privacy:metadata:kialo:timezone'] =
         'Your time zone preference is sent to Kialo Edu to automatically set the user time zone.';
-$string['privacy:metadata:kialo:picture'] = 'Your account picture is sent to Kialo Edu to allow a better user experience.';
+$string['privacy:metadata:kialo:picture'] = 'Your account avatar picture is sent to Kialo Edu to allow a better user experience.';
 $string['privacy:metadata:kialo:role'] =
-        'The user\'s role in the course is used to determine the correct permissions in the Kialo discussion.';
-$string['privacy:metadata:kialo:courseid'] = 'The ID of the course the user is accessing Kialo Edu from.';
+        'The user’s role in the course is used to determine the correct permissions in the Kialo discussion.';
+$string['privacy:metadata:kialo:courseid'] = 'The ID of the user’s course.';
 $string['privacy:metadata:kialo:nullproviderreason'] =
         'No user data is stored by our plugin in the Moodle database. Any data we use is stored externally on kialo-edu.com.';
 
 // Settings.
 $string["acceptterms"] = "Accept Terms of Service";
 $string["acceptterms_desc"] =
-        'By checking the checkbox you accept Kialo Edu’s <a href="{$a->terms}" target="_blank">terms of service</a> on behalf of ' .
-        'all users of this Moodle instance. <a href="{$a->privacy}" target="_blank">Click here</a> to have a look at our ' .
-        'Data Security and Privacy Plan.';
+        'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of ' .
+        'all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our ' .
+        '<a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
 $string["termsnotaccepted"] =
-        'Before enabling this plugin, you must confirm that you have read and accepted the <a href="{$a}">terms of service</a>.';
+        'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
