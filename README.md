@@ -4,6 +4,12 @@ TODO Describe the plugin shortly here.
 
 TODO Provide more detailed description here.
 
+TODO Screenshots
+
+Source Control: https://github.com/kialo/moodle-mod_kialo.
+Bug Tracker: https://github.com/kialo/moodle-mod_kialo/issues
+Documentation: https://support.kialo-edu.com/hc/en/moodle
+
 ## Installing via uploaded ZIP file ##
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
