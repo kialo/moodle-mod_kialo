@@ -72,40 +72,16 @@ class lti_flow {
     /**
      * Initializes an LTI flow that ends up just taking the user to the target_link_uri on the tool (i.e. Kialo).
      *
-     * @param int $courseid
-     * @param int $coursemoduleid
-     * @param string $deploymentid
-     * @param string $moodleuserid
-     * @return LtiMessageInterface
-     * @throws LtiExceptionInterface
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * @param int $course_id
+     * @param int $course_module_id
+     * @param string $deployment_id
+     * @param string $moodle_user_id
+     * @param string|null $target_link_uri
+     * @return string HTML form that will redirect the user to the LTI login endpoint
      */
-    public static function init_resource_link(int $courseid, int $coursemoduleid, string $deploymentid,
-            string $moodleuserid): LtiMessageInterface {
-        $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration($deploymentid);
-        $context = context_module::instance($coursemoduleid);
-        $roles = self::assign_lti_roles($context);
-
-        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
-        // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$courseid/$moodleuserid";
-
-        $builder = new PlatformOriginatingLaunchBuilder();
-        return $builder->buildPlatformOriginatingLaunch(
-                $registration,
-                LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-                $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
-                $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
-                $deploymentid,
-                $roles,
-                [
-                    // The resource link claim is required in the spec, but we don't use it
-                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                        new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
-                ]
-        );
+    public static function init_resource_link($courseid, $coursemoduleid, $deploymentid, $moodleuserid) {
+        $platform = new moodle_lti_platform();
+        return $platform->init_resource_link($courseid, $coursemoduleid, $deploymentid, $moodleuserid);
     }
 
     /**
