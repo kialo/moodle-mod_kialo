@@ -26,6 +26,8 @@
  * @var stdClass $USER
  */
 
+// phpcs:disable moodle.Files.RequireLogin.Missing -- We call require_login in lti_auth helper method below.
+
 require(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
