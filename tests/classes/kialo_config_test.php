@@ -30,6 +30,9 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 class kialo_config_test extends \advanced_testcase {
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
+     */
     public function test_default_tool_url() {
         // The variable TARGET_KIALO_URL is only set in Kialo test environments. By default it's not defined.
         putenv("TARGET_KIALO_URL=");
@@ -38,11 +41,17 @@ class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("https://www.kialo-edu.com", kialo_config::get_instance()->get_tool_url());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
+     */
     public function test_custom_tool_url() {
         putenv("TARGET_KIALO_URL=http://localhost:5000");
         $this->assertEquals("http://localhost:5000", kialo_config::get_instance()->get_tool_url());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_platform_keychain
+     */
     public function test_private_key_generation() {
         // A key should have already been generated during installation by mod_kialo_verify_private_key() in upgradelib.php.
         $keychain = kialo_config::get_instance()->get_platform_keychain();
@@ -53,11 +62,17 @@ class kialo_config_test extends \advanced_testcase {
         $this->assertNotEmpty($keychain->getPrivateKey());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_client_id
+     */
     public function test_client_id() {
         // A clientid should have been generated during installation by mod_kialo_generate_client_id() in upgradelib.php.
         $this->assertNotEmpty(kialo_config::get_instance()->get_client_id());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_platform
+     */
     public function test_get_platform() {
         $platform = kialo_config::get_instance()->get_platform();
 
@@ -67,6 +82,9 @@ class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("Kialo Moodle Plugin", $platform->getName());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::get_tool
+     */
     public function test_get_tool() {
         putenv("TARGET_KIALO_URL=");
         $tool = kialo_config::get_instance()->get_tool();
@@ -79,6 +97,9 @@ class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("https://www.kialo-edu.com/lti/deeplink", $tool->getDeepLinkingUrl());
     }
 
+    /**
+     * @covers \mod_kialo\kialo_config::get_instance::create_registration
+     */
     public function test_registration() {
         $registration = kialo_config::get_instance()->create_registration("DEPLID1234");
         $this->assertNotNull($registration);

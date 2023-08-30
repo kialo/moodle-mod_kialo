@@ -32,6 +32,9 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterface;
 use stdClass;
 
+/**
+ * @covers \mod_kialo\user_authenticator
+ */
 class user_authenticator_test extends \advanced_testcase {
     /**
      * @var stdClass The course that the activity is in.

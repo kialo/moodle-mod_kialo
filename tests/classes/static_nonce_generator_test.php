@@ -29,6 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
+/**
+ * @covers \mod_kialo\static_nonce_generator
+ */
 class static_nonce_generator_test extends \basic_testcase {
     public function test_generator() {
         $generator = new static_nonce_generator("NONCE1234");

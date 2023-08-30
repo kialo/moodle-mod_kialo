@@ -2,16 +2,23 @@
 <!-- see composer.json for the source of truth -->
 <libraries>
     <library>
-        <location>javascript/html5shiv.js</location>
-        <name>Html5Shiv</name>
-        <version>3.6.2</version>
-        <license>Apache</license>
+        <location>vendor/guzzlehttp/guzzle</location>
+        <name>guzzle</name>
+        <version>7.8.0</version>
+        <license>MIT</license>
+        <licenseversion></licenseversion>
+    </library>
+    <library>
+        <location>vendor/oat-sa/lib-lti1p3-core</location>
+        <name>oat-sa/lib-lti1p3-core</name>
+        <version>6.9.0</version>
+        <license>GPL</license>
         <licenseversion>2.0</licenseversion>
     </library>
     <library>
-        <location>vendor/guzzle/guzzle/</location>
-        <name>guzzle</name>
-        <version>v3.9.3</version>
+        <location>vendor/cache/adapter-common</location>
+        <name>cache/adapter-common</name>
+        <version>1.3.0</version>
         <license>MIT</license>
         <licenseversion></licenseversion>
     </library>

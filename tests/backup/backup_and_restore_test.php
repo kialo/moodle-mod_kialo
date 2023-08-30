@@ -40,6 +40,8 @@ use stdClass;
  * @category   test
  * @copyright  2023 Kialo GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \mod_kialo\backup\backup_kialo_activity_task
+ * @covers \mod_kialo\backup\restore_kialo_activity_task
  */
 class backup_and_restore_test extends advanced_testcase {
 

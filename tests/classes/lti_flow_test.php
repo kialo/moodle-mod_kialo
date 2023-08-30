@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tests\classes;
+namespace mod_kialo;
 
 use context_module;
 use core_date;
@@ -87,6 +87,9 @@ class lti_flow_test extends \advanced_testcase {
         parent::tearDown();
     }
 
+    /**
+     * @covers \mod_kialo\lti_flow::assign_lti_roles
+     */
     public function test_assign_lti_roles_for_student() {
         $this->resetAfterTest(true);
 
@@ -96,6 +99,9 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"], $role);
     }
 
+    /**
+     * @covers \mod_kialo\lti_flow::assign_lti_roles
+     */
     public function test_assign_lti_roles_for_teacher() {
         $this->resetAfterTest(true);
 
@@ -105,6 +111,9 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"], $role);
     }
 
+    /**
+     * @covers \mod_kialo\lti_flow::assign_lti_roles
+     */
     public function test_assign_lti_roles_for_teaching_assistant() {
         $this->resetAfterTest(true);
 
@@ -114,6 +123,9 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"], $role);
     }
 
+    /**
+     * @covers \mod_kialo\lti_flow::init_resource_link
+     */
     public function test_init_resource_link() {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
 
