@@ -109,7 +109,7 @@ class mod_kialo_mod_form extends moodleform_mod {
                   // Fill in the deep-linked details.
                   document.querySelector('input[name=deployment_id]').value = event.data.deploymentid;
                   document.querySelector('input[name=discussion_title]').value = event.data.discussiontitle;
-                  
+
                   // Prefill activity name based on discussion title if user hasn't entered one yet.
                   const nameInput = document.querySelector('input[name=name]');
                   if (!nameInput.value) {

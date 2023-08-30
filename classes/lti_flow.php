@@ -1,4 +1,27 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Methods that implement LTI standard flows.
+ *
+ * @package    mod_kialo
+ * @category   activity
+ * @copyright  2023 Kialo GmbH
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 namespace mod_kialo;
 
@@ -69,13 +92,13 @@ class lti_flow {
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-                $kialoconfig->get_tool_url(), // unused, as the final destination URL will be decided by our backend
-                $loginhint, // login hint that will be used afterwards by the platform to perform authentication
+                $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
+                $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
                 $deploymentid,
                 $roles,
                 [
-                    // the resource link claim is required in the spec, but we don't use it
-                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim
+                        // The resource link claim is required in the spec, but we don't use it
+                        // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                         new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
                 ]
         );
@@ -171,30 +194,30 @@ class lti_flow {
 
         $builder = new PlatformOriginatingLaunchBuilder();
 
-        // in the end we want to redirect to launch which handles the deep link request
+        // In the end we want to redirect to launch which handles the deep link request.
         $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/launch';
 
-        // our PHP LTI library expects the data token to be a JWT token signed by the platform
-        $datatoken = self::create_platform_jwt_token(); // empty because we don't need any data, just the signature
+        // Our PHP LTI library expects the data token to be a JWT token signed by the platform.
+        $datatoken = self::create_platform_jwt_token(); // Empty because we don't need any data, just the signature.
 
-        // see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
+        // See https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example.
         return $builder->buildPlatformOriginatingLaunch(
                 $registration,
                 LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
                 $targetlinkuri,
-                $loginhint, // login hint that will be used afterwards by the platform to perform authentication
+                $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
                 $deploymentid,
-                ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // only teachers can deeplink
+                ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
                 [
                         new DeepLinkingSettingsClaim(
                                 $deeplinkingreturnurl,
-                                [LtiResourceLinkInterface::TYPE], // accept_types
-                                ["window"], // accept_presentation_document_targets
-                                null,
-                                false, // acceptMultiple
-                                false, // autoCreate
-                                null, // title, unused
-                                null, // text, unused
+                                [LtiResourceLinkInterface::TYPE],   // Accept_types.
+                                ["window"],                         // Accept_presentation_document_targets.
+                                null,                               // Accept_media_types, unused.
+                                false,                              // AcceptMultiple: We just accept one discussion.
+                                false,                              // AutoCreate.
+                                null,                               // Title, unused.
+                                null,                               // Text, unused.
                                 $datatoken,
                         ),
                 ]
@@ -205,13 +228,14 @@ class lti_flow {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();
 
-        // Get related registration of the launch
+        // Get related registration of the launch.
         $registrationrepository = new static_registration_repository($registration);
         $userauthenticator = new user_authenticator();
 
         $request = ServerRequest::fromGlobals();
 
-        // The LTI library mistakenly generates a new nonce, this works around the issue by providing our own correct nonce generator.
+        // The LTI library mistakenly generates a new nonce every time.
+        // This works around the issue by providing our own correct nonce generator.
         // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
         $nonce = $request->getQueryParams()['nonce'];
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));

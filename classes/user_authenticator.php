@@ -1,8 +1,28 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * User authentication implementation needed for the LTI implementation.
+ *
+ * @package    mod_kialo
+ * @category   activity
+ * @copyright  2023 Kialo GmbH
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 namespace mod_kialo;
-
-defined('MOODLE_INTERNAL') || die();
 
 use context_course;
 use core_date;
@@ -11,6 +31,11 @@ use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterfac
 use OAT\Library\Lti1p3Core\Security\User\UserAuthenticatorInterface;
 use OAT\Library\Lti1p3Core\User\UserIdentity;
 
+/**
+ * An LTI user authenticator that checks if the correct Moodle user is logged in, is part of the same course module,
+ * and has the required capabilities. The returned user identity contains personal information needed to automatically
+ * create a new account on Kialo.
+ */
 class user_authenticator implements UserAuthenticatorInterface {
     public function authenticate(RegistrationInterface $registration, string $loginhint): UserAuthenticationResultInterface {
         global $USER;

@@ -23,17 +23,17 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 global $hassiteconfig;
 global $ADMIN;
 
-defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/mod/kialo/lib.php');
 
+// Terms and conditions need to have been accepted before the activity can be used.
 if ($ADMIN->fulltree) {
-    /** @var admin_settingpage $settings */
-
-    // Terms and conditions need to have been accepted before the activity can be used.
+    /** @var admin_settingpage $setting */
     $setting = new admin_setting_configcheckbox(
             'mod_kialo/acceptterms',
             new lang_string('acceptterms', 'mod_kialo'),

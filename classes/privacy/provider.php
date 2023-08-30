@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -29,8 +28,6 @@ namespace mod_kialo\privacy;
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\metadata\null_provider;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * We do not store any personal data in our Moodle database table.
