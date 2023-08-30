@@ -21,10 +21,13 @@ Ideal for classroom discussions and argumentative reasoning, the free Kialo Edu 
 Its visual format helps students break down complex arguments into digestible units and structure them in easy-to-follow lines of reasoning.
 Our [intuitive design](https://www.kialo-edu.com/p/eafa94b6-a86f-4540-88f4-2a6250115a26/94696) also makes student collaboration and teacher feedback a breeze!
 
-<img src="images/image3.png" alt="drawing" width="40%"/>
-<img src="images/image4.png" alt="drawing" width="40%"/>
-<img src="images/image2.png" alt="drawing" width="40%"/>
-<img src="images/image1.png" alt="drawing" width="40%"/>
+![image of kialo](images/image3.png)</br>
+
+![image of kialo](images/image4.png)</br>
+
+![image of kialo](images/image2.png)</br>
+
+![image of kialo](images/image1.png)
 
 ### Our platform ###
 
