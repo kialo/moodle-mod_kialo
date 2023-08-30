@@ -62,6 +62,7 @@ All data collection is used solely for the purposes of improving user experience
 We are ISO 27001 compliant, and how we handle your data can be seen in detail in our [Data Security and Privacy Plan](https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/).
 
 ## Installation ##
+
 ### Installing via uploaded ZIP file ###
 
 1. Log in to your Moodle site as an admin and go to _Site administration >
@@ -69,6 +70,7 @@ We are ISO 27001 compliant, and how we handle your data can be seen in detail in
 2. Upload the ZIP file with the plugin code. You should only be prompted to add
    extra details if your plugin type is not automatically detected.
 3. Check the plugin validation report and finish the installation.
+4. In the plugin's settings, accept Kialo's terms of service.
 
 ### Installing manually ###
 
@@ -83,7 +85,8 @@ Alternatively, you can run
 
     $ php admin/cli/upgrade.php
 
-to complete the installation from the command line.
+to complete the installation from the command line. 
+Afterwards, in the plugin's settings, accept Kialo's terms of service.
 
 ## If you need a hand ##
 Our [Help Center](https://support.kialo-edu.com/en/) has comprehensive support for most issues you could encounter on the platform.
