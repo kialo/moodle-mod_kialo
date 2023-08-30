@@ -75,13 +75,26 @@ class lti_flow {
      * @param int $course_id
      * @param int $course_module_id
      * @param string $deployment_id
-     * @param string $moodle_user_id
+     * @param int $moodle_user_id
      * @param string|null $target_link_uri
      * @return string HTML form that will redirect the user to the LTI login endpoint
      */
     public static function init_resource_link($courseid, $coursemoduleid, $deploymentid, $moodleuserid) {
         $platform = new moodle_lti_platform();
         return $platform->init_resource_link($courseid, $coursemoduleid, $deploymentid, $moodleuserid);
+    }
+
+    /**
+     * Finishes the LTI authentication flow, parsing the current request (the user should have been redirected here by Kialo).
+     *
+     * @param ValidatorInterface|null $validator Can be used to override validation behavior; only used by tests right now.
+     * @return string HTML redirect form
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
+     * @throws \dml_exception
+     */
+    public static function lti_auth(): string {
+        $platform = new moodle_lti_platform();
+        return $platform->lti_auth();
     }
 
     /**
@@ -208,34 +221,4 @@ class lti_flow {
         );
     }
 
-    /**
-     * Finishes the LTI authentication flow, parsing the current request (the user should have been redirected here by Kialo).
-     *
-     * @param ValidatorInterface|null $validator Can be used to override validation behavior; only used by tests right now.
-     * @return LtiMessageInterface Contains the launch details
-     * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
-     * @throws \dml_exception
-     */
-    public static function lti_auth(?ValidatorInterface $validator = null): LtiMessageInterface {
-        $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration();
-
-        // Get related registration of the launch.
-        $registrationrepository = new static_registration_repository($registration);
-        $userauthenticator = new user_authenticator();
-
-        $request = ServerRequest::fromGlobals();
-
-        // The LTI library mistakenly generates a new nonce every time.
-        // This works around the issue by providing our own correct nonce generator.
-        // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
-        $nonce = $request->getQueryParams()['nonce'];
-        $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
-
-        // Create the OIDC authenticator.
-        $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder, $validator);
-
-        // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint').
-        return $authenticator->authenticate($request);
-    }
 }

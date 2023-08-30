@@ -87,6 +87,19 @@ class kialo_config {
     }
 
     /**
+     * Returns the kid, privatekey and publickey of the platform.
+     * @return array [kid, privatekey, publickey]
+     * @throws \dml_exception
+     */
+    public function get_platform_keyset() {
+        $kid = get_config("mod_kialo", "kid");
+        $privatekeystr = get_config("mod_kialo", "privatekey");
+        $publickeystr = openssl_pkey_get_details(openssl_pkey_get_private($privatekeystr))['key'];
+
+        return [$kid, $privatekeystr, $publickeystr];
+    }
+
+    /**
      * The client ID used to identify this Moodle instance when communicating with Kialo.
      * Currently we have no need for this to be unique, so we can use a constant.
      * @return string
