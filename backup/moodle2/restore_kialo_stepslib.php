@@ -24,12 +24,23 @@
  */
 class restore_kialo_activity_structure_step extends restore_activity_structure_step {
 
+    /**
+     * Define the structure of the kialo activity restore.
+     * @return mixed
+     */
     protected function define_structure() {
         $paths = array();
         $paths[] = new restore_path_element('kialo', '/activity/kialo');
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process the kialo element.
+     * @param mixed $data
+     * @return void
+     * @throws base_step_exception
+     * @throws dml_exception
+     */
     protected function process_kialo($data) {
         global $DB;
 

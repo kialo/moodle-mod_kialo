@@ -18,7 +18,6 @@
  * Used in the LTI flow to generate a static nonce (instead of a new one everytime).
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,6 +28,9 @@ use OAT\Library\Lti1p3Core\Security\Nonce\Nonce;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceGeneratorInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceInterface;
 
+/**
+ * A static nonce generator that always returns the same nonce.
+ */
 class static_nonce_generator implements NonceGeneratorInterface {
 
     /**
@@ -36,10 +38,19 @@ class static_nonce_generator implements NonceGeneratorInterface {
      */
     private string $nonce;
 
+    /**
+     * Creates a new static nonce generator that always returns the given nonce.
+     * @param string $nonce the nonce to return everytime.
+     */
     public function __construct(string $nonce) {
         $this->nonce = $nonce;
     }
 
+    /**
+     * Returns the nonce that the class was created with.
+     * @param int|null $ttl TTL is ignored, because it's not supported.
+     * @return NonceInterface
+     */
     public function generate(int $ttl = null): NonceInterface {
         return new Nonce($this->nonce);
     }

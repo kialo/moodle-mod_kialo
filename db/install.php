@@ -17,9 +17,9 @@
 /**
  * Code to be executed after the plugin's database scheme has been installed is defined here.
  *
- * @package     mod_kialox
+ * @package     mod_kialo
  * @category    upgrade
- * @copyright   2023 Your Name <you@example.com>
+ * @copyright   2023 Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

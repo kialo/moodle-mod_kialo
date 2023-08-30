@@ -18,7 +18,6 @@
  * Registration repository needed for the LTI implementation.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -27,23 +26,33 @@ namespace mod_kialo;
 use OAT\Library\Lti1p3Core\Registration\RegistrationInterface;
 use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 
+// phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
+// phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameLowerCase
+
 /**
  * A static registration repository that always returns the same registration.
- *
- * phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
- * phpcs:disable moodle.NamingConventions.ValidVariableName.VariableNameLowerCase
  */
 class static_registration_repository implements RegistrationRepositoryInterface {
 
     /**
+     * The registration that is returned by the repository.
      * @var RegistrationInterface
      */
     private $registration;
 
+    /**
+     * Creates a new registration repository that only contains the given registration.
+     * @param RegistrationInterface $registration
+     */
     public function __construct(RegistrationInterface $registration) {
         $this->registration = $registration;
     }
 
+    /**
+     * If the given identifier matches the registration identifier, the registration is returned.
+     * @param string $identifier The registration identifier.
+     * @return RegistrationInterface|null
+     */
     public function find(string $identifier): ?RegistrationInterface {
         if ($this->registration->getIdentifier() !== $identifier) {
             return null;
@@ -51,10 +60,19 @@ class static_registration_repository implements RegistrationRepositoryInterface 
         return $this->registration;
     }
 
+    /**
+     * Returns a list with one item: the registration that was given in the constructor.
+     * @return RegistrationInterface[]
+     */
     public function findAll(): array {
         return [$this->registration];
     }
 
+    /**
+     * If the given client id matches the registration client id, the registration is returned.
+     * @param string $clientId
+     * @return RegistrationInterface|null
+     */
     public function findByClientId(string $clientId): ?RegistrationInterface {
         if ($this->registration->getClientId() !== $clientId) {
             return null;
@@ -62,6 +80,12 @@ class static_registration_repository implements RegistrationRepositoryInterface 
         return $this->registration;
     }
 
+    /**
+     * If the given issuer matches the registration platform audience, the registration is returned.
+     * @param string $issuer
+     * @param string|null $clientId
+     * @return RegistrationInterface|null
+     */
     public function findByPlatformIssuer(string $issuer, string $clientId = null): ?RegistrationInterface {
         $platform = $this->registration->getPlatform();
         if ($platform->getAudience() !== $issuer) {
@@ -73,6 +97,12 @@ class static_registration_repository implements RegistrationRepositoryInterface 
         return $this->registration;
     }
 
+    /**
+     * If the given issuer matches the registration tool audience, the registration is returned.
+     * @param string $issuer
+     * @param string|null $clientId
+     * @return RegistrationInterface|null
+     */
     public function findByToolIssuer(string $issuer, string $clientId = null): ?RegistrationInterface {
         $tool = $this->registration->getTool();
         if ($issuer !== $tool->getAudience()) {

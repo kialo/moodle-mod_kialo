@@ -15,8 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Kialo restore task that provides all the settings and steps to perform one
- * complete restore of the activity.
+ * Kialo restore task that provides all the settings and steps to perform one complete restore of the activity.
  *
  * @package    mod_kialo
  * @category   backup
@@ -29,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/kialo/backup/moodle2/restore_kialo_stepslib.php');
 
+/**
+ * Implementation of the Moodle Restore API for the Kialo plugin.
+ */
 class restore_kialo_activity_task extends restore_activity_task {
 
     /**
@@ -76,9 +78,9 @@ class restore_kialo_activity_task extends restore_activity_task {
 
     /**
      * Define the restore log rules that will be applied
-     * by the {@link restore_logs_processor} when restoring
+     * by the restore_logs_processor when restoring
      * kialo logs. It must return one array
-     * of {@link restore_log_rule} objects
+     * of restore_log_rule objects
      */
     public static function define_restore_log_rules(): array {
         $rules = array();

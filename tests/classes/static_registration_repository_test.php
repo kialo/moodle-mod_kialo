@@ -30,11 +30,13 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 /**
+ * Tests the static registration repository.
  * @covers \mod_kialo\static_registration_repository
  */
 class static_registration_repository_test extends \basic_testcase {
 
     /**
+     * Tests the static registration repository.
      * @covers \mod_kialo\static_registration_repository::find
      * @covers \mod_kialo\static_registration_repository::findAll
      * @covers \mod_kialo\static_registration_repository::findByClientId
@@ -52,6 +54,7 @@ class static_registration_repository_test extends \basic_testcase {
     }
 
     /**
+     * Tests the static registration repository's findByPlatformIssuer method.
      * @covers \mod_kialo\static_registration_repository::findByPlatformIssuer
      */
     public function test_find_by_platform_issuer() {
@@ -63,6 +66,7 @@ class static_registration_repository_test extends \basic_testcase {
     }
 
     /**
+     * Tests the static registration repository's findByToolIssuer method.
      * @covers \mod_kialo\static_registration_repository::findByToolIssuer
      */
     public function test_find_by_tool_issuer() {

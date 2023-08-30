@@ -30,13 +30,20 @@ use OAT\Library\Lti1p3Core\Tool\Tool;
  * Defines capabilities for the Kialo activity module.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kialo_config {
+    /**
+     * @var kialo_config
+     */
     private static $instance = null;
 
+    /**
+     * Returns the URL of the Kialo instance to use. By default its the production instance https://www.kialo-edu.com.
+     * For testing purposes it can be overriden by setting the environment variable TARGET_KIALO_URL.
+     * @return array|string
+     */
     public function get_tool_url() {
         $targeturlfromenv = getenv('TARGET_KIALO_URL');
         if (!empty($targeturlfromenv)) {
@@ -46,7 +53,11 @@ class kialo_config {
         }
     }
 
-    public static function get_instance() {
+    /**
+     * Returns the kialo_config singleton.
+     * @return kialo_config
+     */
+    public static function get_instance(): kialo_config {
         if (self::$instance == null) {
             self::$instance = new kialo_config();
         }
@@ -85,6 +96,7 @@ class kialo_config {
     }
 
     /**
+     * Returns the platform interface representing the Kialo moodle plugin.
      * @return Platform
      */
     public function get_platform(): Platform {
@@ -96,6 +108,10 @@ class kialo_config {
         );
     }
 
+    /**
+     * Returns the LTI tool interface representing kialo-edu.com.
+     * @return Tool
+     */
     public function get_tool(): Tool {
         $toolurl = $this->get_tool_url();
         return new Tool(
@@ -108,6 +124,12 @@ class kialo_config {
         );
     }
 
+    /**
+     * Creates a new LTI tool registration for Kialo and one specific deployment id.
+     * @param string|null $deploymentid The deployment id to use, or null, if it's not relevant.
+     * @return Registration
+     * @throws \dml_exception
+     */
     public function create_registration(?string $deploymentid = null): Registration {
         $tool = $this->get_tool();
         $platformjwksurl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();

@@ -24,7 +24,6 @@ use Cache\Adapter\Common\PhpCacheItem;
  * Uses Moodle's Cache API to implement a PSR-6 compatible cache.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see https://docs.moodle.org/dev/Cache_API
@@ -46,17 +45,30 @@ class moodle_cache extends AbstractCachePool {
     }
 
     /**
+     * Generic cache using the Moodle cache API.
      * @param string $name Name of a cache defined in `db/caches.php`.
      */
     protected function __construct(string $name) {
         $this->moodlecache = cache::make('mod_kialo', $name);
     }
 
+    /**
+     * Stores an item in the cache.
+     * @param PhpCacheItem $item
+     * @param int $ttl Ignored.
+     * @return bool
+     */
     protected function storeItemInCache(PhpCacheItem $item, $ttl): bool {
         // Moodle's Cache API does not support TTL, so we ignore it.
         return $this->moodlecache->set($item->getKey(), $item->get());
     }
 
+    /**
+     * Fetches an item from the cache.
+     * @param string $key
+     * @return array tuple of [cachehit: bool, value: mixed, metadata: array (empty), expiration: ?int (null)]
+     * @throws \coding_exception
+     */
     protected function fetchObjectFromCache($key): array {
         $value = $this->moodlecache->get($key);
         if (!$value) {
@@ -66,22 +78,49 @@ class moodle_cache extends AbstractCachePool {
         return [true, $value, [], null];
     }
 
+    /**
+     * Removes all items from the cache.
+     * @return bool
+     */
     protected function clearAllObjectsFromCache(): bool {
         return $this->moodlecache->purge();
     }
 
+    /**
+     * Removes an item from the cache.
+     * @param string $key
+     * @return bool
+     */
     protected function clearOneObjectFromCache($key): bool {
         return $this->moodlecache->delete($key);
     }
 
+    /**
+     * Returns a list value from the cache.
+     * @param string $name
+     * @return array
+     * @throws \coding_exception
+     */
     protected function getList($name): array {
         return $this->moodlecache->get($name) ?? [];
     }
 
+    /**
+     * Remove a list from the cache.
+     * @param string $name
+     * @return bool
+     */
     protected function removeList($name): bool {
         return $this->moodlecache->delete($name);
     }
 
+    /**
+     * Append a value to a list in the cache.
+     * @param string $name
+     * @param string $key
+     * @return void
+     * @throws \coding_exception
+     */
     protected function appendListItem($name, $key) {
         $existing = $this->moodlecache->get($name) ?? [];
         assert(is_array($existing));
@@ -89,6 +128,13 @@ class moodle_cache extends AbstractCachePool {
         $this->moodlecache->set($name, $existing);
     }
 
+    /**
+     * Remove a value from a list in the cache.
+     * @param string $name
+     * @param string $key
+     * @return void
+     * @throws \coding_exception
+     */
     protected function removeListItem($name, $key) {
         $existing = $this->moodlecache->get($name) ?? [];
         assert(is_array($existing));

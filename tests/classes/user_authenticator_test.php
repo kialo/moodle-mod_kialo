@@ -33,6 +33,7 @@ use OAT\Library\Lti1p3Core\Security\User\Result\UserAuthenticationResultInterfac
 use stdClass;
 
 /**
+ * Tests the LTI user authenticator implementation.
  * @covers \mod_kialo\user_authenticator
  */
 class user_authenticator_test extends \advanced_testcase {
@@ -64,11 +65,27 @@ class user_authenticator_test extends \advanced_testcase {
         $this->module = $this->getDataGenerator()->create_module('kialo', array('course' => $this->course->id));
     }
 
+    /**
+     * Calls the authenticate method with the required parameters (given userid and current courseid).
+     * @param string $userid
+     * @return UserAuthenticationResultInterface
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     */
     protected function authenticate_user(string $userid): UserAuthenticationResultInterface {
         $loginhint = "{$this->course->id}/$userid";
         return $this->user_authenticator->authenticate($this->registrationstub, $loginhint);
     }
 
+    /**
+     * Tests the user authenticator's basic success case.
+     * @return void
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_basic_successful_auth() {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user([
@@ -102,6 +119,14 @@ class user_authenticator_test extends \advanced_testcase {
         );
     }
 
+    /**
+     * Tests that the timezone is correctly returned.
+     * @return void
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_timezone() {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user([
@@ -118,6 +143,14 @@ class user_authenticator_test extends \advanced_testcase {
         $this->assertEquals("Asia/Tokyo", $data->getUserIdentity()->getAdditionalProperties()->get('zoneinfo'));
     }
 
+    /**
+     * Tests that the language is correctly returned.
+     * @return void
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_locale() {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user([
@@ -134,6 +167,10 @@ class user_authenticator_test extends \advanced_testcase {
         $this->assertEquals("en", $data->getUserIdentity()->getLocale());
     }
 
+    /**
+     * Tests that a user that's not enrolled in the course cannot authenticate.
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_user_not_enrolled_in_course() {
         // Given a user that is not enrolled in the course.
         $usernotenrolled = $this->getDataGenerator()->create_user();
@@ -148,6 +185,10 @@ class user_authenticator_test extends \advanced_testcase {
         }
     }
 
+    /**
+     * Tests that a guest user cannot authenticate.
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_doesnt_work_for_guest_users() {
         global $USER;
         $this->setGuestUser();
@@ -158,6 +199,10 @@ class user_authenticator_test extends \advanced_testcase {
         $this->assertTrue($data->isAnonymous());
     }
 
+    /**
+     * Tests that non-logged-in users cannot authenticate.
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
     public function test_fails_when_not_logged_in() {
         $this->resetAfterTest(false);
 

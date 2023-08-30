@@ -18,7 +18,6 @@
  * User authentication implementation needed for the LTI implementation.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -32,11 +31,23 @@ use OAT\Library\Lti1p3Core\Security\User\UserAuthenticatorInterface;
 use OAT\Library\Lti1p3Core\User\UserIdentity;
 
 /**
- * An LTI user authenticator that checks if the correct Moodle user is logged in, is part of the same course module,
+ * An LTI user authenticator that checks if the correct Moodle user is logged in.
+ *
+ * Also checks that the user is part of the same course module,
  * and has the required capabilities. The returned user identity contains personal information needed to automatically
  * create a new account on Kialo.
  */
 class user_authenticator implements UserAuthenticatorInterface {
+
+    /**
+     * Authenticates the user.
+     * @param RegistrationInterface $registration
+     * @param string $loginhint The login hint is in the form of "course_id/moodle_user_id".
+     * @return UserAuthenticationResultInterface
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     */
     public function authenticate(RegistrationInterface $registration, string $loginhint): UserAuthenticationResultInterface {
         global $USER;
         global $PAGE;

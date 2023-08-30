@@ -18,7 +18,6 @@
  * User authenticator result implementation needed for the LTI implementation.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -41,19 +40,36 @@ class user_authentication_result implements UserAuthenticationResultInterface {
     /** @var UserIdentityInterface|null */
     private $useridentity;
 
+    /**
+     * Creates a new user authentication result.
+     * @param bool $success
+     * @param UserIdentityInterface|null $userIdentity
+     */
     public function __construct(bool $success, ?UserIdentityInterface $userIdentity = null) {
         $this->success = $success;
         $this->useridentity = $userIdentity;
     }
 
+    /**
+     * Returns whether the authentication was successful.
+     * @return bool
+     */
     public function isSuccess(): bool {
         return $this->success;
     }
 
+    /**
+     * Returns whether the user is anonymous.
+     * @return bool
+     */
     public function isAnonymous(): bool {
         return null === $this->useridentity;
     }
 
+    /**
+     * Returns the user identity if `isSuccess()` is true, or null otherwise.
+     * @return UserIdentityInterface|null
+     */
     public function getUserIdentity(): ?UserIdentityInterface {
         return $this->useridentity;
     }

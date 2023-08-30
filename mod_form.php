@@ -23,7 +23,6 @@
  *
  * @see https://docs.moodle.org/dev/Form_API
  * @var stdClass $CFG see ../moodle/config-dist.php for available fields
- * @noinspection PhpIllegalPsrClassPathInspection classname must not match filename in this case due to moodle conventions
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -41,6 +40,11 @@ require_once('vendor/autoload.php');
  */
 class mod_kialo_mod_form extends moodleform_mod {
 
+    /**
+     * Generates a random deployment id and stores it in the session. This is used on Kialo's side
+     * to identify the activity for which a discussion was selected.
+     * @return string
+     */
     private function get_deployment_id(): string {
         global $COURSE;
         global $USER;

@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Kialo backup step.
+ *
  * @package    mod_kialo
  * @subpackage backup-moodle2
  * @copyright 2013 onwards Kialo GmbH
@@ -27,6 +29,11 @@
  */
 class backup_kialo_activity_structure_step extends backup_activity_structure_step {
 
+    /**
+     * Define the backup structure for the kialo activity.
+     * @return backup_nested_element
+     * @throws base_element_struct_exception
+     */
     protected function define_structure() {
         // We just back up everything. See install.xml for fields that need to be backed up.
         $kialo = new backup_nested_element('kialo', ['id'], [

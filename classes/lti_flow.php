@@ -18,7 +18,6 @@
  * Methods that implement LTI standard flows.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,6 +27,7 @@ namespace mod_kialo;
 use context_module;
 use GuzzleHttp\Psr7\ServerRequest;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
+use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
 use OAT\Library\Lti1p3Core\Message\Launch\Validator\Platform\PlatformLaunchValidator;
 use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
@@ -41,6 +41,9 @@ use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * Functions implementing the LTI steps.
+ */
 class lti_flow {
     /**
      * Assigns LTI roles based on the current user's roles in the given context (module).
@@ -69,16 +72,17 @@ class lti_flow {
     /**
      * Initializes an LTI flow that ends up just taking the user to the target_link_uri on the tool (i.e. Kialo).
      *
-     * @param int $course_id
-     * @param int $course_module_id
-     * @param string $deployment_id
-     * @param string $moodle_user_id
-     * @param string|null $target_link_uri
+     * @param int $courseid
+     * @param int $coursemoduleid
+     * @param string $deploymentid
+     * @param string $moodleuserid
      * @return LtiMessageInterface
-     * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
+     * @throws LtiExceptionInterface
      * @throws \coding_exception
+     * @throws \dml_exception
      */
-    public static function init_resource_link(int $courseid, int $coursemoduleid, string $deploymentid, string $moodleuserid) {
+    public static function init_resource_link(int $courseid, int $coursemoduleid, string $deploymentid,
+            string $moodleuserid): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration($deploymentid);
         $context = context_module::instance($coursemoduleid);
@@ -97,17 +101,21 @@ class lti_flow {
                 $deploymentid,
                 $roles,
                 [
-                        // The resource link claim is required in the spec, but we don't use it
-                        // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
+                    // The resource link claim is required in the spec, but we don't use it
+                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                         new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
                 ]
         );
     }
 
     /**
+     * Validates an LTI deep link response from Kialo and returns the validated details, i.e. discussion details and deployment ID.
+     *
      * @param ServerRequestInterface $request
+     * @param string $deploymentid
      * @return deep_linking_result
      * @throws LtiException
+     * @throws \dml_exception
      * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
      */
     public static function validate_deep_linking_response(ServerRequestInterface $request,
@@ -174,12 +182,12 @@ class lti_flow {
     /**
      * Initializes an LTI flow for selecting a discussion on Kialo and then returning back to Moodle.
      *
-     * @param int $course_id
-     * @param int $course_module_id
-     * @param string $moodle_user_id
+     * @param int $courseid
+     * @param string $moodleuserid
+     * @param string $deploymentid
      * @return LtiMessageInterface
-     * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
-     * @throws \coding_exception
+     * @throws LtiExceptionInterface
+     * @throws \dml_exception
      */
     public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
         $kialoconfig = kialo_config::get_instance();
@@ -224,6 +232,14 @@ class lti_flow {
         );
     }
 
+    /**
+     * Finishes the LTI authentication flow, parsing the current request (the user should have been redirected here by Kialo).
+     *
+     * @param ValidatorInterface|null $validator Can be used to override validation behavior; only used by tests right now.
+     * @return LtiMessageInterface Contains the launch details
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
+     * @throws \dml_exception
+     */
     public static function lti_auth(?ValidatorInterface $validator = null): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();

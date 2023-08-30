@@ -18,11 +18,18 @@
  * Test lib for the Kialo activity module tests.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kialo_generator extends testing_module_generator {
+
+    /**
+     * Create a new instance of the Kialo activity module, setting some useful default placeholder values for tests.
+     * @param stdClass $record
+     * @param array|null $options
+     * @return stdClass
+     * @throws coding_exception
+     */
     public function create_instance($record = null, array $options = null): stdClass {
         $record = (object) (array) $record;
 

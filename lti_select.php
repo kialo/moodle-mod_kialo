@@ -16,6 +16,7 @@
 
 /**
  * Starts the LTI deeplinking flow to select a Kialo discussion when called via GET.
+ *
  * It also handles the LtiDeepLinkingResponse from the Kialo backend.
  *
  * @package     mod_kialo

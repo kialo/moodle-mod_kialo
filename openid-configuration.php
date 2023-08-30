@@ -19,7 +19,7 @@
  *
  * It's used by Kialo to get the site configuration and registration end-point.
  *
- * @package    mod_lti
+ * @package    mod_kialo
  * @copyright  2023 Kialo GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -28,24 +28,15 @@ define('NO_DEBUG_DISPLAY', true);
 define('NO_MOODLE_COOKIES', true);
 require_once(__DIR__ . '/../../config.php');
 
+/**
+ * Returns the LTI capabilities that are supported by this plugin.
+ *
+ * @return array
+ */
 function lti_get_capabilities() {
-    $capabilities = array(
+    $capabilities = [
             'basic-lti-launch-request' => '',
             'ContentItemSelectionRequest' => '',
-            'ToolProxyRegistrationRequest' => '',
-            'Context.id' => 'context_id',
-            'Context.title' => 'context_title',
-            'Context.label' => 'context_label',
-            'Context.id.history' => null,
-            'Context.sourcedId' => 'lis_course_section_sourcedid',
-            'Context.longDescription' => '$COURSE->summary',
-            'Context.timeFrame.begin' => '$COURSE->startdate',
-            'CourseSection.title' => 'context_title',
-            'CourseSection.label' => 'context_label',
-            'CourseSection.sourcedId' => 'lis_course_section_sourcedid',
-            'CourseSection.longDescription' => '$COURSE->summary',
-            'CourseSection.timeFrame.begin' => null,
-            'CourseSection.timeFrame.end' => null,
             'ResourceLink.id' => 'resource_link_id',
             'ResourceLink.title' => 'resource_link_title',
             'ResourceLink.description' => 'resource_link_description',
@@ -59,10 +50,8 @@ function lti_get_capabilities() {
             'Person.sourcedId' => 'lis_person_sourcedid',
             'Membership.role' => 'roles',
             'Result.sourcedId' => 'lis_result_sourcedid',
-            'Result.autocreate' => 'lis_outcome_service_url',
-            'BasicOutcome.sourcedId' => 'lis_result_sourcedid',
-            'BasicOutcome.url' => 'lis_outcome_service_url',
-            'Moodle.Person.userGroupIds' => null);
+            'Result.autocreate' => 'lis_outcome_service_url'
+    ];
 
     return $capabilities;
 }

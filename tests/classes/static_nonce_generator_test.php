@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
 /**
+ * Tests the static nonce generator.
  * @covers \mod_kialo\static_nonce_generator
  */
 class static_nonce_generator_test extends \basic_testcase {

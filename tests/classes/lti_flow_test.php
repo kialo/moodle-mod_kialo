@@ -47,13 +47,25 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
+/**
+ * Tests the LTI flow.
+ */
 class lti_flow_test extends \advanced_testcase {
+
+    /**
+     * Backs up superglobal variables modified by this test.
+     * @return void
+     */
     private function backup_globals(): void {
         $this->server = $_SERVER;
         $this->env = $_ENV;
         $this->get = $_GET;
     }
 
+    /**
+     * Restores superglobal variables modified by this test.
+     * @return void
+     */
     private function restore_globals(): void {
         if (null !== $this->server) {
             $_SERVER = $this->server;
@@ -88,6 +100,7 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that students get the correct LTI role.
      * @covers \mod_kialo\lti_flow::assign_lti_roles
      */
     public function test_assign_lti_roles_for_student() {
@@ -100,6 +113,7 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that teachers get the correct LTI role.
      * @covers \mod_kialo\lti_flow::assign_lti_roles
      */
     public function test_assign_lti_roles_for_teacher() {
@@ -112,6 +126,7 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that teaching assistants get the correct LTI role.
      * @covers \mod_kialo\lti_flow::assign_lti_roles
      */
     public function test_assign_lti_roles_for_teaching_assistant() {
@@ -124,6 +139,7 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * Tests the initial LTI flow step, when Moodle redirects the user to Kialo.
      * @covers \mod_kialo\lti_flow::init_resource_link
      */
     public function test_init_resource_link() {
@@ -160,7 +176,7 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
-     * Simulates the 2nd step of the LTI flow, when Kialo redirects the user back to Moodle.
+     * Tests the 2nd step of the LTI flow, when Kialo redirects the user back to Moodle.
      *
      * @covers \mod_kialo\lti_flow::lti_auth
      */
@@ -246,7 +262,16 @@ class lti_flow_test extends \advanced_testcase {
     }
 }
 
+/**
+ * A validator that always returns true. Used for testing because the key validation is not working right now within the test.
+ */
 class noop_validator implements ValidatorInterface {
+    /**
+     * Returns always true.
+     * @param TokenInterface $token Ignored.
+     * @param KeyInterface $key Ignored.
+     * @return bool
+     */
     public function validate(TokenInterface $token, KeyInterface $key): bool {
         return true;
     }

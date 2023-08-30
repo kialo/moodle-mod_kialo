@@ -31,6 +31,7 @@ use core_privacy\local\metadata\null_provider;
 
 /**
  * We do not store any personal data in our Moodle database table.
+ *
  * But we send and may store some personal data when provisioning accounts on Kialo.
  * See `classes/user_authenticator.php` or the `classes/lti_flow.php` for details.
  *
@@ -40,6 +41,11 @@ use core_privacy\local\metadata\null_provider;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\provider, null_provider {
+    /**
+     * Declares the personal data exported to Kialo.
+     * @param collection $collection
+     * @return collection
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_external_location_link(
                 'kialo',
@@ -60,6 +66,10 @@ class provider implements \core_privacy\local\metadata\provider, null_provider {
         return $collection;
     }
 
+    /**
+     * Returns the reason why we do not store any personal data in Moodle itself.
+     * @return string
+     */
     public static function get_reason(): string {
         return "privacy:metadata:kialo:nullproviderreason";
     }

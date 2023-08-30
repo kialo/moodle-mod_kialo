@@ -29,8 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 
+/**
+ * Tests the mod_kialo config.
+ */
 class kialo_config_test extends \advanced_testcase {
     /**
+     * Tests the default tool URL.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
      */
     public function test_default_tool_url() {
@@ -42,6 +46,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests that the tool URL can be overridden.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
      */
     public function test_custom_tool_url() {
@@ -50,6 +55,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests private key generation.
      * @covers \mod_kialo\kialo_config::get_instance::get_platform_keychain
      */
     public function test_private_key_generation() {
@@ -63,6 +69,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests client id generation.
      * @covers \mod_kialo\kialo_config::get_instance::get_client_id
      */
     public function test_client_id() {
@@ -71,6 +78,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests the platform configuration.
      * @covers \mod_kialo\kialo_config::get_instance::get_platform
      */
     public function test_get_platform() {
@@ -83,6 +91,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests the tool configuration.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool
      */
     public function test_get_tool() {
@@ -98,6 +107,7 @@ class kialo_config_test extends \advanced_testcase {
     }
 
     /**
+     * Tests the registration creation.
      * @covers \mod_kialo\kialo_config::get_instance::create_registration
      */
     public function test_registration() {

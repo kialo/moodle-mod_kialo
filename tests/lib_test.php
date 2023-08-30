@@ -132,9 +132,8 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_pre_enable_plugin_actions
      * @dataProvider kialo_pre_enable_plugin_actions_provider
-     * @param bool $initialstate
+     * @param bool|null $initialstate
      * @param bool $expected
-     * @param int $notificationcount
      */
     public function test_kialo_pre_enable_plugin_actions(
             ?bool $initialstate,
@@ -152,8 +151,9 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_pre_enable_plugin_actions
      * @dataProvider kialo_pre_enable_plugin_actions_provider
-     * @param bool $initialstate
+     * @param bool|null $initialstate
      * @param bool $expected
+     * @throws \moodle_exception
      */
     public function test_enable_plugin(
             ?bool $initialstate,

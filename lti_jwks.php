@@ -16,10 +16,10 @@
 
 /**
  * Endpoint that returns the JWKS for the platform key.
+ *
  * Called by Kialo's backend during the LTI 1.3 flow.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

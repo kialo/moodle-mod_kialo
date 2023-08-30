@@ -21,6 +21,13 @@ use renderer_base;
 use stdClass;
 use templatable;
 
+/**
+ * Data container used for the loading page.
+ *
+ * @package    mod_kialo
+ * @copyright  2023 Kialo GmbH
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class loading_page implements renderable, templatable {
     /** @var string $sometext Title of the loading page (displayed in the window/tab title bar). */
     private $htmltitle = "";
@@ -31,6 +38,12 @@ class loading_page implements renderable, templatable {
     /** @var string $extrahtml Arbitrary HTML to be inserted into the page. Used for redirect forms. */
     private $extrahtml = "";
 
+    /**
+     * Creates a new loading page data container.
+     * @param string $htmltitle
+     * @param string $loadingtext
+     * @param string $extrahtml
+     */
     public function __construct(string $htmltitle, string $loadingtext, string $extrahtml) {
         $this->htmltitle = $htmltitle;
         $this->loadingtext = $loadingtext;
@@ -40,6 +53,7 @@ class loading_page implements renderable, templatable {
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
+     * @param renderer_base $output
      * @return stdClass
      */
     public function export_for_template(renderer_base $output): stdClass {

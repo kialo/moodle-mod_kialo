@@ -28,12 +28,23 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/kialo/backup/moodle2/backup_kialo_stepslib.php');
 
+/**
+ * Implements Moodle's backup interface.
+ */
 class backup_kialo_activity_task extends \backup_activity_task {
 
+    /**
+     * This plugin has no backup settings.
+     */
     protected function define_my_settings() {
         return;
     }
 
+    /**
+     * Defines the single backup step.
+     * @return void
+     * @throws base_task_exception
+     */
     protected function define_my_steps() {
         $this->add_step(new backup_kialo_activity_structure_step('kialo_structure', 'kialo.xml'));
     }
@@ -41,6 +52,9 @@ class backup_kialo_activity_task extends \backup_activity_task {
     /**
      * Code the transformations to perform in the activity in
      * order to get transportable (encoded) links
+     *
+     * @param string $content
+     * @return string
      */
     public static function encode_content_links($content): string {
         global $CFG;

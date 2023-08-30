@@ -20,7 +20,6 @@ namespace mod_kialo;
  * Data container used for the LTI implementation.
  *
  * @package    mod_kialo
- * @category   activity
  * @copyright  2023 Kialo GmbH
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -45,6 +44,12 @@ class deep_linking_result {
      */
     public $discussiontitle;
 
+    /**
+     * Creates a new deep linking result.
+     * @param string $deploymentid
+     * @param string $discussionurl
+     * @param string $discussiontitle
+     */
     public function __construct(string $deploymentid, string $discussionurl, string $discussiontitle) {
         $this->deploymentid = $deploymentid;
         $this->discussionurl = $discussionurl;
