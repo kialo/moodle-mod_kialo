@@ -18,7 +18,7 @@
  * The main mod_kialo configuration form.
  *
  * @package     mod_kialo
- * @copyright   2023 Kialo Inc. <support@kialo-edu.com>
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  *
  * @see https://docs.moodle.org/dev/Form_API
@@ -35,7 +35,7 @@ require_once('vendor/autoload.php');
  * Module instance settings form.
  *
  * @package     mod_kialo
- * @copyright   2023 Kialo Inc. <support@kialo-edu.com>
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kialo_mod_form extends moodleform_mod {

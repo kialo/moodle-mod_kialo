@@ -22,7 +22,7 @@ use plugin_renderer_base;
  * Renderer for the Kialo activity module.
  *
  * @package    mod_kialo
- * @copyright  2023 Kialo GmbH
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {

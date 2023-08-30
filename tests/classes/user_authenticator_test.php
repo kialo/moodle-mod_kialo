@@ -19,7 +19,7 @@
  *
  * @package    mod_kialo
  * @category   test
- * @copyright  2023 Kialo GmbH
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace mod_kialo;

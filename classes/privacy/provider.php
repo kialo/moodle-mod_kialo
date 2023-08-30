@@ -37,7 +37,7 @@ use core_privacy\local\metadata\null_provider;
  *
  * @package    mod_kialo
  * @category   privacy
- * @copyright  2023 onward Kialo GmbH (https://www.kialo-edu.com)
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\provider, null_provider {

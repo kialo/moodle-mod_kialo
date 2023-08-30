@@ -19,8 +19,8 @@
  *
  * @package    mod_kialo
  * @subpackage backup-moodle2
- * @copyright 2013 onwards Kialo GmbH
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see https://docs.moodle.org/dev/Backup_2.0_for_developers
  */
 

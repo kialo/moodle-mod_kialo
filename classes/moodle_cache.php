@@ -24,7 +24,7 @@ use Cache\Adapter\Common\PhpCacheItem;
  * Uses Moodle's Cache API to implement a PSR-6 compatible cache.
  *
  * @package    mod_kialo
- * @copyright  2023 Kialo GmbH
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see https://docs.moodle.org/dev/Cache_API
  *

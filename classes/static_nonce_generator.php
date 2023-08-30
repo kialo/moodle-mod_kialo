@@ -18,7 +18,7 @@
  * Used in the LTI flow to generate a static nonce (instead of a new one everytime).
  *
  * @package    mod_kialo
- * @copyright  2023 Kialo GmbH
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

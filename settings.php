@@ -19,7 +19,7 @@
  *
  * @package     mod_kialo
  * @category    admin
- * @copyright   2023 Kialo GmbH <support@kialo-edu.com>
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

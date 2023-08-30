@@ -18,7 +18,7 @@
  * Privacy provider tests.
  *
  * @package   mod_kialo
- * @copyright 2023 onward, Kialo GmbH
+ * @copyright 2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH <support@kialo-edu.com>
  */
@@ -34,7 +34,7 @@ use core_privacy\local\request\userlist;
  * Privacy provider tests class.
  *
  * @package   mod_kialo
- * @copyright 2023 onward, Kialo GmbH
+ * @copyright 2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH <support@kialo-edu.com>
  * @covers \mod_kialo\privacy\provider

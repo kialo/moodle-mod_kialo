@@ -99,7 +99,7 @@ Please also feel free to reach out to us through our [support page](https://supp
 
 ## License ##
 
-2023 Kialo Inc. <support@kialo-edu.com>
+2023 Kialo GmbH <support@kialo-edu.com>
 
 This program is free software: You can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software

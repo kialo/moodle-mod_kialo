@@ -20,7 +20,7 @@
  * Called by Kialo's backend during the LTI 1.3 flow.
  *
  * @package    mod_kialo
- * @copyright  2023 Kialo GmbH
+ * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

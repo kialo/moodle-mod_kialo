@@ -18,7 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     mod_kialo
- * @copyright   2023 Kialo GmbH <support@kialo-edu.com>
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,12 +26,12 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 $plugin->component = 'mod_kialo';
-$plugin->release = '0.5.2';
-$plugin->version = 2023083002;
+$plugin->release = '1.0.0';
+$plugin->version = 2023083003;
 
 // Officially we require PHP 7.4. The first Moodle version that requires this as a minimum is Moodle 4.1.
 // But technically this plugin also runs on older Moodle versions, as long as they run on PHP 7.4,
 // which some older Moodle versions also support. We tested that with Moodle 3.10 and 3.11, at least.
 $plugin->requires = 2020061522; // 3.9.22 and later.
 
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->maturity = MATURITY_STABLE;

@@ -18,7 +18,7 @@
  * Kialo Library tests class.
  *
  * @package   mod_kialo
- * @copyright 2023 Kialo GmbH
+ * @copyright 2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH (support@kialo-edu.com)
  */
@@ -33,7 +33,7 @@ require_once($CFG->dirroot . '/mod/kialo/lib.php');
  * Kialo Library tests class.
  *
  * @package   mod_kialo
- * @copyright 2023 Kialo GmbH
+ * @copyright 2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH (support@kialo-edu.com)
  */
