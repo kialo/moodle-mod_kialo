@@ -41,11 +41,11 @@ $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
 $deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
-
-if ($courseid) {
+if ($courseid && $deploymentid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
     require_login($courseid, false);
     require_capability('mod/kialo:addinstance', context_course::instance($courseid));
+    $_SESSION["kialo_deployment_id"] = $deploymentid;
 
     // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
     try {
@@ -68,6 +68,7 @@ if ($courseid) {
 } else if ($idtoken && isset($_SESSION["kialo_deployment_id"])) {
     // Received LtiDeepLinkingResponse from Kialo.
     $deploymentid = $_SESSION["kialo_deployment_id"];
+    unset($_SESSION["kialo_deployment_id"]);
 
     try {
         $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
