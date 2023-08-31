@@ -41,10 +41,11 @@ $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
 $deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
-if ($courseid) {
+if ($courseid && $deploymentid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
     require_login($courseid, false);
     require_capability('mod/kialo:addinstance', context_course::instance($courseid));
+    $_SESSION["kialo_deployment_id"] = $deploymentid;
 
     // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
     try {
@@ -91,6 +92,17 @@ if ($courseid) {
     // The user should basically not see this, or just very briefly.
     echo '<br><br><br><br><center>You can close this window now.</center>';
 } else {
+    $error = "Invalid request";
+    if (empty($deploymentid)) {
+        $error = "Missing deployment id";
+    } else if (empty($courseid)) {
+        $error = "Missing course id";
+    } else if (empty($idtoken)) {
+        $error = "Missing id token";
+    } else if (empty($_SESSION['kialo_deployment_id'])) {
+        $error = "Missing session data";
+    }
+
     // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
-    throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, "Invalid request.");
+    throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, $error);
 }

@@ -52,7 +52,6 @@ class mod_kialo_mod_form extends moodleform_mod {
         // Since the deployment id corresponds to an activity id, but the activity hasn't been created yet,
         // when the deep linking happens, we need to use a different deployment id.
         $deploymentid = uniqid($COURSE->id . $USER->id, true);
-        $_SESSION['kialo_deployment_id'] = $deploymentid;
 
         return $deploymentid;
     }
