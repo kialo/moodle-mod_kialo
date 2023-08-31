@@ -14,12 +14,15 @@
         <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Unusued (but required by Moodle): Activity description"/>
         <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Unusued (but required by Moodle): The format of the intro field."/>
         <FIELD NAME="discussion_title" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The title of the discussion (when it was selected)."/>
-        <FIELD NAME="deployment_id" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The deployment ID of the discussion."/>
+        <FIELD NAME="deployment_id" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The deployment ID of the discussion."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="idx_deployment_id_uniq" UNIQUE="true" FIELDS="deployment_id"/>
+      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>
