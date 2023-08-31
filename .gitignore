@@ -1,6 +1,7 @@
 ## PHP
 
-vendor/
+vendor/*
+!vendor/oat-sa/lib-lti1p3-core/readme_moodle.txt
 
 ## IDEA
 
