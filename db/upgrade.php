@@ -25,8 +25,8 @@
 /**
  * Custom upgrade steps.
  * @param int $oldversion
- * @return void
  */
-function xmldb_kialo_upgrade($oldversion = 0) {
+function xmldb_kialo_upgrade($oldversion = 0): bool {
     // This is the first public version, so there is nothing to do yet.
+    return true;
 }
