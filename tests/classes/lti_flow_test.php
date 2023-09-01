@@ -258,7 +258,9 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals($this->user->firstname . " " . $this->user->lastname, $token->claims()->get("name"));
         $this->assertEquals($this->user->email, $token->claims()->get("email"));
         $this->assertEquals($this->user->lang, $token->claims()->get("locale"));
-        $this->assertEquals((new \user_picture($USER))->get_url($PAGE), $token->claims()->get("picture"));
+        $expectedpicture = new \user_picture($USER);
+        $expectedpicture->size = 128;
+        $this->assertEquals($expectedpicture->get_url($PAGE), $token->claims()->get("picture"));
     }
 }
 

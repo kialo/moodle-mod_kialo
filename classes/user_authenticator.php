@@ -64,6 +64,9 @@ class user_authenticator implements UserAuthenticatorInterface {
             return new user_authentication_result(false);
         }
 
+        $avatar = new \user_picture($USER);
+        $avatar->size = 128;
+
         return new user_authentication_result(true,
                 new UserIdentity(
                         $USER->id,
@@ -73,7 +76,7 @@ class user_authenticator implements UserAuthenticatorInterface {
                         $USER->lastname,
                         $USER->middlename,
                         $USER->lang,
-                        (new \user_picture($USER))->get_url($PAGE),
+                        $avatar->get_url($PAGE),
                         // Additional claims our app needs, but which are not required fields in LTI.
                         // Using OIDC standard claims, see https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims.
                         [
