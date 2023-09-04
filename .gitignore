@@ -2,6 +2,7 @@
 
 vendor/*
 !vendor/oat-sa/lib-lti1p3-core/readme_moodle.txt
+!vendor/readme_moodle.txt
 
 ## IDEA
 
@@ -11,6 +12,7 @@ vendor/*
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/php-test-framework.xml
 
 # Generated files
 .idea/**/contentModel.xml
