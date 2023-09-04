@@ -4,9 +4,11 @@
 # Only install production dependencies
 cd .. # cd into root of repository
 cp vendor/oat-sa/lib-lti1p3-core/readme_moodle.txt ./readme_moodle.txt
+cp vendor/readme_moodle.txt ./vendor_readme_moodle.txt
 rm -rf vendor/
 composer install --no-dev --no-scripts --prefer-dist --no-interaction
 mv ./readme_moodle.txt vendor/oat-sa/lib-lti1p3-core/readme_moodle.txt
+mv ./vendor_readme_moodle.txt vendor/readme_moodle.txt
 
 # Ensure that the version in moodle is up-to-date. This corresponds to our release version.
 cd development
