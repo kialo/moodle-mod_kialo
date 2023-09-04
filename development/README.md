@@ -66,6 +66,20 @@ into the mounted moodle plugin folder on every change.
 * https://docs.moodle.org/dev/Activity_modules
 * https://moodledev.io/general/development/policies/codingstyle
 
+### Dependency Management
+
+We use PHP Composer to manage our dependencies.
+To add a new dependency, run `composer require <package-name>`.
+
+Whenever any dependency is changed (when `composer.lock` changes), you need to ensure to update `thirdpartylibs.xml` accordingly. Run the test `tests/thirdpartylibs_test.php` to check that 
+the thirdpartylibs.xml file is up to date.
+
+If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBS=1` to automatically regenerate the file:
+
+```shell
+UPDATE_THIRDPARTYLIBS=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
+```
+
 ## Testing
 
 Tests for the plugin are located in the `tests` folder. This need to be executed in the docker compose context,
@@ -109,26 +123,7 @@ To release a new version, follow these steps:
 
     * Check "Set as a pre-release" and add a tag "-alpha" to the tag while we haven't published the plugin yet.
 
-# Random Notes (temporary, should be removed/updated before release)
-
-## Moodle 3 / 4 compatibility
-
-* A single branch can be used to support both Moodle 3x and 4x activity plugins by including icon.svg for Moodle 3x and monologo.svg for Moodle 4x.
-* in `kialo_supports` when defining a MOD_PURPOSE_, `if (defined('FEATURE_MOD_PURPOSE') && $feature === FEATURE_MOD_PURPOSE) {
-  return MOD_PURPOSE_CONTENT` to ensure Moodle 3 compatibility.
-
-## Global Moodle vars
-
-* `$CFG`: This global variable contains configuration values of the Moodle setup, such as the root directory, data directory, database details, and other config values.
-* ```$SESSION`: Moodle's wrapper round PHP's `$_SESSION`.
-* `$USER`: Holds the user table record for the current user. This will be the 'guest' user record for people who are not logged in.
-* `$SITE`: Frontpage course record. This is the course record with id=1.
-* `$COURSE`: This global variable holds the current course details. An alias for `$PAGE->course`.
-* `$PAGE`: This is a central store of information about the current page we are generating in response to the user's request.
-* `$OUTPUT`: `$OUTPUT `is an instance of core_renderer or one of its subclasses. It is used to generate HTML for output.
-* `$DB`: This holds the database connection details. It is used for all access to the database.
-
-## Docs
+## Related Docs
 
 * https://registry.hub.docker.com/r/bitnami/moodle - setting up Moodle locally
 * https://docs.moodle.org/dev/Automatic_class_loading
@@ -140,14 +135,3 @@ To release a new version, follow these steps:
 
 This can happen if you deleted your docker containers before for some reason and then tried running `docker compose up` again.
 Try deleting both the docker images, and the folder `development/moodle`, and then run `docker compose up` again.
-
-## TODOs
-
-* go through the plugin checklist linked above
-* the plugin content should be at the root of the repo, not its own folder
-* the git repo should be called `moodle-mod_kialo`
-* configure CI to run the tests for different moodle versions, at least 3.9 (current LTS), 4.0 (next LTS), and latest moodle (4.2)
-* add default header to all files: https://moodledev.io/general/development/policies/codingstyle#files
-* add docblock to all PHP classes: https://moodledev.io/general/development/policies/codingstyle#phpdoc-classes
-* add docblock to all PHP functions https://moodledev.io/general/development/policies/codingstyle#functions
-* exceptions: https://moodledev.io/general/development/policies/codingstyle#exceptions

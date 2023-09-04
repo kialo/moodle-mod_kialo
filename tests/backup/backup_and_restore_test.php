@@ -69,7 +69,7 @@ class backup_and_restore_test extends advanced_testcase {
         $activity = $this->getDataGenerator()->create_module('kialo', [
                 'course' => $course,
                 'name' => 'Some Kialo Discussion Activity',
-                'deployment_id' => '42lashf13.34ih',
+                'deployment_id' => uniqid('random-deployment-id'),
                 'discussion_title' => 'Test discussion',
         ]);
 
