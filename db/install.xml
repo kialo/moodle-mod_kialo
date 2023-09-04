@@ -20,9 +20,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fk_course" TYPE="foreign" FIELDS="course" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
-      <INDEXES>
-        <INDEX NAME="idx_deployment_id_uniq" UNIQUE="true" FIELDS="deployment_id"/>
-      </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>
