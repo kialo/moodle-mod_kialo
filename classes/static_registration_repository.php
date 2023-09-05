@@ -89,9 +89,11 @@ class static_registration_repository implements RegistrationRepositoryInterface 
     public function findByPlatformIssuer(string $issuer, string $clientId = null): ?RegistrationInterface {
         $platform = $this->registration->getPlatform();
         if ($platform->getAudience() !== $issuer) {
+            //throw new \Error("$issuer != {$platform->getAudience()}");
             return null;
         }
         if ($clientId !== null && $clientId !== $this->registration->getClientId()) {
+            //throw new \Error("$clientId != {$this->registration->getClientId()}");
             return null;
         }
         return $this->registration;

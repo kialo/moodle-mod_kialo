@@ -35,8 +35,8 @@ use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
+use OAT\Library\Lti1p3Core\Security\Jwks\Fetcher\JwksFetcher;
 use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
-use OAT\Library\Lti1p3Core\Security\Jwt\Validator\ValidatorInterface;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
@@ -45,6 +45,13 @@ use Psr\Http\Message\ServerRequestInterface;
  * Functions implementing the LTI steps.
  */
 class lti_flow {
+    /**
+     * Can be used to override the default JwksFetcher. Used for testing purposes.
+     *
+     * @var null|JwksFetcher
+     */
+    public static $jwksfetcher = null;
+
     /**
      * Assigns LTI roles based on the current user's roles in the given context (module).
      * Any users with the `mod/kialo:kialo_admin` capability (see `db/access.php`) are assigned the Instructor role.
@@ -125,7 +132,7 @@ class lti_flow {
         $registrationrepo = new static_registration_repository($registration);
         $noncerepo = new NonceRepository(moodle_cache::nonce_cache());
 
-        $validator = new PlatformLaunchValidator($registrationrepo, $noncerepo);
+        $validator = new PlatformLaunchValidator($registrationrepo, $noncerepo, self::$jwksfetcher);
         $message = $validator->validateToolOriginatingLaunch($request);
         $payload = $message->getPayload();
 
@@ -152,13 +159,13 @@ class lti_flow {
             throw new LtiException('Expected content item to be of type ltiResourceLink');
         }
 
-        if (!$content["url"]) {
+        if (empty($content["url"])) {
             throw new LtiException('Expected content item to have a url');
         }
 
         return new deep_linking_result(
                 $payload->getDeploymentId(),
-                $content["url"] ?? "",
+                $content["url"],
                 $content["title"] ?? "",
         );
     }
@@ -203,7 +210,7 @@ class lti_flow {
         $builder = new PlatformOriginatingLaunchBuilder();
 
         // In the end we want to redirect to launch which handles the deep link request.
-        $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/launch';
+        $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/deeplink';
 
         // Our PHP LTI library expects the data token to be a JWT token signed by the platform.
         $datatoken = self::create_platform_jwt_token(); // Empty because we don't need any data, just the signature.
@@ -235,12 +242,11 @@ class lti_flow {
     /**
      * Finishes the LTI authentication flow, parsing the current request (the user should have been redirected here by Kialo).
      *
-     * @param ValidatorInterface|null $validator Can be used to override validation behavior; only used by tests right now.
      * @return LtiMessageInterface Contains the launch details
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function lti_auth(?ValidatorInterface $validator = null): LtiMessageInterface {
+    public static function lti_auth(): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();
 
@@ -257,7 +263,7 @@ class lti_flow {
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
 
         // Create the OIDC authenticator.
-        $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder, $validator);
+        $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
 
         // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint').
         return $authenticator->authenticate($request);

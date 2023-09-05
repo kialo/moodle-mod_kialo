@@ -25,7 +25,6 @@ use OAT\Library\Lti1p3Core\Security\Key\KeyChainInterface;
 use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
 use OAT\Library\Lti1p3Core\Tool\Tool;
 
-
 /**
  * Defines capabilities for the Kialo activity module.
  *
@@ -38,6 +37,15 @@ class kialo_config {
      * @var kialo_config
      */
     private static $instance = null;
+
+    /**
+     * By default, the tool's (Kialo's own) current public key will be downloaded during the LTI flow.
+     *
+     * This can be overriden for testing purposes.
+     *
+     * @var KeyChainInterface|null
+     */
+    public ?KeyChainInterface $toolkeychain = null;
 
     /**
      * Returns the URL of the Kialo instance to use. By default its the production instance https://www.kialo-edu.com.
@@ -137,15 +145,15 @@ class kialo_config {
         $deploymentids = $deploymentid ? [$deploymentid] : [];
 
         return new Registration(
-                'kialo-moodle-registration',        // Registration ID. Since we don't need to store this, we can use a constant.
-                $this->get_client_id(),             // Client ID.
-                $this->get_platform(),              // Platform.
-                $tool,                              // Tool.
-                $deploymentids,                     // Deployment IDs.
-                $this->get_platform_keychain(),     // Platform's keychain used for signing messages.
-                null,                               // Kialo's keychain for verifying messages. Is downloaded from the JWKS URL.
-                $platformjwksurl,                   // JWKS URL for the platform. Unused by us.
-                $tooljwksurl,                       // JWKS URL used to download Kialo's keyset.
+                'kialo-moodle-registration',    // Registration ID. Since we don't need to store this, we can use a constant.
+                $this->get_client_id(),         // Client ID.
+                $this->get_platform(),          // Platform.
+                $tool,                          // Tool.
+                $deploymentids,                 // Deployment IDs.
+                $this->get_platform_keychain(), // Platform's keychain used for signing messages.
+                $this->toolkeychain,            // Kialo's keychain for verifying messages. Usuallly downloaded from the JWKS URL.
+                $platformjwksurl,               // JWKS URL for the platform. Unused by us.
+                $tooljwksurl,                   // JWKS URL used to download Kialo's keyset.
         );
     }
 }
