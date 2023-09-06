@@ -69,7 +69,7 @@ class lti_flow {
         $roles = [];
         if (has_capability('mod/kialo:kialo_admin', $context)) {
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor';
-        } else {
+        } else if (has_capability('mod/kialo:view', $context)) {
             $roles[] = 'http://purl.imsglobal.org/vocab/lis/v2/membership#Learner';
         }
 
@@ -259,7 +259,7 @@ class lti_flow {
         // The LTI library mistakenly generates a new nonce every time.
         // This works around the issue by providing our own correct nonce generator.
         // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
-        $nonce = $request->getQueryParams()['nonce'];
+        $nonce = $request->getQueryParams()['nonce'] ?? '';
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
 
         // Create the OIDC authenticator.

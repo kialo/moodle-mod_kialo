@@ -54,9 +54,48 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  */
 class lti_flow_test extends \advanced_testcase {
 
+    /**
+     * Message is signed by the platform (the Kialo Moodle plugin).
+     */
     const SIGNER_PLATFORM = 'platform';
+
+    /**
+     * Message is signed by the tool (Kialo Edu).
+     */
     const SIGNER_TOOL = 'tool';
+
+    /**
+     * Some random deployment id used for the tests.
+     */
     const EXAMPLE_DEPLOYMENT_ID = '2264e897a263eae4.74875925';
+
+    /**
+     * Current user (created and logged in in setUp).
+     *
+     * @var \stdClass
+     */
+    private $user;
+
+    /**
+     * Current course (created in setUp).
+     *
+     * @var \stdClass
+     */
+    private $course;
+
+    /**
+     * Current module (created in setUp).
+     *
+     * @var \stdClass
+     */
+    private $module;
+
+    /**
+     * Current course module id (created in setUp).
+     *
+     * @var int
+     */
+    private $cmid;
 
     /**
      * In production the tool's (Kialo's) public key is downloaded from the platform (Moodle) during the LTI flow.
@@ -205,11 +244,10 @@ class lti_flow_test extends \advanced_testcase {
     /**
      * Asserts that the given string is a valid JWT signed by the plugin (LTI platform).
      *
-     * @param $value string
+     * @param string $value a JWT
      * @return UnencryptedToken parsed token
-     * @throws \dml_exception
      */
-    private function assert_jwt_signed_by_platform($value): UnencryptedToken {
+    private function assert_jwt_signed_by_platform(string $value): UnencryptedToken {
         $parser = new Parser(new JoseEncoder());
         $token = $parser->parse($value);
 
@@ -232,45 +270,40 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
-     * Tests that students get the correct LTI role.
-     *
-     * @covers \mod_kialo\lti_flow::assign_lti_roles
+     * Provides test scenarios for the role assignment test.
+     * @return \array[][] lists of Moodle roles and expected LTI roles.
      */
-    public function test_assign_lti_roles_for_student() {
-        $this->resetAfterTest(true);
-
-        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
-
-        $role = lti_flow::assign_lti_roles(context_module::instance($this->cmid));
-        $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"], $role);
+    public static function provide_lti_role_assertions() {
+        return [
+                "student" => [["student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"]],
+                "teacher" => [["teacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+                "editingteacher" => [["editingteacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+                "student and teacher at the same time" => [
+                        ["editingteacher", "student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]
+                ],
+                "manager" => [["manager"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+                "not enrolled" => [[], []],
+        ];
     }
 
     /**
-     * Tests that teachers get the correct LTI role.
-     *
+     * Tests that Moodle roles are correctly mapped to LTI roles.
+     * @param array $moodleroles List of Moodle roles the user has in the course.
+     * @param array $expectedltiroles List of expected LTI roles the user should be assigned.
+     * @return void
+     * @throws \coding_exception
      * @covers \mod_kialo\lti_flow::assign_lti_roles
      */
-    public function test_assign_lti_roles_for_teacher() {
+    public function test_assign_lti_roles(array $moodleroles, array $expectedltiroles) {
         $this->resetAfterTest(true);
 
-        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "editingteacher");
+        foreach ($moodleroles as $moodlerole) {
+            $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, $moodlerole);
+        }
 
         $role = lti_flow::assign_lti_roles(context_module::instance($this->cmid));
-        $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"], $role);
-    }
 
-    /**
-     * Tests that teaching assistants get the correct LTI role.
-     *
-     * @covers \mod_kialo\lti_flow::assign_lti_roles
-     */
-    public function test_assign_lti_roles_for_teaching_assistant() {
-        $this->resetAfterTest(true);
-
-        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
-
-        $role = lti_flow::assign_lti_roles(context_module::instance($this->cmid));
-        $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"], $role);
+        $this->assertEquals($expectedltiroles, $role);
     }
 
     /**
@@ -309,15 +342,14 @@ class lti_flow_test extends \advanced_testcase {
     }
 
     /**
-     * Tests the 2nd step of the LTI flow, when Kialo redirects the user back to Moodle.
+     * Prepares a standard LTI auth request as would be received by the plugin from Kialo in the LTI flow.
      *
-     * @covers \mod_kialo\lti_flow::lti_auth
+     * @param string|array $signer self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
+     * @param callable|null $callback Callback to add custom claims to the token or modify other $_GET params.
+     * @return void
+     * @throws \Exception
      */
-    public function test_lti_auth(): void {
-        global $PAGE, $USER;
-
-        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
-
+    private function prepare_lti_auth_request($signer = self::SIGNER_PLATFORM, ?callable $callback = null) {
         // Given a redirect GET request from Kialo with the LTI auth response.
         $_GET['scope'] = 'openid';
         $_GET['nonce'] = 'c380f19c98444ea5907a24d2586c301f8066082a429611eeb7dcceee5bb58708';
@@ -329,17 +361,34 @@ class lti_flow_test extends \advanced_testcase {
         $_GET['login_hint'] = $this->course->id . "/" . $this->user->id;
 
         // LTI Message JWT - created and signed by the Moodle plugin initially and then passed around.
-        $tokenstr = $this->create_signed_jwt(self::SIGNER_PLATFORM, function($builder) {
+        $tokenstr = $this->create_signed_jwt($signer, function($builder) use ($callback) {
             $builder
                 ->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiResourceLinkRequest')
                 ->withClaim("https://purl.imsglobal.org/spec/lti/claim/target_link_uri",
-                        kialo_config::get_instance()->get_tool_url())
+                            kialo_config::get_instance()->get_tool_url())
                 ->withClaim("registration_id", "kialo-moodle-registration");
+
+            if ($callback) {
+                $callback($builder);
+            }
         });
         $this->assertNotEmpty($tokenstr);
 
         $_GET['lti_message_hint'] = $tokenstr;
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', '&');
+    }
+
+    /**
+     * Tests the 2nd step of the LTI flow, when Kialo redirects the user back to Moodle.
+     *
+     * @covers \mod_kialo\lti_flow::lti_auth
+     */
+    public function test_lti_auth(): void {
+        // The current user must be at least a student in the course. But this LTI step works the same for students and teachers.
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+
+        // Given a redirect GET request from Kialo with the LTI auth response.
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM);
 
         // Do the actual LTI auth step, as if the user was just redirected to the plugin by Kialo.
         $message = lti_flow::lti_auth();
@@ -362,9 +411,95 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals($this->user->firstname . " " . $this->user->lastname, $token->claims()->get("name"));
         $this->assertEquals($this->user->email, $token->claims()->get("email"));
         $this->assertEquals($this->user->lang, $token->claims()->get("locale"));
+
+        global $PAGE, $USER;
         $expectedpicture = new \user_picture($USER);
         $expectedpicture->size = 128;
         $this->assertEquals($expectedpicture->get_url($PAGE), $token->claims()->get("picture"));
+    }
+
+    /**
+     * Provides test scenarios of invalid LTI auth requests.
+     * @return array[] lists of invalid LTI auth requests.
+     * @throws \dml_exception
+     */
+    public function provide_invalid_lti_auth_builders() {
+        $maliciouskeychain = self::generate_tool_keychain();
+        $platformkeychain = kialo_config::get_instance()->get_platform_keychain();
+        $normalclientid = kialo_config::get_instance()->get_client_id();
+
+        return [
+            // Not just anybody can sign the JWT.
+                "invalid signature" => [
+                        [
+                                "key" => $maliciouskeychain->getPrivateKey()->getContent(),
+                                "iss" => $normalclientid,
+                                "aud" => "https://www.example.com/moodle/mod/kialo",
+                                "kid" => $platformkeychain->getIdentifier()
+                        ],
+                        null,
+                        new LtiException("Invalid message hint")
+                ],
+                "wrong Moodle user" => [
+                        self::SIGNER_PLATFORM,
+                        function(Builder $builder) {
+                            $othercourseid = "42";
+                            $invaliduserid = "9999";
+                            $_GET["login_hint"] = "$othercourseid/$invaliduserid";
+                        },
+                        "/^OIDC authentication failed.*/",
+                ],
+                "missing state parameter" => [
+                        self::SIGNER_PLATFORM,
+                        function(Builder $builder) {
+                            unset($_GET['state']);
+                        },
+                        new LtiException("OIDC authentication failed: Missing mandatory state"),
+                ],
+                "missing login_hint" => [
+                        self::SIGNER_PLATFORM,
+                        function(Builder $builder) {
+                            unset($_GET['login_hint']);
+                        },
+                        new LtiException("OIDC authentication failed: Missing mandatory login_hint"),
+                ],
+                "wrong registration id" => [
+                        self::SIGNER_PLATFORM,
+                        function(Builder $builder) {
+                            $builder->withClaim("registration_id", "wrong-registration");
+                        },
+                        new LtiException("Invalid message hint registration id claim"),
+                ],
+        ];
+    }
+
+    /**
+     * Tests invalid LTI auth requests.
+     *
+     * @param mixed $signer self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
+     * @param callable|null $builder Callback to modify the token (receives a JWT Builder).
+     * @param \Exception $exception expected exception
+     * @return void
+     * @throws LtiException
+     * @throws \dml_exception
+     * @dataProvider provide_invalid_lti_auth_builders
+     * @covers       \mod_kialo\lti_flow::validate_deep_linking_response
+     */
+    public function test_invalid_lti_auth($signer, ?callable $builder, $exception) {
+        // The current user must be at least a student in the course. But this LTI step works the same for students and teachers.
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+
+        // Given a redirect GET request from Kialo with the LTI auth response.
+        $this->prepare_lti_auth_request($signer, $builder);
+
+        if (is_string($exception)) {
+            $this->expectExceptionMessageMatches($exception);
+        } else if ($exception) {
+            $this->expectExceptionObject($exception);
+        }
+
+        // Do the actual LTI auth step, as if the user was just redirected to the plugin by Kialo.
+        lti_flow::lti_auth();
     }
 
     /**
@@ -412,12 +547,12 @@ class lti_flow_test extends \advanced_testcase {
     /**
      * Creates a deep link response JWT and sets the current request's query string to contain it.
      *
-     * @param $signer string self::SIGNER_PLATFORM or self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
-     * @param $callable callable|null Callback to modify the token.
+     * @param string $signer self::SIGNER_PLATFORM or self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
+     * @param callable|null $callable Callback to modify the token.
      * @return void
      * @throws \Exception
      */
-    private function prepare_deep_link_response($signer, ?callable $callable = null) {
+    private function prepare_deep_link_response_request($signer, ?callable $callable = null) {
         $_GET['JWT'] = $this->create_signed_jwt($signer, function(Builder $builder) use ($callable) {
             $builder->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiDeepLinkingResponse');
             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
@@ -451,7 +586,7 @@ class lti_flow_test extends \advanced_testcase {
      */
     public function test_validate_deep_link_response() {
         // Given a redirect GET request from Kialo with the deep linking response.
-        $this->prepare_deep_link_response(self::SIGNER_TOOL);
+        $this->prepare_deep_link_response_request(self::SIGNER_TOOL);
 
         // The response should be validated successfully.
         $result = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), self::EXAMPLE_DEPLOYMENT_ID);
@@ -462,6 +597,11 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals("https://www.kialo-edu.com/discussion-title-1234", $result->discussionurl);
     }
 
+    /**
+     * Provides test scenarios of invalid deep link response request.
+     * @return array[]
+     * @throws \dml_exception
+     */
     public static function provide_invalid_deeplink_builders() {
         $maliciouskeychain = self::generate_tool_keychain();
         $platformkeychain = kialo_config::get_instance()->get_platform_keychain();
@@ -488,7 +628,8 @@ class lti_flow_test extends \advanced_testcase {
                                 "key" => $maliciouskeychain->getPrivateKey()->getContent(),
                                 "iss" => $normalclientid,
                                 "aud" => "https://www.example.com/moodle/mod/kialo",
-                                "kid" => $platformkeychain->getIdentifier()],
+                                "kid" => $platformkeychain->getIdentifier()
+                        ],
                         null,
                         new LtiException("JWT validation failure")
                 ],
@@ -536,9 +677,9 @@ class lti_flow_test extends \advanced_testcase {
     /**
      * Tests invalid deep link responses.
      *
-     * @param $signer string|array self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
-     * @param callable $builder Callback to modify the token (receives a JWT Builder).
-     * @param $exception \Exception expected exception
+     * @param mixed $signer self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
+     * @param callable|null $builder Callback to modify the token (receives a JWT Builder).
+     * @param \Exception $exception expected exception
      * @return void
      * @throws LtiException
      * @throws \dml_exception
@@ -547,7 +688,7 @@ class lti_flow_test extends \advanced_testcase {
      */
     public function test_invalid_deep_link_response($signer, ?callable $builder, $exception) {
         // Given an invalid redirect GET request from Kialo with the deep linking response.
-        $this->prepare_deep_link_response($signer, $builder);
+        $this->prepare_deep_link_response_request($signer, $builder);
 
         // The validation should fail.
         $this->expectExceptionObject($exception);
