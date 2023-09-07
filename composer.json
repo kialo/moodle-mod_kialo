@@ -33,6 +33,7 @@
   },
   "scripts": {
     "phpcs": "phpcs --standard=moodle",
+    "php-cs-fixer": "php-cs-fixer --config=.php-cs-fixer.php",
     "post-install-cmd": [
       "phpcs --config-set default_standard moodle"
     ],
