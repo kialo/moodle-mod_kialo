@@ -3,8 +3,8 @@ grumphp:
     phpcs:
       standard: moodle
       triggered_by: [php]
-      exclude: [vendor,development]
-    phpcsfixer: null
+    phpcsfixer:
+      config: .php-cs-fixer.php
   ascii: ~  # disable ASCII art in pre-commit hook output
   parallel:
     enabled: false  # phpcs and php-cs-fixer could get into each other's way when running in parallel
