@@ -5,3 +5,9 @@ grumphp:
       triggered_by: [php]
       exclude: [vendor,development]
     phpcsfixer: null
+  ascii: ~  # disable ASCII art in pre-commit hook output
+  parallel:
+    enabled: false  # phpcs and php-cs-fixer could get into each other's way when running in parallel
+  fixer:
+    enabled: true
+    fix_by_default: true
