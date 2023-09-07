@@ -3,6 +3,7 @@
 vendor/*
 !vendor/oat-sa/lib-lti1p3-core/readme_moodle.txt
 !vendor/readme_moodle.txt
+.php-cs-fixer.cache
 
 ## IDEA
 
