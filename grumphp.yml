@@ -1,0 +1,7 @@
+grumphp:
+  tasks:
+    phpcs:
+      standard: moodle
+      triggered_by: [php]
+      exclude: [vendor,development]
+    phpcsfixer: null
