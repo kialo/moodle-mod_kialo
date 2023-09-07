@@ -57,17 +57,17 @@ class lti_flow_test extends \advanced_testcase {
     /**
      * Message is signed by the platform (the Kialo Moodle plugin).
      */
-    const SIGNER_PLATFORM = 'platform';
+    public const SIGNER_PLATFORM = 'platform';
 
     /**
      * Message is signed by the tool (Kialo Edu).
      */
-    const SIGNER_TOOL = 'tool';
+    public const SIGNER_TOOL = 'tool';
 
     /**
      * Some random deployment id used for the tests.
      */
-    const EXAMPLE_DEPLOYMENT_ID = '2264e897a263eae4.74875925';
+    public const EXAMPLE_DEPLOYMENT_ID = '2264e897a263eae4.74875925';
 
     /**
      * Current user (created and logged in in setUp).
@@ -125,12 +125,12 @@ class lti_flow_test extends \advanced_testcase {
         $toolpublickeystr = openssl_pkey_get_details(openssl_pkey_get_private($toolprivatekeystr))['key'];
 
         $toolkeychain = (new KeyChainFactory())->create(
-                'example-key-id-1234',                           // Identifier (used for JWT kid header).
-                'kialo',                                         // Key set name (for grouping).
-                $toolpublickeystr,                               // Public key (file or content).
-                $toolprivatekeystr,                              // Private key (file or content).
-                '',                                              // Our key has no passphrase.
-                KeyInterface::ALG_RS256                          // Algorithm.
+            'example-key-id-1234',                           // Identifier (used for JWT kid header).
+            'kialo',                                         // Key set name (for grouping).
+            $toolpublickeystr,                               // Public key (file or content).
+            $toolprivatekeystr,                              // Private key (file or content).
+            '',                                              // Our key has no passphrase.
+            KeyInterface::ALG_RS256                          // Algorithm.
         );
 
         return $toolkeychain;
@@ -331,13 +331,19 @@ class lti_flow_test extends \advanced_testcase {
 
         $this->assertEquals("JWT", $token->headers()->get('typ'));
         $this->assertEquals("RS256", $token->headers()->get('alg'));
-        $this->assertEquals("LtiResourceLinkRequest",
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type"));
+        $this->assertEquals(
+            "LtiResourceLinkRequest",
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type")
+        );
         $this->assertEquals($deploymentid, $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/deployment_id"));
-        $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"],
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/roles"));
-        $this->assertEquals(kialo_config::get_instance()->get_tool_url(),
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri"));
+        $this->assertEquals(
+            ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"],
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/roles")
+        );
+        $this->assertEquals(
+            kialo_config::get_instance()->get_tool_url(),
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri")
+        );
         $this->assertNotNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/resource_link"));
     }
 
@@ -361,11 +367,13 @@ class lti_flow_test extends \advanced_testcase {
         $_GET['login_hint'] = $this->course->id . "/" . $this->user->id;
 
         // LTI Message JWT - created and signed by the Moodle plugin initially and then passed around.
-        $tokenstr = $this->create_signed_jwt($signer, function($builder) use ($callback) {
+        $tokenstr = $this->create_signed_jwt($signer, function ($builder) use ($callback) {
             $builder
                 ->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiResourceLinkRequest')
-                ->withClaim("https://purl.imsglobal.org/spec/lti/claim/target_link_uri",
-                            kialo_config::get_instance()->get_tool_url())
+                ->withClaim(
+                    "https://purl.imsglobal.org/spec/lti/claim/target_link_uri",
+                    kialo_config::get_instance()->get_tool_url()
+                )
                 ->withClaim("registration_id", "kialo-moodle-registration");
 
             if ($callback) {
@@ -400,10 +408,14 @@ class lti_flow_test extends \advanced_testcase {
         // The id_token is a JWT Token that contains the LTI details of the Moodle user and the deployment id.
         $token = $this->assert_jwt_signed_by_platform($message->getParameters()->get("id_token"));
 
-        $this->assertEquals("LtiResourceLinkRequest",
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type"));
-        $this->assertEquals(self::EXAMPLE_DEPLOYMENT_ID,
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/deployment_id"));
+        $this->assertEquals(
+            "LtiResourceLinkRequest",
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type")
+        );
+        $this->assertEquals(
+            self::EXAMPLE_DEPLOYMENT_ID,
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/deployment_id")
+        );
         $this->assertEquals("1.3.0", $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/version"));
         $this->assertEquals(core_date::get_user_timezone_object($this->user)->getName(), $token->claims()->get("zoneinfo"));
         $this->assertEquals($this->user->username, $token->claims()->get("preferred_username"));
@@ -442,7 +454,7 @@ class lti_flow_test extends \advanced_testcase {
                 ],
                 "wrong Moodle user" => [
                         self::SIGNER_PLATFORM,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $othercourseid = "42";
                             $invaliduserid = "9999";
                             $_GET["login_hint"] = "$othercourseid/$invaliduserid";
@@ -451,21 +463,21 @@ class lti_flow_test extends \advanced_testcase {
                 ],
                 "missing state parameter" => [
                         self::SIGNER_PLATFORM,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             unset($_GET['state']);
                         },
                         new LtiException("OIDC authentication failed: Missing mandatory state"),
                 ],
                 "missing login_hint" => [
                         self::SIGNER_PLATFORM,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             unset($_GET['login_hint']);
                         },
                         new LtiException("OIDC authentication failed: Missing mandatory login_hint"),
                 ],
                 "wrong registration id" => [
                         self::SIGNER_PLATFORM,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->withClaim("registration_id", "wrong-registration");
                         },
                         new LtiException("Invalid message hint registration id claim"),
@@ -525,13 +537,19 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertNotEmpty($params['lti_message_hint']);
         $token = $this->assert_jwt_signed_by_platform($params['lti_message_hint']);
 
-        $this->assertEquals("LtiDeepLinkingRequest",
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type"));
+        $this->assertEquals(
+            "LtiDeepLinkingRequest",
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/message_type")
+        );
         $this->assertEquals($deploymentid, $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/deployment_id"));
-        $this->assertEquals(["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"],
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/roles"));
-        $this->assertEquals(kialo_config::get_instance()->get_tool_url() . '/lti/deeplink',
-                $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri"));
+        $this->assertEquals(
+            ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"],
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/roles")
+        );
+        $this->assertEquals(
+            kialo_config::get_instance()->get_tool_url() . '/lti/deeplink',
+            $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri")
+        );
 
         $settings = $token->claims()->get("https://purl.imsglobal.org/spec/lti-dl/claim/deep_linking_settings");
         $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_select.php", $settings["deep_link_return_url"]);
@@ -553,7 +571,7 @@ class lti_flow_test extends \advanced_testcase {
      * @throws \Exception
      */
     private function prepare_deep_link_response_request($signer, ?callable $callable = null) {
-        $_GET['JWT'] = $this->create_signed_jwt($signer, function(Builder $builder) use ($callable) {
+        $_GET['JWT'] = $this->create_signed_jwt($signer, function (Builder $builder) use ($callable) {
             $builder->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiDeepLinkingResponse');
             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                     [
@@ -565,8 +583,10 @@ class lti_flow_test extends \advanced_testcase {
             ]);
 
             // The "data" claim needs to be a JWT signed by the platform, content doesn't matter.
-            $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/data",
-                    $this->create_signed_jwt(self::SIGNER_PLATFORM));
+            $builder->withClaim(
+                "https://purl.imsglobal.org/spec/lti-dl/claim/data",
+                $this->create_signed_jwt(self::SIGNER_PLATFORM)
+            );
 
             if ($callable) {
                 $callable($builder);
@@ -610,14 +630,14 @@ class lti_flow_test extends \advanced_testcase {
         return [
                 "invalid issuer" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->issuedBy("invalid-issuer");
                         },
                         new LtiException("No matching registration found platform side"),
                 ],
                 "missing issuer" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->issuedBy('');
                         },
                         new LtiException("No matching registration found platform side")
@@ -635,21 +655,21 @@ class lti_flow_test extends \advanced_testcase {
                 ],
                 "missing nonce" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->withClaim("nonce", "");
                         },
                         new LtiException("JWT nonce claim is missing")
                 ],
                 "missing content items" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
                         },
                         new LtiException("Expected exactly one content item")
                 ],
                 "wrong content type" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                                     [
                                             "type" => "link",
@@ -661,7 +681,7 @@ class lti_flow_test extends \advanced_testcase {
                 ],
                 "missing content item URL" => [
                         self::SIGNER_TOOL,
-                        function(Builder $builder) {
+                        function (Builder $builder) {
                             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                                     [
                                             "type" => "ltiResourceLink",

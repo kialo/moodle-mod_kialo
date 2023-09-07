@@ -136,8 +136,8 @@ class lib_test extends \advanced_testcase {
      * @param bool $expected
      */
     public function test_kialo_pre_enable_plugin_actions(
-            ?bool $initialstate,
-            bool $expected
+        ?bool $initialstate,
+        bool $expected
     ): void {
         $this->resetAfterTest(true);
 
@@ -156,8 +156,8 @@ class lib_test extends \advanced_testcase {
      * @throws \moodle_exception
      */
     public function test_enable_plugin(
-            ?bool $initialstate,
-            bool $expected
+        ?bool $initialstate,
+        bool $expected
     ): void {
         $this->resetAfterTest(true);
 

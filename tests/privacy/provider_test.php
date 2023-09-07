@@ -22,13 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH <support@kialo-edu.com>
  */
+
 namespace mod_kialo\privacy;
 
-use context_module;
 use core_privacy\local\metadata\collection;
-use core_privacy\local\request\approved_contextlist;
-use core_privacy\local\request\approved_userlist;
-use core_privacy\local\request\userlist;
 
 /**
  * Privacy provider tests class.

@@ -50,9 +50,9 @@ if ($courseid && $deploymentid) {
     // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
     try {
         $deeplinkmsg = lti_flow::init_deep_link(
-                $courseid,
-                $USER->id,
-                $deploymentid,
+            $courseid,
+            $USER->id,
+            $deploymentid,
         );
     } catch (Throwable $e) {
         // Show Moodle's default error page including some debug info.
@@ -61,9 +61,9 @@ if ($courseid && $deploymentid) {
 
     $output = $PAGE->get_renderer('mod_kialo');
     echo $output->render(new loading_page(
-            get_string("redirect_title", "mod_kialo"),
-            get_string("redirect_loading", "mod_kialo"),
-            $deeplinkmsg->toHtmlRedirectForm()
+        get_string("redirect_title", "mod_kialo"),
+        get_string("redirect_loading", "mod_kialo"),
+        $deeplinkmsg->toHtmlRedirectForm()
     ));
 } else if ($idtoken && isset($_SESSION["kialo_deployment_id"])) {
     // Received LtiDeepLinkingResponse from Kialo.

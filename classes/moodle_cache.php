@@ -138,7 +138,7 @@ class moodle_cache extends AbstractCachePool {
     protected function removeListItem($name, $key) {
         $existing = $this->moodlecache->get($name) ?? [];
         assert(is_array($existing));
-        $existing = array_filter($existing, fn($item) => $item !== $key);
+        $existing = array_filter($existing, fn ($item) => $item !== $key);
         $this->moodlecache->set($name, $existing);
     }
 }

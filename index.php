@@ -66,13 +66,15 @@ if ($course->format == 'weeks') {
 foreach ($kialos as $kialo) {
     if (!$kialo->visible) {
         $link = html_writer::link(
-                new moodle_url('/mod/kialo/view.php', array('id' => $kialo->coursemodule)),
-                format_string($kialo->name, true),
-                array('class' => 'dimmed'));
+            new moodle_url('/mod/kialo/view.php', array('id' => $kialo->coursemodule)),
+            format_string($kialo->name, true),
+            array('class' => 'dimmed')
+        );
     } else {
         $link = html_writer::link(
-                new moodle_url('/mod/kialo/view.php', array('id' => $kialo->coursemodule)),
-                format_string($kialo->name, true));
+            new moodle_url('/mod/kialo/view.php', array('id' => $kialo->coursemodule)),
+            format_string($kialo->name, true)
+        );
     }
 
     if ($course->format == 'weeks' || $course->format == 'topics') {

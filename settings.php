@@ -35,14 +35,14 @@ require_once($CFG->dirroot . '/mod/kialo/lib.php');
 if ($ADMIN->fulltree) {
     /** @var admin_settingpage $setting */
     $setting = new admin_setting_configcheckbox(
-            'mod_kialo/acceptterms',
-            new lang_string('acceptterms', 'mod_kialo'),
-            new lang_string('acceptterms_desc', 'mod_kialo', [
+        'mod_kialo/acceptterms',
+        new lang_string('acceptterms', 'mod_kialo'),
+        new lang_string('acceptterms_desc', 'mod_kialo', [
                     "terms" => "https://www.kialo-edu.com/terms",
                     "privacy" => "https://www.kialo-edu.com/privacy",
                     "data_security" => "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/"
             ]),
-            0
+        0
     );
     $settings->add($setting);
     $setting->set_updatedcallback('kialo_update_visibility_depending_on_accepted_terms');

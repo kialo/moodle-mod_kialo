@@ -88,8 +88,12 @@ class lti_flow {
      * @throws \coding_exception
      * @throws \dml_exception
      */
-    public static function init_resource_link(int $courseid, int $coursemoduleid, string $deploymentid,
-            string $moodleuserid): LtiMessageInterface {
+    public static function init_resource_link(
+        int $courseid,
+        int $coursemoduleid,
+        string $deploymentid,
+        string $moodleuserid
+    ): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration($deploymentid);
         $context = context_module::instance($coursemoduleid);
@@ -101,13 +105,13 @@ class lti_flow {
 
         $builder = new PlatformOriginatingLaunchBuilder();
         return $builder->buildPlatformOriginatingLaunch(
-                $registration,
-                LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-                $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
-                $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
-                $deploymentid,
-                $roles,
-                [
+            $registration,
+            LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
+            $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
+            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
+            $deploymentid,
+            $roles,
+            [
                     // The resource link claim is required in the spec, but we don't use it
                     // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                         new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
@@ -125,8 +129,10 @@ class lti_flow {
      * @throws \dml_exception
      * @see https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example
      */
-    public static function validate_deep_linking_response(ServerRequestInterface $request,
-            string $deploymentid): deep_linking_result {
+    public static function validate_deep_linking_response(
+        ServerRequestInterface $request,
+        string $deploymentid
+    ): deep_linking_result {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration($deploymentid);
         $registrationrepo = new static_registration_repository($registration);
@@ -164,9 +170,9 @@ class lti_flow {
         }
 
         return new deep_linking_result(
-                $payload->getDeploymentId(),
-                $content["url"],
-                $content["title"] ?? "",
+            $payload->getDeploymentId(),
+            $content["url"],
+            $content["title"] ?? "",
         );
     }
 
@@ -178,8 +184,8 @@ class lti_flow {
      * @return string
      */
     private static function create_platform_jwt_token(
-            array $headers = [],
-            array $claims = []
+        array $headers = [],
+        array $claims = []
     ): string {
         $platformkey = kialo_config::get_instance()->get_platform_keychain()->getPrivateKey();
         $jwtbuilder = new JwtBuilder();
@@ -217,25 +223,25 @@ class lti_flow {
 
         // See https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example.
         return $builder->buildPlatformOriginatingLaunch(
-                $registration,
-                LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
-                $targetlinkuri,
-                $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
-                $deploymentid,
-                ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
-                [
-                        new DeepLinkingSettingsClaim(
-                                $deeplinkingreturnurl,
-                                [LtiResourceLinkInterface::TYPE],   // Accept_types.
-                                ["window"],                         // Accept_presentation_document_targets.
-                                null,                               // Accept_media_types, unused.
-                                false,                              // AcceptMultiple: We just accept one discussion.
-                                false,                              // AutoCreate.
-                                null,                               // Title, unused.
-                                null,                               // Text, unused.
-                                $datatoken,
-                        ),
-                ]
+            $registration,
+            LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
+            $targetlinkuri,
+            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
+            $deploymentid,
+            ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
+            [
+                    new DeepLinkingSettingsClaim(
+                        $deeplinkingreturnurl,
+                        [LtiResourceLinkInterface::TYPE],   // Accept_types.
+                        ["window"],                         // Accept_presentation_document_targets.
+                        null,                               // Accept_media_types, unused.
+                        false,                              // AcceptMultiple: We just accept one discussion.
+                        false,                              // AutoCreate.
+                        null,                               // Title, unused.
+                        null,                               // Text, unused.
+                        $datatoken,
+                    ),
+            ]
         );
     }
 

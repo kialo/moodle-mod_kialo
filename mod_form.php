@@ -81,8 +81,12 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
         // Discussion Title.
-        $mform->addElement("text", "discussion_title", get_string("discussion_title", "mod_kialo"),
-                array("size" => "64", "readonly" => true));
+        $mform->addElement(
+            "text",
+            "discussion_title",
+            get_string("discussion_title", "mod_kialo"),
+            array("size" => "64", "readonly" => true)
+        );
         $mform->setType("discussion_title", PARAM_TEXT);
         $mform->addRule('discussion_title', null, 'required', null, 'client');
 

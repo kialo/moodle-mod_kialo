@@ -46,12 +46,11 @@ try {
 
     $output = $PAGE->get_renderer('mod_kialo');
     echo $output->render(new loading_page(
-            get_string("redirect_title", "mod_kialo"),
-            get_string("redirect_loading", "mod_kialo"),
-            $redirectform
+        get_string("redirect_title", "mod_kialo"),
+        get_string("redirect_loading", "mod_kialo"),
+        $redirectform
     ));
 } catch (Throwable $e) {
     // Show Moodle's default error page including some debug info.
     throw new \moodle_exception('errors:ltiauth', 'kialo', '', null, $e->getMessage());
 }
-

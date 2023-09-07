@@ -48,8 +48,8 @@ class provider implements \core_privacy\local\metadata\provider, null_provider {
      */
     public static function get_metadata(collection $collection): collection {
         $collection->add_external_location_link(
-                'kialo',
-                [
+            'kialo',
+            [
                         'userid' => 'privacy:metadata:kialo:userid',
                         'username' => 'privacy:metadata:kialo:username',
                         'fullname' => 'privacy:metadata:kialo:fullname',
@@ -60,7 +60,7 @@ class provider implements \core_privacy\local\metadata\provider, null_provider {
                         'courseid' => 'privacy:metadata:kialo:courseid',
                         'role' => 'privacy:metadata:kialo:role',
                 ],
-                'privacy:metadata:kialo'
+            'privacy:metadata:kialo'
         );
 
         return $collection;

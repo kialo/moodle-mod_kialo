@@ -36,7 +36,7 @@ class thirdpartylibs_test extends TestCase {
     private function parse_composer_packages() {
         $composerjson = json_decode(file_get_contents(__DIR__ . '/../composer.lock'), true);
         $this->assertNotNull($composerjson['packages']);
-        $composerpackages = array_map(function($package) {
+        $composerpackages = array_map(function ($package) {
             $license = $package['license'][0] ?? '';
             $licenseversion = '';
             if ($license) {
@@ -59,7 +59,7 @@ class thirdpartylibs_test extends TestCase {
             ];
         }, $composerjson['packages']);
 
-        usort($composerpackages, function($a, $b) {
+        usort($composerpackages, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
         });
 

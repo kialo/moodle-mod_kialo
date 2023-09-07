@@ -22,6 +22,7 @@
  * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_kialo;
 
 defined('MOODLE_INTERNAL') || die();
@@ -114,8 +115,8 @@ class user_authenticator_test extends \advanced_testcase {
         $this->assertEquals("Mustermann", $identity->getFamilyName());
         $this->assertEquals("The Machine", $identity->getMiddleName());
         $this->assertMatchesRegularExpression(
-                "|https://www.example.com/moodle/theme/image.php/_s/boost/core/\d+/u/f\d+|",
-                $identity->getPicture()
+            "|https://www.example.com/moodle/theme/image.php/_s/boost/core/\d+/u/f\d+|",
+            $identity->getPicture()
         );
     }
 

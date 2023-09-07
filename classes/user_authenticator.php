@@ -21,6 +21,7 @@
  * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace mod_kialo;
 
 use context_course;
@@ -67,22 +68,24 @@ class user_authenticator implements UserAuthenticatorInterface {
         $avatar = new \user_picture($USER);
         $avatar->size = 128;
 
-        return new user_authentication_result(true,
-                new UserIdentity(
-                        $USER->id,
-                        fullname($USER),
-                        $USER->email,
-                        $USER->firstname,
-                        $USER->lastname,
-                        $USER->middlename,
-                        $USER->lang,
-                        $avatar->get_url($PAGE),
-                        // Additional claims our app needs, but which are not required fields in LTI.
-                        // Using OIDC standard claims, see https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims.
-                        [
-                                "zoneinfo" => core_date::get_user_timezone_object()->getName(),
-                                "preferred_username" => $USER->username,
-                        ]
-                ));
+        return new user_authentication_result(
+            true,
+            new UserIdentity(
+                $USER->id,
+                fullname($USER),
+                $USER->email,
+                $USER->firstname,
+                $USER->lastname,
+                $USER->middlename,
+                $USER->lang,
+                $avatar->get_url($PAGE),
+                // Additional claims our app needs, but which are not required fields in LTI.
+                // Using OIDC standard claims, see https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims.
+                [
+                        "zoneinfo" => core_date::get_user_timezone_object()->getName(),
+                        "preferred_username" => $USER->username,
+                ]
+            )
+        );
     }
 }

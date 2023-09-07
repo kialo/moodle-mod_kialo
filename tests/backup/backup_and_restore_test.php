@@ -101,9 +101,14 @@ class backup_and_restore_test extends advanced_testcase {
 
         // Do backup with default settings. MODE_IMPORT means it will just
         // create the directory and not zip it.
-        $bc = new backup_controller(backup::TYPE_1COURSE, $srccourse->id,
-                backup::FORMAT_MOODLE, backup::INTERACTIVE_NO, backup::MODE_IMPORT,
-                $USER->id);
+        $bc = new backup_controller(
+            backup::TYPE_1COURSE,
+            $srccourse->id,
+            backup::FORMAT_MOODLE,
+            backup::INTERACTIVE_NO,
+            backup::MODE_IMPORT,
+            $USER->id
+        );
 
         // Don't need userdata.
         $bc->get_plan()->get_setting('users')->set_status(base_setting::NOT_LOCKED);
@@ -115,11 +120,18 @@ class backup_and_restore_test extends advanced_testcase {
 
         // Do restore to new course with default settings.
         $newcourseid = restore_dbops::create_new_course(
-                $srccourse->fullname, $srccourse->shortname . '_2', $srccourse->category
+            $srccourse->fullname,
+            $srccourse->shortname . '_2',
+            $srccourse->category
         );
-        $rc = new restore_controller($backupid, $newcourseid,
-                backup::INTERACTIVE_NO, backup::MODE_GENERAL, $USER->id,
-                backup::TARGET_NEW_COURSE);
+        $rc = new restore_controller(
+            $backupid,
+            $newcourseid,
+            backup::INTERACTIVE_NO,
+            backup::MODE_GENERAL,
+            $USER->id,
+            backup::TARGET_NEW_COURSE
+        );
 
         // Don't need userdata.
         $rc->get_plan()->get_setting('users')->set_status(base_setting::NOT_LOCKED);
