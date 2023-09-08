@@ -22,8 +22,6 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use core\plugininfo\mod;
-
 /**
  * Return if the plugin supports $feature.
  *
@@ -153,11 +151,14 @@ function kialo_update_visibility_depending_on_accepted_terms(): void {
 
     $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
 
-    if (function_exists('mod::enable_plugin')) {
+    if (class_exists('core\plugininfo\mod') && method_exists('core\plugininfo\mod', 'enable_plugin')) {
         // Moodle 4.0+.
-        mod::enable_plugin("kialo", $visible);
+        \core\plugininfo\mod::enable_plugin("kialo", $visible);
     } else {
         // Moodle 3.9 and older.
         $DB->set_field('modules', 'visible', $visible, ['name' => 'kialo']);
+
+        // Ensure that the plugin status (Enabled/Disabled) is updated correctly in Plugins overview.
+        \core_plugin_manager::instance()->reset_caches();
     }
 }

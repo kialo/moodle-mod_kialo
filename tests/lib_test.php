@@ -201,6 +201,8 @@ class lib_test extends \advanced_testcase {
         set_config('acceptterms', true, 'mod_kialo');
         kialo_update_visibility_depending_on_accepted_terms();
         $this->assertEquals(1, $DB->get_field('modules', 'visible', ['name' => 'kialo']));
+
+        $this->assertContains('kialo', \core_plugin_manager::instance()->get_enabled_plugins('mod'));
     }
 
     /**
@@ -216,5 +218,7 @@ class lib_test extends \advanced_testcase {
         set_config('acceptterms', false, 'mod_kialo');
         kialo_update_visibility_depending_on_accepted_terms();
         $this->assertEquals(0, $DB->get_field('modules', 'visible', ['name' => 'kialo']));
+
+        $this->assertNotContains('kialo', \core_plugin_manager::instance()->get_enabled_plugins('mod'));
     }
 }
