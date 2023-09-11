@@ -123,13 +123,14 @@ See `.github/workflows/moodle-release.yml` for details.
 
 To create a new release, follow these steps:
 1. Ensure the version in `version.php` has been incremented. Commit and push the change.
-2. Create a new tag, e.g. `git tag v1.2.3`
-3. Push the tag to GitHub: `git push origin v1.2.3`
-4. Wait for the release to be created on GitHub. This can take a few minutes.
+2. Wait for the CI to complete successfully.
+3. Create a new tag, e.g. `git tag v1.2.3`
+4. Push the tag to GitHub: `git push origin v1.2.3`
+5. Wait for the release to be created on GitHub. This can take a few minutes.
    See https://github.com/kialo/moodle-mod_kialo/actions/workflows/moodle-release.yml. 
    Note that the release workflow is only triggered once the CI for the new tag has completed successfully.
-5. Check the release [on GitHub](https://github.com/kialo/moodle-mod_kialo/releases) and ensure the `mod_kialo.zip` file is attached.
-6. Check the release on https://moodle.org/plugins/mod_kialo and ensure the version number is correct.
+6. Check the release [on GitHub](https://github.com/kialo/moodle-mod_kialo/releases) and ensure the `mod_kialo.zip` file is attached.
+7. Check the release on https://moodle.org/plugins/mod_kialo and ensure the version number is correct.
 
 ### Manual Release
 

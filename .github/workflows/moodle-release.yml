@@ -9,14 +9,9 @@
 name: Releasing in the Plugins directory
 
 on:
-  # Trigger the release when the CI build for a tag was completed successfully.
-  workflow_run:
-    workflows:
-      - Moodle Plugin CI
-    branches:
-      - main
-    types:
-      - completed
+  push:
+    tags:
+      - v*.*.*
 
   workflow_dispatch:
     inputs:
@@ -29,27 +24,14 @@ defaults:
     shell: bash
 
 jobs:
-  norelease:
-    runs-on: ubuntu-latest
-    if: ${{ !((github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'refs/tags/')) || github.event.workflow_dispatch.inputs.tag) }}
-    steps:
-      - name: Echo ref information
-        run: |
-          echo "No release was triggered, because no tag was detected."
-          echo "github.event.workflow_run.conclusion=${{ github.event.workflow_run.conclusion }}"
-          echo "github.event.workflow_run.head_branch=${{ github.event.workflow_run.head_branch }}"
-          echo "github.event.workflow_dispatch.inputs.tag=${{ github.event.workflow_dispatch.inputs.tag }}"
-
   release:
     runs-on: ubuntu-latest
-    if: ${{ (github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'refs/tags/')) || github.event.workflow_dispatch.inputs.tag }}
     env:
       PLUGIN: mod_kialo
       CURL: curl -s
       ENDPOINT: https://moodle.org/webservice/rest/server.php
       TOKEN: ${{ secrets.MOODLE_ORG_TOKEN }}  # see https://moodle.org/user/managetoken.php
       FUNCTION: local_plugins_add_version
-      RELEASE_REF: ${{ github.event.workflow_run.head_branch || github.event.workflow_dispatch.inputs.tag }}
     permissions:
       contents: write
 
@@ -58,7 +40,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: plugin
-          ref: ${{ env.RELEASE_REF }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -79,7 +60,6 @@ jobs:
           files: |
             plugin/development/mod_kialo.zip
           generate_release_notes: true
-          tag_name: ${{ env.RELEASE_REF }}
 
       # Uploads the release to Moodle using its Plugin Directory API
       - name: Call the service function
@@ -87,8 +67,8 @@ jobs:
         run: |
           if [[ ! -z "${{ github.event.inputs.tag }}" ]]; then
             TAGNAME="${{ github.event.inputs.tag }}"
-          elif [[ $RELEASE_REF = refs/tags/* ]]; then
-            TAGNAME="${RELEASE_REF##*/}"
+          elif [[ $GITHUB_REF = refs/tags/* ]]; then
+            TAGNAME="${GITHUB_REF##*/}"
           fi
           if [[ -z "${TAGNAME}" ]]; then
             echo "No tag name has been provided!"
