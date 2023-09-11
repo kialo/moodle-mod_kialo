@@ -1,3 +1,9 @@
+#
+# Automatically runs the Moodle Plugin CI on every push and pull request.
+# This includes code quality checks like phpcs, php-cs-fixer, and Moodle's own code checkers.
+#
+# Source: https://github.com/moodlehq/moodle-plugin-ci.
+#
 name: Moodle Plugin CI
 
 on: [ push, pull_request ]
