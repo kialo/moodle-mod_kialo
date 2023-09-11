@@ -9,9 +9,14 @@
 name: Releasing in the Plugins directory
 
 on:
-  push:
-    tags:
-      - v*.*.*
+  # Trigger the release when the CI build for a tag was completed successfully.
+  workflow_run:
+    workflows:
+      - Moodle Plugin CI
+    branches:
+      - main
+    types:
+      - completed
 
   workflow_dispatch:
     inputs:
@@ -26,6 +31,7 @@ defaults:
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' or github.event.workflow_dispatch.inputs.tag }}
     env:
       PLUGIN: mod_kialo
       CURL: curl -s
