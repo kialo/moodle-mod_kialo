@@ -75,6 +75,12 @@ jobs:
         if: ${{ always() }}
         run: moodle-plugin-ci phplint
 
+      - name: PHP code sniffer & php-cs-fixer
+        if: ${{ always() }}
+        run: |
+          cd plugin
+          composer lint
+
       - name: PHP Copy/Paste Detector
         continue-on-error: true # This step will show errors but will not fail
         if: ${{ always() }}
