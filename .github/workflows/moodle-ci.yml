@@ -2,7 +2,12 @@
 # Automatically runs the Moodle Plugin CI on every push and pull request.
 # This includes code quality checks like phpcs, php-cs-fixer, and Moodle's own code checkers.
 #
-# Source: https://github.com/moodlehq/moodle-plugin-ci.
+# For tag builds, it also creates a release on GitHub and uploads the plugin to Moodle's Plugin Directory.
+#
+# Based on:
+# - https://github.com/moodlehq/moodle-plugin-ci.
+# - https://github.com/moodlehq/moodle-plugin-release
+# - https://github.com/softprops/action-gh-release.
 #
 name: Moodle Plugin CI
 
@@ -126,7 +131,6 @@ jobs:
         run: moodle-plugin-ci phpunit --fail-on-warning
 
   # Automatically releases tags when the CI tests passed.
-  # Based on https://github.com/moodlehq/moodle-plugin-release and https://github.com/softprops/action-gh-release.
   release:
     runs-on: ubuntu-latest
     needs: test
