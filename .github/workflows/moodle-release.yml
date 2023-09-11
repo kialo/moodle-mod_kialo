@@ -31,7 +31,7 @@ defaults:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event.workflow_dispatch.inputs.tag }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || (github.event.workflow_dispatch.inputs.tag && contains(github.ref, 'refs/tags/')) }}
     env:
       PLUGIN: mod_kialo
       CURL: curl -s
