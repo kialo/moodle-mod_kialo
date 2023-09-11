@@ -50,6 +50,11 @@ jobs:
           # If you try to use code coverage with "none", it will fallback to phpdbg (which has known problems).
           coverage: none
 
+      - name: Install plugin dependencies
+        run: |
+          cd plugin
+          composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader
+
       - name: Initialise moodle-plugin-ci
         run: |
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
