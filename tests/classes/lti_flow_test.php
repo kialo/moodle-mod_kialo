@@ -116,9 +116,9 @@ class lti_flow_test extends \advanced_testcase {
      */
     private static function generate_tool_keychain(): KeyChainInterface {
         $config = array(
-                "digest_alg" => "sha256",
-                "private_key_bits" => 2048,
-                "private_key_type" => OPENSSL_KEYTYPE_RSA,
+            "digest_alg" => "sha256",
+            "private_key_bits" => 2048,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
         );
         $res = openssl_pkey_new($config);
         openssl_pkey_export($res, $toolprivatekeystr);
@@ -271,28 +271,31 @@ class lti_flow_test extends \advanced_testcase {
 
     /**
      * Provides test scenarios for the role assignment test.
+     *
      * @return \array[][] lists of Moodle roles and expected LTI roles.
      */
     public static function provide_lti_role_assertions() {
         return [
-                "student" => [["student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"]],
-                "teacher" => [["teacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
-                "editingteacher" => [["editingteacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
-                "student and teacher at the same time" => [
-                        ["editingteacher", "student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]
-                ],
-                "manager" => [["manager"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
-                "not enrolled" => [[], []],
+            "student" => [["student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"]],
+            "teacher" => [["teacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+            "editingteacher" => [["editingteacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+            "student and teacher at the same time" => [
+                ["editingteacher", "student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]
+            ],
+            "manager" => [["manager"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
+            "not enrolled" => [[], []],
         ];
     }
 
     /**
      * Tests that Moodle roles are correctly mapped to LTI roles.
+     *
      * @param array $moodleroles List of Moodle roles the user has in the course.
      * @param array $expectedltiroles List of expected LTI roles the user should be assigned.
      * @return void
      * @throws \coding_exception
-     * @covers \mod_kialo\lti_flow::assign_lti_roles
+     * @covers       \mod_kialo\lti_flow::assign_lti_roles
+     * @dataProvider provide_lti_role_assertions
      */
     public function test_assign_lti_roles(array $moodleroles, array $expectedltiroles) {
         $this->resetAfterTest(true);
@@ -432,6 +435,7 @@ class lti_flow_test extends \advanced_testcase {
 
     /**
      * Provides test scenarios of invalid LTI auth requests.
+     *
      * @return array[] lists of invalid LTI auth requests.
      * @throws \dml_exception
      */
@@ -442,46 +446,46 @@ class lti_flow_test extends \advanced_testcase {
 
         return [
             // Not just anybody can sign the JWT.
-                "invalid signature" => [
-                        [
-                                "key" => $maliciouskeychain->getPrivateKey()->getContent(),
-                                "iss" => $normalclientid,
-                                "aud" => "https://www.example.com/moodle/mod/kialo",
-                                "kid" => $platformkeychain->getIdentifier()
-                        ],
-                        null,
-                        new LtiException("Invalid message hint")
+            "invalid signature" => [
+                [
+                    "key" => $maliciouskeychain->getPrivateKey()->getContent(),
+                    "iss" => $normalclientid,
+                    "aud" => "https://www.example.com/moodle/mod/kialo",
+                    "kid" => $platformkeychain->getIdentifier()
                 ],
-                "wrong Moodle user" => [
-                        self::SIGNER_PLATFORM,
-                        function (Builder $builder) {
-                            $othercourseid = "42";
-                            $invaliduserid = "9999";
-                            $_GET["login_hint"] = "$othercourseid/$invaliduserid";
-                        },
-                        "/^OIDC authentication failed.*/",
-                ],
-                "missing state parameter" => [
-                        self::SIGNER_PLATFORM,
-                        function (Builder $builder) {
-                            unset($_GET['state']);
-                        },
-                        new LtiException("OIDC authentication failed: Missing mandatory state"),
-                ],
-                "missing login_hint" => [
-                        self::SIGNER_PLATFORM,
-                        function (Builder $builder) {
-                            unset($_GET['login_hint']);
-                        },
-                        new LtiException("OIDC authentication failed: Missing mandatory login_hint"),
-                ],
-                "wrong registration id" => [
-                        self::SIGNER_PLATFORM,
-                        function (Builder $builder) {
-                            $builder->withClaim("registration_id", "wrong-registration");
-                        },
-                        new LtiException("Invalid message hint registration id claim"),
-                ],
+                null,
+                new LtiException("Invalid message hint")
+            ],
+            "wrong Moodle user" => [
+                self::SIGNER_PLATFORM,
+                function (Builder $builder) {
+                    $othercourseid = "42";
+                    $invaliduserid = "9999";
+                    $_GET["login_hint"] = "$othercourseid/$invaliduserid";
+                },
+                "/^OIDC authentication failed.*/",
+            ],
+            "missing state parameter" => [
+                self::SIGNER_PLATFORM,
+                function (Builder $builder) {
+                    unset($_GET['state']);
+                },
+                new LtiException("OIDC authentication failed: Missing mandatory state"),
+            ],
+            "missing login_hint" => [
+                self::SIGNER_PLATFORM,
+                function (Builder $builder) {
+                    unset($_GET['login_hint']);
+                },
+                new LtiException("OIDC authentication failed: Missing mandatory login_hint"),
+            ],
+            "wrong registration id" => [
+                self::SIGNER_PLATFORM,
+                function (Builder $builder) {
+                    $builder->withClaim("registration_id", "wrong-registration");
+                },
+                new LtiException("Invalid message hint registration id claim"),
+            ],
         ];
     }
 
@@ -574,12 +578,12 @@ class lti_flow_test extends \advanced_testcase {
         $_GET['JWT'] = $this->create_signed_jwt($signer, function (Builder $builder) use ($callable) {
             $builder->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiDeepLinkingResponse');
             $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
-                    [
-                            "type" => "ltiResourceLink",
-                            "title" => "Selected Kialo Discussion",
-                            "url" => "https://www.kialo-edu.com/discussion-title-1234",
-                            "custom" => [],
-                    ]
+                [
+                    "type" => "ltiResourceLink",
+                    "title" => "Selected Kialo Discussion",
+                    "url" => "https://www.kialo-edu.com/discussion-title-1234",
+                    "custom" => [],
+                ]
             ]);
 
             // The "data" claim needs to be a JWT signed by the platform, content doesn't matter.
@@ -619,6 +623,7 @@ class lti_flow_test extends \advanced_testcase {
 
     /**
      * Provides test scenarios of invalid deep link response request.
+     *
      * @return array[]
      * @throws \dml_exception
      */
@@ -628,69 +633,69 @@ class lti_flow_test extends \advanced_testcase {
         $normalclientid = kialo_config::get_instance()->get_client_id();
 
         return [
-                "invalid issuer" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->issuedBy("invalid-issuer");
-                        },
-                        new LtiException("No matching registration found platform side"),
+            "invalid issuer" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->issuedBy("invalid-issuer");
+                },
+                new LtiException("No matching registration found platform side"),
+            ],
+            "missing issuer" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->issuedBy('');
+                },
+                new LtiException("No matching registration found platform side")
+            ],
+            // Not just anybody can sign the JWT.
+            "invalid signature" => [
+                [
+                    "key" => $maliciouskeychain->getPrivateKey()->getContent(),
+                    "iss" => $normalclientid,
+                    "aud" => "https://www.example.com/moodle/mod/kialo",
+                    "kid" => $platformkeychain->getIdentifier()
                 ],
-                "missing issuer" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->issuedBy('');
-                        },
-                        new LtiException("No matching registration found platform side")
-                ],
-                // Not just anybody can sign the JWT.
-                "invalid signature" => [
+                null,
+                new LtiException("JWT validation failure")
+            ],
+            "missing nonce" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->withClaim("nonce", "");
+                },
+                new LtiException("JWT nonce claim is missing")
+            ],
+            "missing content items" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
+                },
+                new LtiException("Expected exactly one content item")
+            ],
+            "wrong content type" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                         [
-                                "key" => $maliciouskeychain->getPrivateKey()->getContent(),
-                                "iss" => $normalclientid,
-                                "aud" => "https://www.example.com/moodle/mod/kialo",
-                                "kid" => $platformkeychain->getIdentifier()
-                        ],
-                        null,
-                        new LtiException("JWT validation failure")
-                ],
-                "missing nonce" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->withClaim("nonce", "");
-                        },
-                        new LtiException("JWT nonce claim is missing")
-                ],
-                "missing content items" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
-                        },
-                        new LtiException("Expected exactly one content item")
-                ],
-                "wrong content type" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
-                                    [
-                                            "type" => "link",
-                                            "url" => "https://www.kialo-edu.com/discussion-title-1234",
-                                    ]
-                            ]);
-                        },
-                        new LtiException("Expected content item to be of type ltiResourceLink")
-                ],
-                "missing content item URL" => [
-                        self::SIGNER_TOOL,
-                        function (Builder $builder) {
-                            $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
-                                    [
-                                            "type" => "ltiResourceLink",
-                                            "title" => "Selected Kialo Discussion",
-                                    ]
-                            ]);
-                        },
-                        new LtiException("Expected content item to have a url")
-                ],
+                            "type" => "link",
+                            "url" => "https://www.kialo-edu.com/discussion-title-1234",
+                        ]
+                    ]);
+                },
+                new LtiException("Expected content item to be of type ltiResourceLink")
+            ],
+            "missing content item URL" => [
+                self::SIGNER_TOOL,
+                function (Builder $builder) {
+                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
+                        [
+                            "type" => "ltiResourceLink",
+                            "title" => "Selected Kialo Discussion",
+                        ]
+                    ]);
+                },
+                new LtiException("Expected content item to have a url")
+            ],
         ];
     }
 
