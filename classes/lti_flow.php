@@ -44,8 +44,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Functions implementing the LTI steps.
  */
-class lti_flow
-{
+class lti_flow {
     /**
      * Can be used to override the default JwksFetcher. Used for testing purposes.
      *
@@ -53,12 +52,12 @@ class lti_flow
      */
     public static $jwksfetcher = null;
 
-    private static function buildPlatformOriginatingLaunch(
+    private static function build_platform_originating_launch(
         string $messagetype,
         string $targetlinkuri,
         string $deploymentid,
         string $moodleuserid,
-        string $courseid,
+        int $courseid,
         array $roles,
         array $optionalclaims
     ): LtiMessageInterface {
@@ -93,8 +92,7 @@ class lti_flow
      * @throws \coding_exception
      * @see https://www.imsglobal.org/spec/lti/v1p3#lis-vocabulary-for-context-roles
      */
-    public static function assign_lti_roles($context): array
-    {
+    public static function assign_lti_roles($context): array {
         // Note: The $context parameter is intentionally not type-hinted as `context_module` because between Moodle 4.2 and other
         // versions the concrete type differs. In Moodle 4.2 it's `context_module`, in other versions it's `core\context\module`.
         // And since we need to support versions older than PHP 8.0, we can't use an union type here.
@@ -131,7 +129,7 @@ class lti_flow
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
-        return self::buildPlatformOriginatingLaunch(
+        return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
             $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
             $deploymentid,
@@ -229,8 +227,7 @@ class lti_flow
      * @throws LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid)
-    {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
         $kialoconfig = kialo_config::get_instance();
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
@@ -244,12 +241,12 @@ class lti_flow
         $datatoken = self::create_platform_jwt_token(); // Empty because we don't need any data, just the signature.
 
         // See https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example.
-        return $builder->buildPlatformOriginatingLaunch(
-            $kialoconfig->create_registration($deploymentid),
+        return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
             $targetlinkuri,
-            $moodleuserid, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
+            $moodleuserid,
+            $courseid,
             ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
             [
                 new DeepLinkingSettingsClaim(
@@ -274,8 +271,7 @@ class lti_flow
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function lti_auth(): LtiMessageInterface
-    {
+    public static function lti_auth(): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();
 
