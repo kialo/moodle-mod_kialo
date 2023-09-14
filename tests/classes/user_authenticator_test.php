@@ -90,11 +90,12 @@ class user_authenticator_test extends \advanced_testcase {
     public function test_basic_successful_auth() {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user([
-                "username" => "hoschi",
-                "email" => "hoschi@mustermann.com",
-                "firstname" => "Horscht",
-                "lastname" => "Mustermann",
-                "middlename" => "The Machine",
+            "username" => "hoschi",
+            "email" => "hoschi@mustermann.com",
+            "firstname" => "Horscht",
+            "lastname" => "Mustermann",
+            "middlename" => "The Machine",
+            "picture" => 42,
         ]);
         $this->setUser($user);
         $this->getDataGenerator()->enrol_user($user->id, $this->course->id, "student");
@@ -114,10 +115,29 @@ class user_authenticator_test extends \advanced_testcase {
         $this->assertEquals("Horscht", $identity->getGivenName());
         $this->assertEquals("Mustermann", $identity->getFamilyName());
         $this->assertEquals("The Machine", $identity->getMiddleName());
-        $this->assertMatchesRegularExpression(
-            "|https://www.example.com/moodle/theme/image.php/_s/boost/core/\d+/u/f\d+|",
+        $this->matchesRegularExpression(
+            "|https://www.example.com/moodle/pluginfile.php/\d+/user/icon/boost/f3?rev=42|",
             $identity->getPicture()
         );
+    }
+
+    /**
+     * Tests the authentication result picture being null when the user uses the default picture.
+     * @return void
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @throws \require_login_exception
+     * @covers \mod_kialo\user_authenticator::authenticate
+     */
+    public function test_default_image_not_send() {
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+        $this->getDataGenerator()->enrol_user($user->id, $this->course->id, "student");
+
+        // When they authenticate via LTI.
+        $data = $this->authenticate_user($user->id);
+
+        $this->assertNull($data->getUserIdentity()->getPicture());
     }
 
     /**
