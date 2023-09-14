@@ -53,6 +53,51 @@ class lti_flow {
     public static $jwksfetcher = null;
 
     /**
+     * Builds an LTI message for launching Kialo. This is used for both the resource link and deep linking flows.
+     *
+     * @param string $messagetype LTI message type, e.g. LtiResourceLinkRequest or LtiDeepLinkingRequest, see LtiMessageInterface.
+     * @param string $targetlinkuri The URL that the user will be redirected to after the LTI flow.
+     * @param string $deploymentid The unique deployment ID of this activity (used to link the discussion on Kialo's side).
+     * @param string $moodleuserid The Moodle user ID of the user that is launching the activity.
+     * @param int $courseid The Moodle course ID of the course that the activity is in.
+     * @param array $roles The LTI roles to assign to the user, e.g. Instructor or Learner.
+     * @param array $optionalclaims Optional claims to include in the LTI message.
+     * @return LtiMessageInterface The LTI message that can be used to launch Kialo.
+     * @throws LtiExceptionInterface
+     * @throws \dml_exception
+     */
+    private static function build_platform_originating_launch(
+        string $messagetype,
+        string $targetlinkuri,
+        string $deploymentid,
+        string $moodleuserid,
+        int $courseid,
+        array $roles,
+        array $optionalclaims
+    ): LtiMessageInterface {
+        $kialoconfig = kialo_config::get_instance();
+        $registration = $kialoconfig->create_registration($deploymentid);
+
+        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
+        // We also assert that it's the same moodle user that was used in the first step.
+        $loginhint = "$courseid/$moodleuserid";
+
+        $builder = new PlatformOriginatingLaunchBuilder();
+        return $builder->buildPlatformOriginatingLaunch(
+            $registration,
+            $messagetype,
+            $targetlinkuri,
+            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
+            $deploymentid,
+            $roles,
+            [
+                'kialo_plugin_version' => kialo_config::get_release(),
+                ...$optionalclaims
+            ]
+        );
+    }
+
+    /**
      * Assigns LTI roles based on the current user's roles in the given context (module).
      * Any users with the `mod/kialo:kialo_admin` capability (see `db/access.php`) are assigned the Instructor role.
      *
@@ -95,27 +140,21 @@ class lti_flow {
         string $moodleuserid
     ): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration($deploymentid);
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
-        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
-        // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$courseid/$moodleuserid";
-
-        $builder = new PlatformOriginatingLaunchBuilder();
-        return $builder->buildPlatformOriginatingLaunch(
-            $registration,
+        return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
             $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
-            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
+            $moodleuserid,
+            $courseid,
             $roles,
             [
-                    // The resource link claim is required in the spec, but we don't use it
-                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                        new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
-                ]
+                // The resource link claim is required in the spec, but we don't use it
+                // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
+                new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
+            ]
         );
     }
 
@@ -205,12 +244,6 @@ class lti_flow {
     public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
         $kialoconfig = kialo_config::get_instance();
 
-        $registration = $kialoconfig->create_registration($deploymentid);
-
-        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
-        // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$courseid/$moodleuserid";
-
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
 
         $builder = new PlatformOriginatingLaunchBuilder();
@@ -222,25 +255,25 @@ class lti_flow {
         $datatoken = self::create_platform_jwt_token(); // Empty because we don't need any data, just the signature.
 
         // See https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example.
-        return $builder->buildPlatformOriginatingLaunch(
-            $registration,
+        return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
             $targetlinkuri,
-            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
+            $moodleuserid,
+            $courseid,
             ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
             [
-                    new DeepLinkingSettingsClaim(
-                        $deeplinkingreturnurl,
-                        [LtiResourceLinkInterface::TYPE],   // Accept_types.
-                        ["window"],                         // Accept_presentation_document_targets.
-                        null,                               // Accept_media_types, unused.
-                        false,                              // AcceptMultiple: We just accept one discussion.
-                        false,                              // AutoCreate.
-                        null,                               // Title, unused.
-                        null,                               // Text, unused.
-                        $datatoken,
-                    ),
+                new DeepLinkingSettingsClaim(
+                    $deeplinkingreturnurl,
+                    [LtiResourceLinkInterface::TYPE],   // Accept_types.
+                    ["window"],                         // Accept_presentation_document_targets.
+                    null,                               // Accept_media_types, unused.
+                    false,                              // AcceptMultiple: We just accept one discussion.
+                    false,                              // AutoCreate.
+                    null,                               // Title, unused.
+                    null,                               // Text, unused.
+                    $datatoken,
+                ),
             ]
         );
     }
@@ -267,6 +300,7 @@ class lti_flow {
         // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
         $nonce = $request->getQueryParams()['nonce'] ?? '';
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
+        $payloadbuilder->withClaim('kialo_plugin_version', kialo_config::get_release());
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);

@@ -38,6 +38,16 @@ class kialo_config {
     private static $instance = null;
 
     /**
+     * Gets the release version of the plugin.
+     * @return string
+     */
+    public static function get_release(): string {
+        $plugin = new \stdClass();
+        require(__DIR__ . '/../version.php');
+        return $plugin->release;
+    }
+
+    /**
      * By default, the tool's (Kialo's own) current public key will be downloaded during the LTI flow.
      *
      * This can be overriden for testing purposes.
