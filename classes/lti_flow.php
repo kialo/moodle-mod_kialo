@@ -44,13 +44,45 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Functions implementing the LTI steps.
  */
-class lti_flow {
+class lti_flow
+{
     /**
      * Can be used to override the default JwksFetcher. Used for testing purposes.
      *
      * @var null|JwksFetcher
      */
     public static $jwksfetcher = null;
+
+    private static function buildPlatformOriginatingLaunch(
+        string $messagetype,
+        string $targetlinkuri,
+        string $deploymentid,
+        string $moodleuserid,
+        string $courseid,
+        array $roles,
+        array $optionalclaims
+    ): LtiMessageInterface {
+        $kialoconfig = kialo_config::get_instance();
+        $registration = $kialoconfig->create_registration($deploymentid);
+
+        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
+        // We also assert that it's the same moodle user that was used in the first step.
+        $loginhint = "$courseid/$moodleuserid";
+
+        $builder = new PlatformOriginatingLaunchBuilder();
+        return $builder->buildPlatformOriginatingLaunch(
+            $registration,
+            $messagetype,
+            $targetlinkuri,
+            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
+            $deploymentid,
+            $roles,
+            [
+                'kialo_plugin_version' => kialo_config::get_release(),
+                ...$optionalclaims
+            ]
+        );
+    }
 
     /**
      * Assigns LTI roles based on the current user's roles in the given context (module).
@@ -61,7 +93,8 @@ class lti_flow {
      * @throws \coding_exception
      * @see https://www.imsglobal.org/spec/lti/v1p3#lis-vocabulary-for-context-roles
      */
-    public static function assign_lti_roles($context): array {
+    public static function assign_lti_roles($context): array
+    {
         // Note: The $context parameter is intentionally not type-hinted as `context_module` because between Moodle 4.2 and other
         // versions the concrete type differs. In Moodle 4.2 it's `context_module`, in other versions it's `core\context\module`.
         // And since we need to support versions older than PHP 8.0, we can't use an union type here.
@@ -95,27 +128,21 @@ class lti_flow {
         string $moodleuserid
     ): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration($deploymentid);
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
-        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
-        // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$courseid/$moodleuserid";
-
-        $builder = new PlatformOriginatingLaunchBuilder();
-        return $builder->buildPlatformOriginatingLaunch(
-            $registration,
+        return self::buildPlatformOriginatingLaunch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
             $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
-            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
+            $moodleuserid,
+            $courseid,
             $roles,
             [
-                    // The resource link claim is required in the spec, but we don't use it
-                    // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                        new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
-                ]
+                // The resource link claim is required in the spec, but we don't use it
+                // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
+                new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
+            ]
         );
     }
 
@@ -202,14 +229,9 @@ class lti_flow {
      * @throws LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid)
+    {
         $kialoconfig = kialo_config::get_instance();
-
-        $registration = $kialoconfig->create_registration($deploymentid);
-
-        // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
-        // We also assert that it's the same moodle user that was used in the first step.
-        $loginhint = "$courseid/$moodleuserid";
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
 
@@ -223,24 +245,24 @@ class lti_flow {
 
         // See https://www.imsglobal.org/spec/lti-dl/v2p0#deep-linking-response-example.
         return $builder->buildPlatformOriginatingLaunch(
-            $registration,
+            $kialoconfig->create_registration($deploymentid),
             LtiMessageInterface::LTI_MESSAGE_TYPE_DEEP_LINKING_REQUEST,
             $targetlinkuri,
-            $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
+            $moodleuserid, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
             ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
             [
-                    new DeepLinkingSettingsClaim(
-                        $deeplinkingreturnurl,
-                        [LtiResourceLinkInterface::TYPE],   // Accept_types.
-                        ["window"],                         // Accept_presentation_document_targets.
-                        null,                               // Accept_media_types, unused.
-                        false,                              // AcceptMultiple: We just accept one discussion.
-                        false,                              // AutoCreate.
-                        null,                               // Title, unused.
-                        null,                               // Text, unused.
-                        $datatoken,
-                    ),
+                new DeepLinkingSettingsClaim(
+                    $deeplinkingreturnurl,
+                    [LtiResourceLinkInterface::TYPE],   // Accept_types.
+                    ["window"],                         // Accept_presentation_document_targets.
+                    null,                               // Accept_media_types, unused.
+                    false,                              // AcceptMultiple: We just accept one discussion.
+                    false,                              // AutoCreate.
+                    null,                               // Title, unused.
+                    null,                               // Text, unused.
+                    $datatoken,
+                ),
             ]
         );
     }
@@ -252,7 +274,8 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function lti_auth(): LtiMessageInterface {
+    public static function lti_auth(): LtiMessageInterface
+    {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();
 
@@ -267,6 +290,7 @@ class lti_flow {
         // See https://github.com/oat-sa/lib-lti1p3-core/issues/154.
         $nonce = $request->getQueryParams()['nonce'] ?? '';
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
+        $payloadbuilder->withClaim('kialo_plugin_version', kialo_config::get_release());
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
