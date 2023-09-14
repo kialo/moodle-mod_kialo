@@ -1,3 +1,7 @@
+### v1.0.23 (Build - 2023091402)
+
+* Send plugin version number to Kialo.
+
 ### v1.0.22 (Build - 2023091401)
 
 * Do not send the default picture to Kialo when the user has no profile picture set in Moodle.
