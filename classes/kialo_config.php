@@ -43,7 +43,7 @@ class kialo_config {
      */
     public static function get_release(): string {
         $plugin = new \stdClass();
-        require __DIR__ . '/../version.php';
+        require(__DIR__ . '/../version.php');
         return $plugin->release;
     }
 
