@@ -126,7 +126,7 @@ To create a new release, follow these steps:
 2. Create a new tag, e.g. `git tag v1.2.3`.
 3. Push the commit and the tag to GitHub (`git push && git push --tags`).
 
-To verify that the releases was successful:
+To verify that the release was successful:
 
 1. Wait for the release to be created on GitHub. This can take a few minutes.
    See https://github.com/kialo/moodle-mod_kialo/actions/workflows/moodle-ci.yml. 

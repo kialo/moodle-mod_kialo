@@ -48,6 +48,10 @@
     <meta name=mobile-web-app-capable content=yes>
     <meta name=referrer content=strict-origin-when-cross-origin>
     <style>
+        :root {
+            --kialo-blue-color: #0069e0;
+        }
+
         @font-face {
             font-family: Roboto-subset;
             font-style: normal;
@@ -148,7 +152,7 @@
 
         .spinner__line {
             animation: line-center-rotate 4s cubic-bezier(.4, 0, .2, 1) infinite both, blend-line-color 4s cubic-bezier(.4, 0, .2, 1) infinite both;
-            border-color: #0069e0;
+            border-color: var(--kialo-blue-color);
             display: flex;
             height: 100%;
             position: absolute;
@@ -250,10 +254,10 @@
 
         @keyframes blend-line-color {
             0% {
-                border-color: #0069e0
+                border-color: var(--kialo-blue-color)
             }
             15% {
-                border-color: #0069e0
+                border-color: var(--kialo-blue-color)
             }
             25% {
                 border-color: #e6e9eb
@@ -262,10 +266,10 @@
                 border-color: #e6e9eb
             }
             75% {
-                border-color: #0069e0
+                border-color: var(--kialo-blue-color)
             }
             to {
-                border-color: #0069e0
+                border-color: var(--kialo-blue-color)
             }
         }
     </style>
