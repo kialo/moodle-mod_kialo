@@ -142,7 +142,7 @@ class lti_flow_test extends \advanced_testcase {
         $this->backup_globals();
         $this->resetAfterTest();
 
-        $this->user = $this->getDataGenerator()->create_user();
+        $this->user = $this->getDataGenerator()->create_user(["picture" => 42]);
         $this->setUser($this->user);
 
         $this->course = $this->getDataGenerator()->create_course();

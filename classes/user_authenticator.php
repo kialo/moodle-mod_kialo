@@ -78,7 +78,7 @@ class user_authenticator implements UserAuthenticatorInterface {
                 $USER->lastname,
                 $USER->middlename,
                 $USER->lang,
-                $avatar->get_url($PAGE),
+                $USER->picture ? $avatar->get_url($PAGE) : null, // If no picture is set, we don't send the default picture.
                 // Additional claims our app needs, but which are not required fields in LTI.
                 // Using OIDC standard claims, see https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims.
                 [
