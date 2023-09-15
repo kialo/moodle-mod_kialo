@@ -51,10 +51,7 @@ $string['kialo:view'] = 'View Kialo discussions';
 $string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
 
 // Help texts.
-$string['modulename_help'] =
-        'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. ' .
-        'Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. ' .
-        'Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
+$string['modulename_help'] = 'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
 $string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
 
 // Displayed while redirecting to Kialo during the LTI flows.
