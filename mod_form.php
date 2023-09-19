@@ -65,6 +65,12 @@ class mod_kialo_mod_form extends moodleform_mod {
         global $COURSE;
 
         $mform = $this->_form;
+        // Kialo does not suipport group mode yet. Show a hint if it is enabled.
+        if (groups_get_course_groupmode($COURSE) > 0) {
+            $mform->addElement("html", "<div class='alert alert-info alert-block'>".get_string("groupmode_warning", "mod_kialo", [
+                "help_center" => get_string("modulename_link", "mod_kialo")
+            ])."</div>");
+        }
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));

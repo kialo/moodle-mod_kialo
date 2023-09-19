@@ -49,6 +49,7 @@ $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI reque
 $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['kialo:view'] = 'View Kialo discussions';
 $string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
+$string['groupmode_warning'] = 'Group mode is enabled for this course. Kialo Discussions currently work with all the members of a course. See this <a href="{$a->help_center}" target="_blank">Help Center Article</a> to learn how to set up a Kialo Discussion for each of the groups in this course.';
 
 // Help texts.
 $string['modulename_help'] = 'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
