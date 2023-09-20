@@ -83,18 +83,17 @@ class lti_flow {
         $loginhint = "$courseid/$moodleuserid";
 
         $builder = new PlatformOriginatingLaunchBuilder();
-        return $builder->buildPlatformOriginatingLaunch(
+        $ltimessage = $builder->buildPlatformOriginatingLaunch(
             $registration,
             $messagetype,
             $targetlinkuri,
             $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
             $roles,
-            [
-                'kialo_plugin_version' => kialo_config::get_release(),
-                ...$optionalclaims
-            ]
+            $optionalclaims,
         );
+        $ltimessage->getParameters()->add(['kialo_plugin_version' => kialo_config::get_release()]);
+        return $ltimessage;
     }
 
     /**
