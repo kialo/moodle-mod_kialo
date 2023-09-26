@@ -29,7 +29,7 @@ class restore_kialo_activity_structure_step extends restore_activity_structure_s
      * @return mixed
      */
     protected function define_structure() {
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('kialo', '/activity/kialo');
         return $this->prepare_activity_structure($paths);
     }

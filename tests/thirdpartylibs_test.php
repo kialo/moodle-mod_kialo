@@ -81,8 +81,8 @@ class thirdpartylibs_test extends TestCase {
                 ],
                 [
                         "name" => "composer",
-                        "license" => "MIT"
-                ]
+                        "license" => "MIT",
+                ],
         ];
 
         foreach ($staticdeps as $dep) {

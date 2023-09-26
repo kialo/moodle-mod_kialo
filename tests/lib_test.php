@@ -171,20 +171,11 @@ class lib_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function kialo_pre_enable_plugin_actions_provider(): array {
+    public static function kialo_pre_enable_plugin_actions_provider(): array {
         return [
-                'Initially unset' => [
-                        null,
-                        false,
-                ],
-                'Set to false' => [
-                        false,
-                        false,
-                ],
-                'Initially set' => [
-                        true,
-                        true,
-                ],
+                'Initially unset' => [null, false],
+                'Set to false' => [false, false],
+                'Initially set' => [true, true],
         ];
     }
 

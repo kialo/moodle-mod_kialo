@@ -82,7 +82,7 @@ if ($courseid && $deploymentid) {
             "type" => "kialo_discussion_selected",
             "deploymentid" => $link->deploymentid,
             "discussionurl" => $link->discussionurl,
-            "discussiontitle" => $link->discussiontitle
+            "discussiontitle" => $link->discussiontitle,
     ]);
     echo "<script>
         window.addEventListener('message', (event) => event.data.type === 'kialo_selection_acknowledged' && window.close());

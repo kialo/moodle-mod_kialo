@@ -90,10 +90,7 @@ class lti_flow {
             $loginhint, // Login hint that will be used afterwards by the platform to perform authentication.
             $deploymentid,
             $roles,
-            [
-                'kialo_plugin_version' => kialo_config::get_release(),
-                ...$optionalclaims
-            ]
+            ['kialo_plugin_version' => kialo_config::get_release(), ...$optionalclaims],
         );
     }
 
@@ -154,7 +151,7 @@ class lti_flow {
                 // The resource link claim is required in the spec, but we don't use it
                 // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                 new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
-            ]
+            ],
         );
     }
 

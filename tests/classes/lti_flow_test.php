@@ -115,11 +115,11 @@ class lti_flow_test extends \advanced_testcase {
      * @return \OAT\Library\Lti1p3Core\Security\Key\KeyChainInterface
      */
     private static function generate_tool_keychain(): KeyChainInterface {
-        $config = array(
+        $config = [
             "digest_alg" => "sha256",
             "private_key_bits" => 2048,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        ];
         $res = openssl_pkey_new($config);
         openssl_pkey_export($res, $toolprivatekeystr);
         $toolpublickeystr = openssl_pkey_get_details(openssl_pkey_get_private($toolprivatekeystr))['key'];
@@ -148,7 +148,7 @@ class lti_flow_test extends \advanced_testcase {
         $this->course = $this->getDataGenerator()->create_course();
 
         // Creates a Kialo activity.
-        $this->module = $this->getDataGenerator()->create_module('kialo', array('course' => $this->course->id));
+        $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
         $this->cmid = get_coursemodule_from_instance("kialo", $this->module->id)->id;
     }
 
@@ -274,13 +274,13 @@ class lti_flow_test extends \advanced_testcase {
      *
      * @return \array[][] lists of Moodle roles and expected LTI roles.
      */
-    public static function provide_lti_role_assertions() {
+    public static function provide_lti_role_assertions(): array {
         return [
             "student" => [["student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Learner"]],
             "teacher" => [["teacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
             "editingteacher" => [["editingteacher"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
             "student and teacher at the same time" => [
-                ["editingteacher", "student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]
+                ["editingteacher", "student"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"],
             ],
             "manager" => [["manager"], ["http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor"]],
             "not enrolled" => [[], []],
@@ -441,7 +441,7 @@ class lti_flow_test extends \advanced_testcase {
      * @return array[] lists of invalid LTI auth requests.
      * @throws \dml_exception
      */
-    public function provide_invalid_lti_auth_builders() {
+    public static function provide_invalid_lti_auth_builders(): array {
         $maliciouskeychain = self::generate_tool_keychain();
         $platformkeychain = kialo_config::get_instance()->get_platform_keychain();
         $normalclientid = kialo_config::get_instance()->get_client_id();
@@ -453,10 +453,10 @@ class lti_flow_test extends \advanced_testcase {
                     "key" => $maliciouskeychain->getPrivateKey()->getContent(),
                     "iss" => $normalclientid,
                     "aud" => "https://www.example.com/moodle/mod/kialo",
-                    "kid" => $platformkeychain->getIdentifier()
+                    "kid" => $platformkeychain->getIdentifier(),
                 ],
                 null,
-                new LtiException("Invalid message hint")
+                new LtiException("Invalid message hint"),
             ],
             "wrong Moodle user" => [
                 self::SIGNER_PLATFORM,
@@ -586,7 +586,7 @@ class lti_flow_test extends \advanced_testcase {
                     "title" => "Selected Kialo Discussion",
                     "url" => "https://www.kialo-edu.com/discussion-title-1234",
                     "custom" => [],
-                ]
+                ],
             ]);
 
             // The "data" claim needs to be a JWT signed by the platform, content doesn't matter.
@@ -630,7 +630,7 @@ class lti_flow_test extends \advanced_testcase {
      * @return array[]
      * @throws \dml_exception
      */
-    public static function provide_invalid_deeplink_builders() {
+    public static function provide_invalid_deeplink_builders(): array {
         $maliciouskeychain = self::generate_tool_keychain();
         $platformkeychain = kialo_config::get_instance()->get_platform_keychain();
         $normalclientid = kialo_config::get_instance()->get_client_id();
@@ -648,7 +648,7 @@ class lti_flow_test extends \advanced_testcase {
                 function (Builder $builder) {
                     $builder->issuedBy('');
                 },
-                new LtiException("No matching registration found platform side")
+                new LtiException("No matching registration found platform side"),
             ],
             // Not just anybody can sign the JWT.
             "invalid signature" => [
@@ -656,24 +656,24 @@ class lti_flow_test extends \advanced_testcase {
                     "key" => $maliciouskeychain->getPrivateKey()->getContent(),
                     "iss" => $normalclientid,
                     "aud" => "https://www.example.com/moodle/mod/kialo",
-                    "kid" => $platformkeychain->getIdentifier()
+                    "kid" => $platformkeychain->getIdentifier(),
                 ],
                 null,
-                new LtiException("JWT validation failure")
+                new LtiException("JWT validation failure"),
             ],
             "missing nonce" => [
                 self::SIGNER_TOOL,
                 function (Builder $builder) {
                     $builder->withClaim("nonce", "");
                 },
-                new LtiException("JWT nonce claim is missing")
+                new LtiException("JWT nonce claim is missing"),
             ],
             "missing content items" => [
                 self::SIGNER_TOOL,
                 function (Builder $builder) {
                     $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
                 },
-                new LtiException("Expected exactly one content item")
+                new LtiException("Expected exactly one content item"),
             ],
             "wrong content type" => [
                 self::SIGNER_TOOL,
@@ -682,10 +682,10 @@ class lti_flow_test extends \advanced_testcase {
                         [
                             "type" => "link",
                             "url" => "https://www.kialo-edu.com/discussion-title-1234",
-                        ]
+                        ],
                     ]);
                 },
-                new LtiException("Expected content item to be of type ltiResourceLink")
+                new LtiException("Expected content item to be of type ltiResourceLink"),
             ],
             "missing content item URL" => [
                 self::SIGNER_TOOL,
@@ -694,10 +694,10 @@ class lti_flow_test extends \advanced_testcase {
                         [
                             "type" => "ltiResourceLink",
                             "title" => "Selected Kialo Discussion",
-                        ]
+                        ],
                     ]);
                 },
-                new LtiException("Expected content item to have a url")
+                new LtiException("Expected content item to have a url"),
             ],
         ];
     }
