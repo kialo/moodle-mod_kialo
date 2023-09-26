@@ -27,7 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 
 $definitions = [
         // Cache for nonces used in LTI 1.3 authentication, stored in the default PHP session.
-        'nonces' => [
-                'mode' => cache_store::MODE_SESSION,
-        ]
+        'nonces' => ['mode' => cache_store::MODE_SESSION],
 ];

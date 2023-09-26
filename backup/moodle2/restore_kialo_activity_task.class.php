@@ -53,11 +53,11 @@ class restore_kialo_activity_task extends restore_activity_task {
      * processed by the link decoder
      */
     public static function define_decode_contents(): array {
-        $contents = array();
+        $contents = [];
 
         // We don't actually use the intro field right now, but since it's a default field we handle it here just in case
         // we are going to use it at some point.
-        $contents[] = new restore_decode_content('kialo', array('intro'), 'kialo');
+        $contents[] = new restore_decode_content('kialo', ['intro'], 'kialo');
 
         return $contents;
     }
@@ -67,7 +67,7 @@ class restore_kialo_activity_task extends restore_activity_task {
      * to the activity to be executed by the link decoder
      */
     public static function define_decode_rules() {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_decode_rule('KIALOVIEWBYID', '/mod/kialo/view.php?id=$1', 'course_module');
         $rules[] = new restore_decode_rule('KIALOINDEX', '/mod/kialo/index.php?id=$1', 'course');
@@ -83,7 +83,7 @@ class restore_kialo_activity_task extends restore_activity_task {
      * of restore_log_rule objects
      */
     public static function define_restore_log_rules(): array {
-        $rules = array();
+        $rules = [];
 
         $rules[] = new restore_log_rule('kialo', 'add', 'view.php?id={course_module}', '{kialo}');
         $rules[] = new restore_log_rule('kialo', 'update', 'view.php?id={course_module}', '{kialo}');

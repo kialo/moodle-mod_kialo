@@ -50,7 +50,7 @@ function lti_get_capabilities() {
             'Person.sourcedId' => 'lis_person_sourcedid',
             'Membership.role' => 'roles',
             'Result.sourcedId' => 'lis_result_sourcedid',
-            'Result.autocreate' => 'lis_outcome_service_url'
+            'Result.autocreate' => 'lis_outcome_service_url',
     ];
 
     return $capabilities;
@@ -70,14 +70,16 @@ $conf = [
         'subject_types_supported' => ['public', 'pairwise'],
         'id_token_signing_alg_values_supported' => ['RS256'],
         'claims_supported' => ['sub', 'iss', 'name', 'given_name', 'middle_name', 'family_name', 'email', 'picture', 'locale',
-                'zoneinfo'],
+                'zoneinfo',
+        ],
         'https://purl.imsglobal.org/spec/lti-platform-configuration' => [
                 'product_family_code' => 'moodle_kialo_plugin',
                 'version' => $CFG->release,
-                'messages_supported' => [['type' => 'LtiResourceLinkRequest'],
-                        ['type' => 'LtiDeepLinkingRequest', 'placements' => ['ContentArea']]],
-                'variables' => array_keys(lti_get_capabilities())
-        ]
+                'messages_supported' => [
+                        ['type' => 'LtiResourceLinkRequest'], ['type' => 'LtiDeepLinkingRequest', 'placements' => ['ContentArea']],
+                ],
+                'variables' => array_keys(lti_get_capabilities()),
+        ],
 ];
 
 @header('Content-Type: application/json; charset=utf-8');
