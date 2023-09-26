@@ -70,7 +70,7 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('kialoname', 'mod_kialo'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('kialoname', 'mod_kialo'), ['size' => '64']);
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -85,7 +85,7 @@ class mod_kialo_mod_form extends moodleform_mod {
             "text",
             "discussion_title",
             get_string("discussion_title", "mod_kialo"),
-            array("size" => "64", "readonly" => true)
+            ["size" => "64", "readonly" => true]
         );
         $mform->setType("discussion_title", PARAM_TEXT);
         $mform->addRule('discussion_title', null, 'required', null, 'client');

@@ -95,7 +95,7 @@ Please also feel free to reach out to us through our [support page](https://supp
 ## Useful Links ##
 - Source Control: https://github.com/kialo/moodle-mod_kialo
 - Bug Tracker: https://github.com/kialo/moodle-mod_kialo/issues
-- Documentation: https://support.kialo-edu.com/hc/en/moodle
+- Documentation: https://support.kialo-edu.com/en/hc/moodle
 
 ## License ##
 

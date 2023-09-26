@@ -63,7 +63,7 @@ class user_authenticator_test extends \advanced_testcase {
         $this->user_authenticator = new user_authenticator();
 
         // Creates a Kialo activity.
-        $this->module = $this->getDataGenerator()->create_module('kialo', array('course' => $this->course->id));
+        $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
     }
 
     /**
@@ -150,9 +150,7 @@ class user_authenticator_test extends \advanced_testcase {
      */
     public function test_timezone() {
         // Given a user with a very particular set of timezone and language.
-        $user = $this->getDataGenerator()->create_user([
-                "timezone" => "Asia/Tokyo",
-        ]);
+        $user = $this->getDataGenerator()->create_user(["timezone" => "Asia/Tokyo"]);
         $this->setUser($user);
         $this->getDataGenerator()->enrol_user($user->id, $this->course->id, "student");
 
@@ -174,9 +172,7 @@ class user_authenticator_test extends \advanced_testcase {
      */
     public function test_locale() {
         // Given a user with a very particular set of timezone and language.
-        $user = $this->getDataGenerator()->create_user([
-                "lang" => "en"
-        ]);
+        $user = $this->getDataGenerator()->create_user(["lang" => "en"]);
         $this->setUser($user);
         $this->getDataGenerator()->enrol_user($user->id, $this->course->id, "student");
 

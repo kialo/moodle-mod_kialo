@@ -153,7 +153,7 @@ class lti_flow {
                 // The resource link claim is required in the spec, but we don't use it
                 // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                 new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
-            ]
+            ],
         );
     }
 

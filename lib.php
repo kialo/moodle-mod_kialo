@@ -95,12 +95,12 @@ function kialo_update_instance($moduleinstance, $mform = null) {
 function kialo_delete_instance($id) {
     global $DB;
 
-    $exists = $DB->get_record('kialo', array('id' => $id));
+    $exists = $DB->get_record('kialo', ['id' => $id]);
     if (!$exists) {
         return false;
     }
 
-    $DB->delete_records('kialo', array('id' => $id));
+    $DB->delete_records('kialo', ['id' => $id]);
 
     return true;
 }
@@ -117,7 +117,7 @@ function kialo_delete_instance($id) {
 function kialo_get_coursemodule_info($coursemodule) {
     $info = new cached_cm_info();
 
-    $url = new moodle_url('/mod/kialo/view.php', array('id' => $coursemodule->id));
+    $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
     $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
 
     return $info;

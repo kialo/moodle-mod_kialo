@@ -40,11 +40,11 @@ function mod_kialo_verify_private_key(): string {
         // Create the private key.
         $kid = bin2hex(openssl_random_pseudo_bytes(10));
         set_config('kid', $kid, 'mod_kialo');
-        $config = array(
-                "digest_alg" => "sha256",
-                "private_key_bits" => 2048,
-                "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        $config = [
+            "digest_alg" => "sha256",
+            "private_key_bits" => 2048,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        ];
         $res = openssl_pkey_new($config);
         openssl_pkey_export($res, $privatekey);
 
