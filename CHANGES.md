@@ -3,7 +3,6 @@
 * Send plugin version number to Kialo.
 * Fix help center link
 
-
 ### v1.0.22 (Build - 2023091401)
 
 * Do not send the default picture to Kialo when the user has no profile picture set in Moodle.
