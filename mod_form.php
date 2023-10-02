@@ -65,6 +65,18 @@ class mod_kialo_mod_form extends moodleform_mod {
         global $COURSE;
 
         $mform = $this->_form;
+        // Kialo does not support group mode yet. Show a warning if it is enabled, otherwise show an info.
+        if (groups_get_course_groupmode($COURSE) == NOGROUPS) {
+            $text = '<i class="icon fa fa-info-circle text-info fa-fw"
+                title="Information" role="img" aria-label="Information"></i>';
+            $text .= get_string("groupmode_off_info", "mod_kialo");
+        } else {
+            $text = '<i class="icon fa fa-exclamation-circle text-danger fa-fw"
+                title="Warning" role="img" aria-label="Warning"></i>';
+            $text .= get_string("groupmode_on_warning", "mod_kialo");
+        }
+        $text = "<div class='alert alert-info'>".$text."</div>";
+        $mform->addElement("html", $text);
 
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
