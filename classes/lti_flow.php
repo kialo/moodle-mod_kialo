@@ -127,6 +127,7 @@ class lti_flow {
      * @param int $coursemoduleid
      * @param string $deploymentid
      * @param string $moodleuserid
+     * @param string $discussionurl
      * @return LtiMessageInterface
      * @throws LtiExceptionInterface
      * @throws \coding_exception
