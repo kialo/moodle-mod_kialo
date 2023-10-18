@@ -136,15 +136,15 @@ class lti_flow {
         int $courseid,
         int $coursemoduleid,
         string $deploymentid,
-        string $moodleuserid
+        string $moodleuserid,
+        string $discussionurl
     ): LtiMessageInterface {
-        $kialoconfig = kialo_config::get_instance();
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
         return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-            $kialoconfig->get_tool_url(), // Unused, as the final destination URL will be decided by our backend.
+            $discussionurl, // Unused, as the final destination URL will be decided by our backend.
             $deploymentid,
             $moodleuserid,
             $courseid,
@@ -244,8 +244,6 @@ class lti_flow {
         $kialoconfig = kialo_config::get_instance();
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
-
-        $builder = new PlatformOriginatingLaunchBuilder();
 
         // In the end we want to redirect to launch which handles the deep link request.
         $targetlinkuri = $kialoconfig->get_tool_url() . '/lti/deeplink';

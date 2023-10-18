@@ -423,6 +423,13 @@
       <sourceFolder url="file://$MODULE_DIR$/development/moodle/webservice/rest/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/development/moodle/webservice/soap/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/development/moodle/webservice/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/guzzlehttp/guzzle/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/guzzlehttp/kevinrob/guzzlecache/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/guzzlehttp/psr7/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/maxmind/MaxMind/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/php-jwt/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/moodle/lib/ralouphie/getallheaders/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/development/moodle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor" />
     </content>

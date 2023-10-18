@@ -1,3 +1,8 @@
+### v1.0.24 (Build - 2023101801)
+
+* Reintroduce discussionurl
+* Do not create new deployment ids per activity
+
 ### v1.0.23 (Build - 2023092701)
 
 * Send plugin version number to Kialo.
