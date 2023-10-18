@@ -348,7 +348,7 @@ class lti_flow_test extends \advanced_testcase {
             $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri")
         );
         $this->assertNotNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/resource_link"));
-        $this->assertEquals(kialo_config::get_release(), $token->claims()->get("kialo_plugin_version"));
+        $this->assertEquals(kialo_config::get_release(), $params["kialo_plugin_version"]);
     }
 
     /**
@@ -525,7 +525,7 @@ class lti_flow_test extends \advanced_testcase {
      *
      * @covers \mod_kialo\lti_flow::init_deep_link
      */
-    public function test_deep_link() {
+    public function test_init_deep_link() {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
 
         $deploymentid = "random-string-123";
@@ -556,7 +556,7 @@ class lti_flow_test extends \advanced_testcase {
             kialo_config::get_instance()->get_tool_url() . '/lti/deeplink',
             $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri")
         );
-        $this->assertEquals(kialo_config::get_release(), $token->claims()->get("kialo_plugin_version"));
+        $this->assertEquals(kialo_config::get_release(), $params["kialo_plugin_version"]);
 
         $settings = $token->claims()->get("https://purl.imsglobal.org/spec/lti-dl/claim/deep_linking_settings");
         $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_select.php", $settings["deep_link_return_url"]);
