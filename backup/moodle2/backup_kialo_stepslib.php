@@ -37,7 +37,15 @@ class backup_kialo_activity_structure_step extends backup_activity_structure_ste
     protected function define_structure() {
         // We just back up everything. See install.xml for fields that need to be backed up.
         $kialo = new backup_nested_element('kialo', ['id'], [
-                'course', 'name', 'timecreated', 'timemodified', 'intro', 'introformat', 'discussion_title', 'deployment_id', 'discussion_url',
+            'course',
+            'name',
+            'timecreated',
+            'timemodified',
+            'intro',
+            'introformat',
+            'discussion_title',
+            'deployment_id',
+            'discussion_url',
         ]);
         $kialo->set_source_table('kialo', ['id' => backup::VAR_ACTIVITYID]);
 
