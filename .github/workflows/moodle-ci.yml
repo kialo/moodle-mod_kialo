@@ -169,10 +169,12 @@ jobs:
           files: |
             plugin/development/mod_kialo.zip
           generate_release_notes: true
+          prerelease: ${{endsWith(github.ref, '-beta')}}
 
       # Uploads the release to Moodle using its Plugin Directory API
-      - name: Call the service function
+      - name: Upload to plugin directory
         id: add-version
+        if: github.event_name == 'push' && !endsWith(github.ref, '-beta')
         run: |
           if [[ ! -z "${{ github.event.inputs.tag }}" ]]; then
             TAGNAME="${{ github.event.inputs.tag }}"
