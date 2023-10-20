@@ -200,6 +200,7 @@ jobs:
 
       - name: Evaluate the response
         id: evaluate-response
+        if: steps.add-version.conclusion == 'success'
         env:
           RESPONSE: ${{ steps.add-version.outputs.response }}
         run: |
