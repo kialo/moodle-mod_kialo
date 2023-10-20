@@ -5,7 +5,7 @@
 ### v1.0.23 (Build - 2023092701)
 
 * Send plugin version number to Kialo.
-* Fix help center link
+* Fix help center link.
 
 ### v1.0.22 (Build - 2023091401)
 

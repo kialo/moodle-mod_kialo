@@ -319,13 +319,14 @@ class lti_flow_test extends \advanced_testcase {
 
         // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
         $deploymentid = "random-string-123";
-        $message = lti_flow::init_resource_link($this->course->id, $this->cmid, $deploymentid, $this->user->id);
+        $discussionurl = "random-discussion-url.com";
+        $message = lti_flow::init_resource_link($this->course->id, $this->cmid, $deploymentid, $this->user->id, $discussionurl);
         $this->assertNotNull($message);
 
         $params = $message->getParameters()->jsonSerialize();
         $this->assertEquals('https://www.example.com/moodle/mod/kialo', $params['iss']);
         $this->assertEquals($this->course->id . "/" . $this->user->id, $params['login_hint']);
-        $this->assertEquals(kialo_config::get_instance()->get_tool_url(), $params['target_link_uri']);
+        $this->assertEquals($discussionurl, $params['target_link_uri']);
         $this->assertEquals($deploymentid, $params['lti_deployment_id']);
         $this->assertEquals(kialo_config::get_instance()->get_client_id(), $params['client_id']);
 
@@ -344,7 +345,7 @@ class lti_flow_test extends \advanced_testcase {
             $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/roles")
         );
         $this->assertEquals(
-            kialo_config::get_instance()->get_tool_url(),
+            $discussionurl,
             $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/target_link_uri")
         );
         $this->assertNotNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/resource_link"));
