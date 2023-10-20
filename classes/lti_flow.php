@@ -145,7 +145,7 @@ class lti_flow {
 
         return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
-            $discussionurl, // Unused, as the final destination URL will be decided by our backend.
+            $discussionurl,
             $deploymentid,
             $moodleuserid,
             $courseid,
@@ -153,7 +153,7 @@ class lti_flow {
             [
                 // The resource link claim is required in the spec, but we don't use it
                 // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
+                new ResourceLinkClaim('resource-link-' . $coursemoduleid, '', ''),
             ],
         );
     }
