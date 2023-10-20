@@ -150,9 +150,14 @@ class lti_flow {
             $courseid,
             $roles,
             [
-                // The resource link claim is required in the spec, but we don't use it
-                // https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
+                // See https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
                 new ResourceLinkClaim('resource-link-' . $deploymentid, '', ''),
+
+                // We provide the course ID as the context ID so that discussion links are scoped to the course.
+                // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
+                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                    "id" => $courseid,
+                ]
             ],
         );
     }
@@ -273,6 +278,12 @@ class lti_flow {
                     null,                               // Text, unused.
                     $datatoken,
                 ),
+
+                // We provide the course ID as the context ID so that discussion links are scoped to the course.
+                // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
+                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                    "id" => $courseid,
+                ]
             ]
         );
     }

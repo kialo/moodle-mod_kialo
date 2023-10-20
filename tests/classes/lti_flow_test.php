@@ -349,6 +349,8 @@ class lti_flow_test extends \advanced_testcase {
         );
         $this->assertNotNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/resource_link"));
         $this->assertEquals(kialo_config::get_release(), $params["kialo_plugin_version"]);
+
+        $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/context")["id"], $this->course->id);
     }
 
     /**
@@ -567,6 +569,8 @@ class lti_flow_test extends \advanced_testcase {
 
         // The LTI library used on Kialo's side requires this to be a JWT with no particular content, but signed by the plugin.
         $this->assert_jwt_signed_by_platform($settings['data']);
+
+        $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/context")["id"], $this->course->id);
     }
 
     /**
