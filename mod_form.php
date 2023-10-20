@@ -41,8 +41,10 @@ require_once('vendor/autoload.php');
 class mod_kialo_mod_form extends moodleform_mod {
 
     /**
-     * Generates a random deployment id and stores it in the session. This is used on Kialo's side
-     * to identify the activity for which a discussion was selected.
+     * In LTI the deployment ID identifies an LTI tool definition or installation. Moodle sends
+     * the same ID for all activities that are based on the same LTI external tool definition.
+     * We always send 1 for the plugin because there can only be one Kialo plugin installed which
+     * always has the same configuration.
      * @return string
      */
     private function get_deployment_id(): string {
