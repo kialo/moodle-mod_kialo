@@ -158,7 +158,7 @@ class lti_flow {
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
                 "https://purl.imsglobal.org/spec/lti/claim/context" => [
                     "id" => $courseid,
-                ]
+                ],
             ],
         );
     }
@@ -282,7 +282,7 @@ class lti_flow {
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
                 "https://purl.imsglobal.org/spec/lti/claim/context" => [
                     "id" => $courseid,
-                ]
+                ],
             ]
         );
     }

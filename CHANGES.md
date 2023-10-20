@@ -1,4 +1,4 @@
-### v1.0.23 (Build - 2023102003)
+### v1.0.23 (Build - 2023102004)
 
 * Send plugin version number to Kialo.
 * Fix help center link.
