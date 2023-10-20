@@ -124,6 +124,8 @@ To create a new release, follow these steps:
 
 1. Ensure the version in `version.php` has been incremented and `CHANGES.md` has been updated accordingly. 
 2. Create a new tag, e.g. `git tag v1.2.3`.
+   * For pre-releases that should not be pushed to the moodle plugin directory, use a tag name like `v1.2.3-beta1`.
+        As long as the name contains the keyword `beta`, the release will not be pushed to the moodle plugin directory.
 3. Push the commit and the tag to GitHub (`git push && git push --tags`).
 
 To verify that the release was successful:
@@ -133,6 +135,7 @@ To verify that the release was successful:
    Note that the release job in the CI workflow is only triggered for tags.
 2. Check the release [on GitHub](https://github.com/kialo/moodle-mod_kialo/releases). Ensure the `mod_kialo.zip` file is attached.
 3. Check the release on https://moodle.org/plugins/mod_kialo. Ensure the version number and changelog is correct.
+   This only applies to non-beta releases.
 
 ### Manual Release
 
