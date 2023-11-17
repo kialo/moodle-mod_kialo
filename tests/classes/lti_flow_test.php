@@ -399,6 +399,8 @@ class lti_flow_test extends \advanced_testcase {
      * @covers \mod_kialo\lti_flow::lti_auth
      */
     public function test_lti_auth(): void {
+        global $CFG;
+
         // The current user must be at least a student in the course. But this LTI step works the same for students and teachers.
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
@@ -430,7 +432,14 @@ class lti_flow_test extends \advanced_testcase {
         $this->assertEquals($this->user->firstname . " " . $this->user->lastname, $token->claims()->get("name"));
         $this->assertEquals($this->user->email, $token->claims()->get("email"));
         $this->assertEquals($this->user->lang, $token->claims()->get("locale"));
+
         $this->assertEquals(kialo_config::get_release(), $token->claims()->get("kialo_plugin_version"));
+
+        $this->assertEquals([
+            "guid" => lti_flow::PLATFORM_GUID,
+            "product_family_code" => lti_flow::PRODUCT_FAMILY_CODE,
+            "version" => $CFG->version,
+        ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/tool_platform"));
 
         global $PAGE, $USER;
         $expectedpicture = new \user_picture($USER);

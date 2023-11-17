@@ -46,6 +46,19 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class lti_flow {
     /**
+     * The LTI standard requires a stable GUID to be send with the platform information.
+     * See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
+     * We send a value uniqely identifying the Kialo plugin, but it's the same for all instances.
+     */
+    public const PLATFORM_GUID = 'f4be0d51-bf02-5520-b589-8e6d23515876';
+
+    /**
+     * The "product_family_code" that the plugin uses to identify itself during LTI requests to tools.
+     * We send moodle's own product family code because we count the plugin as part of moodle.
+     */
+    public const PRODUCT_FAMILY_CODE = "moodle";
+
+    /**
      * Can be used to override the default JwksFetcher. Used for testing purposes.
      *
      * @var null|JwksFetcher
@@ -295,6 +308,8 @@ class lti_flow {
      * @throws \dml_exception
      */
     public static function lti_auth(): LtiMessageInterface {
+        global $CFG;
+
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration();
 
@@ -310,6 +325,13 @@ class lti_flow {
         $nonce = $request->getQueryParams()['nonce'] ?? '';
         $payloadbuilder = new MessagePayloadBuilder(new static_nonce_generator($nonce));
         $payloadbuilder->withClaim('kialo_plugin_version', kialo_config::get_release());
+
+        // See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
+        $payloadbuilder->withClaim('https://purl.imsglobal.org/spec/lti/claim/tool_platform', [
+            'guid' => self::PLATFORM_GUID,
+            'product_family_code' => self::PRODUCT_FAMILY_CODE,
+            'version' => $CFG->version,
+        ]);
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);

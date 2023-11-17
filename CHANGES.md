@@ -1,3 +1,7 @@
+### v1.0.24 (Build - 2023111701)
+
+* Send plugin's version and "platform" information using standard LTI claims.
+
 ### v1.0.23 (Build - 2023102005)
 
 * Send plugin version number to Kialo.
