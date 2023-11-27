@@ -72,6 +72,7 @@ $conf = [
         'claims_supported' => ['sub', 'iss', 'name', 'given_name', 'middle_name', 'family_name', 'email', 'picture', 'locale',
                 'zoneinfo',
         ],
+        // This is similar to https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim, but not the same!
         'https://purl.imsglobal.org/spec/lti-platform-configuration' => [
                 'product_family_code' => 'moodle_kialo_plugin',
                 'version' => $CFG->release,
