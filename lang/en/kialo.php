@@ -62,6 +62,7 @@ $string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
 // Displayed while redirecting to Kialo during the LTI flows.
 $string['redirect_title'] = "Loading";
 $string['redirect_loading'] = "Loading";
+$string['close_prompt'] = 'You can close this window now.';
 
 // Errors.
 $string['errors:nopermissiontoview'] = "You do not have permission to view this activity.";
@@ -69,6 +70,11 @@ $string['errors:ltiauth'] = "Authentication failed due to an unexpected error. P
 $string['errors:resourcelink'] = "Activity cannot be displayed due to an unexpected error. Please try again.";
 $string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
 $string['errors:noguestaccess'] = "Guests cannot access this activity. Please log in.";
+$string['errors:invalidrequest'] = "Invalid request";
+$string['errors:missingdeploymentid'] = "Missing deployment id";
+$string['errors:missingcourseid'] = "Missing course id";
+$string['errors:missingidtoken'] = "Missing id token";
+$string['errors:missingsessiondata'] = "Missing session data";
 
 // Privacy API.
 $string['privacy:metadata:kialo'] =

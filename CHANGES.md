@@ -1,6 +1,7 @@
-### v1.0.24 (Build - 2023111701)
+### v1.0.24 (Build - 2023111702)
 
 * Send plugin's version and "platform" information using standard LTI claims.
+* Replaced hardcoded strings in lti_select.php.
 
 ### v1.0.23 (Build - 2023102005)
 

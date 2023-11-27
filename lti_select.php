@@ -90,19 +90,19 @@ if ($courseid && $deploymentid) {
     </script>";
 
     // The user should basically not see this, or just very briefly.
-    echo '<br><br><br><br><center>You can close this window now.</center>';
+    echo "<br><br><br><br><center>" . get_string('close_prompt', 'mod_kialo') . "</center>";
 } else {
-    $error = "Invalid request";
+    $error = "errors:invalidrequest";
     if (empty($deploymentid)) {
-        $error = "Missing deployment id";
+        $error = "errors:missingdeploymentid";
     } else if (empty($courseid)) {
-        $error = "Missing course id";
+        $error = "errors:missingcourseid";
     } else if (empty($idtoken)) {
-        $error = "Missing id token";
+        $error = "errors:missingidtoken";
     } else if (empty($_SESSION['kialo_deployment_id'])) {
-        $error = "Missing session data";
+        $error = "errors:missingsessiondata";
     }
 
     // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
-    throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, $error);
+    throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, get_string($error, 'mod_kialo'));
 }
