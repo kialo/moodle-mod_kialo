@@ -119,6 +119,8 @@ Each time you add new test files, you need to run `development/tests-init.sh` ag
 ### Automatic Release
 
 We use GitHub Actions to automatically create a release whenever a new tag is pushed to the repository.
+This requires an [access key](https://moodledev.io/general/community/plugincontribution/pluginsdirectory/api#access-token),
+which is configured as a secret in this GitHub repo.
 
 To create a new release, follow these steps:
 
