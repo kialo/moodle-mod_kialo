@@ -50,11 +50,6 @@ $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['kialo:view'] = 'View Kialo discussions';
 $string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
 
-// Links.
-$grouphelpcenterlink = 'https://support.kialo-edu.com/en/hc/moodle/#using-the-kialo-plugin-with-moodle-group-mode';
-$pluginreleaseemailnotificationlink = 'https://fh6m79pud11.typeform.com/to/cYurgy84';
-
-
 // Help texts.
 $string['modulename_help'] = 'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
 $string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
@@ -101,5 +96,5 @@ $string["acceptterms_desc"] =
 'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our <a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
 $string["termsnotaccepted"] =
 'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
-$string['groupmode_on_warning'] = '<b>Moodle groups are currently <u>not</u> automatically supported.</b> If you use the Kialo Moodle Plugin with a course that has multiple groups, <b>all</b> groups will find themselves in the <b>same</b> Kialo discussion.<br/><br/>To manually set up Kialo discussions for each of your groups, please follow the instructions in our <a href="'.$grouphelpcenterlink.'">help center</a>.<br/><br/>We will release automatic Moodle groups support in Q1 2024. <a href="'.$pluginreleaseemailnotificationlink.'">Submit your email address</a> to be notified when it is released.';
-$string['groupmode_off_info'] = '<b>Please note that Moodle groups are currently <u>not</u> automatically supported.</b> (<a href="'.$grouphelpcenterlink.'">More info</a>)';
+$string['groupmode_on_warning'] = '<b>Moodle groups are currently <u>not</u> automatically supported.</b> If you use the Kialo Moodle Plugin with a course that has multiple groups, <b>all</b> groups will find themselves in the <b>same</b> Kialo discussion.<br/><br/>To manually set up Kialo discussions for each of your groups, please follow the instructions in our <a href="{$a->grouphelpcenterlink}">help center</a>.<br/><br/>We will release automatic Moodle groups support in Q1 2024. <a href="{$a->pluginreleaseemailnotificationlink}">Submit your email address</a> to be notified when it is released.';
+$string['groupmode_off_info'] = '<b>Please note that Moodle groups are currently <u>not</u> automatically supported.</b> (<a href="{$a->grouphelpcenterlink}">More info</a>)';
