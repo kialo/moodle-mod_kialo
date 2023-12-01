@@ -31,6 +31,7 @@ global $hassiteconfig;
 global $ADMIN;
 
 require_once($CFG->dirroot . '/mod/kialo/lib.php');
+require_once(__DIR__ . '/constants.php');
 
 // Terms and conditions need to have been accepted before the activity can be used.
 if ($ADMIN->fulltree) {
@@ -38,9 +39,9 @@ if ($ADMIN->fulltree) {
         'mod_kialo/acceptterms',
         new lang_string('acceptterms', 'mod_kialo'),
         new lang_string('acceptterms_desc', 'mod_kialo', [
-            "terms" => "https://www.kialo-edu.com/terms",
-            "privacy" => "https://www.kialo-edu.com/privacy",
-            "data_security" => "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/",
+            "terms" => TERMS_LINK,
+            "privacy" => PRIVACY_LINK,
+            "data_security" => DATA_SECURITY_LINK,
         ]),
         0
     );
