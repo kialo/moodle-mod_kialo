@@ -1,3 +1,7 @@
+### v1.0.25 (Build - 2023112901)
+
+* Minor internal improvements
+
 ### v1.0.24 (Build - 2023111702)
 
 * Send plugin's version and "platform" information using standard LTI claims.

@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 require_once('vendor/autoload.php');
+require_once(__DIR__ . '/constants.php');
 
 /**
  * Module instance settings form.
@@ -64,13 +65,18 @@ class mod_kialo_mod_form extends moodleform_mod {
         if (groups_get_course_groupmode($COURSE) == NOGROUPS) {
             $text = '<i class="icon fa fa-info-circle text-info fa-fw"
                 title="Information" role="img" aria-label="Information"></i>';
-            $text .= get_string("groupmode_off_info", "mod_kialo");
+            $text .= get_string("groupmode_off_info", "mod_kialo", [
+                "grouphelpcenterlink" => GROUP_HELP_CENTER_LINK,
+            ]);
         } else {
             $text = '<i class="icon fa fa-exclamation-circle text-danger fa-fw"
                 title="Warning" role="img" aria-label="Warning"></i>';
-            $text .= get_string("groupmode_on_warning", "mod_kialo");
+            $text .= get_string("groupmode_on_warning", "mod_kialo", [
+                "grouphelpcenterlink" => GROUP_HELP_CENTER_LINK,
+                "pluginreleaseemailnotificationlink" => PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK,
+            ]);
         }
-        $text = "<div class='alert alert-info'>".$text."</div>";
+        $text = "<div class='alert alert-info'>" . $text . "</div>";
         $mform->addElement("html", $text);
 
         // Adding the "general" fieldset, where all the common settings are shown.
@@ -109,8 +115,8 @@ class mod_kialo_mod_form extends moodleform_mod {
 
         // Deep Linking Button, allowing the user to select a discussion on Kialo.
         $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
-                "deploymentid" => $deploymentid,
-                "courseid" => $COURSE->id,
+            "deploymentid" => $deploymentid,
+            "courseid" => $COURSE->id,
         ]))->out(false);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
 

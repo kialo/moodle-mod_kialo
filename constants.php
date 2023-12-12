@@ -15,25 +15,16 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Global constants for the Kialo plugin.
  *
  * @package     mod_kialo
  * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-/** @var stdClass $plugin */
-$plugin->component = 'mod_kialo';
-
-// See https://moodledev.io/docs/apis/commonfiles/version.php.
-$plugin->version = 2023112901;  // Must be incremented for each new release!
-$plugin->release = '1.0.25';    // Semantic version.
-
-// Officially we require PHP 7.4. The first Moodle version that requires this as a minimum is Moodle 4.1.
-// But technically this plugin also runs on older Moodle versions, as long as they run on PHP 7.4,
-// which some older Moodle versions also support. We tested that with Moodle 3.10 and 3.11, at least.
-$plugin->requires = 2020061522; // 3.9.22 and later.
-
-$plugin->maturity = MATURITY_STABLE;
+define("GROUP_HELP_CENTER_LINK", "https://support.kialo-edu.com/en/hc/moodle/#using-the-kialo-plugin-with-moodle-group-mode");
+define("PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK", "https://fh6m79pud11.typeform.com/to/cYurgy84");
+define("TERMS_LINK", "https://www.kialo-edu.com/terms");
+define("PRIVACY_LINK", "https://www.kialo-edu.com/privacy");
+define("DATA_SECURITY_LINK", "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/");
