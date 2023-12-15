@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="kialo" pattern="file:*.php&amp;&amp;!file[mod_kialo]:development//*" />
+</component>
