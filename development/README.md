@@ -5,7 +5,7 @@
 * Git
 * PHP composer (https://getcomposer.org/)
   * on macOS you can install via `brew install composer`
-* PHP 7.4 or higher
+* PHP 7.4 or PHP 8.2
   * If you installed composer `brew`, this should already be installed
 * Docker (https://www.docker.com/)
 

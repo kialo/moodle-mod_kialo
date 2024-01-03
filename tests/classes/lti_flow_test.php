@@ -98,6 +98,24 @@ class lti_flow_test extends \advanced_testcase {
     private $cmid;
 
     /**
+     * Copy of $_SERVER superglobal before the test.
+     * @var array|null
+     */
+    private $server;
+
+    /**
+     * Copy of $_ENV superglobal before the test.
+     * @var array|null
+     */
+    private $env;
+
+    /**
+     * Copy of $_GET superglobal before the test.
+     * @var array|null
+     */
+    private $get;
+
+    /**
      * In production the tool's (Kialo's) public key is downloaded from the platform (Moodle) during the LTI flow.
      * For this test we generate a new keypair and override the tool keychain in kialo_config, instead.    *
      *

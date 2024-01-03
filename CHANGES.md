@@ -1,3 +1,7 @@
+### v1.0.26 (Build - 2023121501)
+
+* Improved compatibility with future PHP versions.
+
 ### v1.0.25 (Build - 2023112901)
 
 * Minor internal improvements
