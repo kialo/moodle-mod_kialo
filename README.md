@@ -46,7 +46,7 @@ Kialo Edu’s design encourages reasoned, respectful discussion among students, 
 ### Our resources ###
 We have a wealth of resources to help you make the most of Kialo Edu!
 
-The [Topic Library](https://www.kialo-edu.com/debate-topics-and-argumentative-essay-topics) has over 300 ready-to-go discussion activities for you to choose from.
+The [Topic Library](https://www.kialo-edu.com/debate-topics-and-argumentative-essay-topics) has over 500 ready-to-go discussion activities for you to choose from.
 Whether you are looking for ice-breaker inspiration or want to clone one of our academic resources, we have something for everyone.
 
 Our [Edu Blog](https://blog.kialo-edu.com/) has tips and hints on how to get the most out of your Kialo discussions.
