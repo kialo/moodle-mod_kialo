@@ -42,6 +42,8 @@ cp .env.example .env # before starting compose, check instructions in this file
 docker compose up
 ```
 
+By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
+
 Afterward, see `/development/config/README.md` for steps to apply default settings that are useful for development.
 
 The folder `moodle` is mounted locally in the `development` folder. To test changes to the plugin code,
