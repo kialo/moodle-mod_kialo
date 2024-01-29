@@ -23,7 +23,7 @@ services:
       - MOODLE_DATABASE_USER=bn_moodle
       - MOODLE_DATABASE_NAME=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
-      - MOODLE_PASSWORD=kialo
+      - MOODLE_PASSWORD=kialo1234
       # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
       - MOODLE_HOST=${MOODLE_HOST:-localhost:8080}
