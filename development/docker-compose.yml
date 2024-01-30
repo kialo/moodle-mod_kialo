@@ -35,3 +35,7 @@ services:
     image: moodlehq/moodleapp:latest-dev
     ports:
       - '8100:80'
+networks:
+  # join the existing network when running Kialo locally
+  default:
+    name: kialo

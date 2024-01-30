@@ -31,10 +31,12 @@ into the mounted moodle plugin folder on every change.
 
 ## How to run Moodle
 
+Before you run Moodle copy `.env.example` to `.env` and adjust the values to your needs. 
+See `.env.example` for instructions.
+
 The following command starts Moodle locally on port 8080 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
 It also starts the hosted version of the Moodle app on port 8100.
-
 
 ```shell
 cd development
@@ -42,9 +44,16 @@ cp .env.example .env # before starting compose, check instructions in this file
 docker compose up
 ```
 
-By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
+After you started Moodle for the first time, do the following to set some useful default settings:
 
-Afterward, see `/development/config/README.md` for steps to apply default settings that are useful for development.
+* Copy `development/config.php` into `development/moodle` to apply some default settings useful for development.
+* Import `development/config/kialo-admin-preset.xml` via http://localhost:8080/admin/tool/admin_presets/index.php?action=import.
+
+The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
+testing Kialo locally won't work, as communication will be blocked by Moodle.
+This also enables web services for mobile (required for the mobile app) and enables debug messages for developers.
+
+By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
 
 The folder `moodle` is mounted locally in the `development` folder. To test changes to the plugin code,
 you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
