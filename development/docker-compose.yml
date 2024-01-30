@@ -38,5 +38,5 @@ services:
 networks:
   # join the existing network when running Kialo locally
   default:
-    name: kialo
+    name: kialo_default
     external: true
