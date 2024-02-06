@@ -39,4 +39,3 @@ networks:
   # join the existing network when running Kialo locally
   default:
     name: kialo_default
-    external: true
