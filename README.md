@@ -118,7 +118,8 @@ If not, see <https://www.gnu.org/licenses/>.
 ## Dependencies ##
 
 Our dependencies are managed via PHP composer, see `composer.json`.
-The `vendor` files are not included in the repository, but can be installed using `composer install`.They are included in our release packages, however.
+The `vendor` files are not included in the repository, but can be installed using `composer install`.
+They are included in our release packages, however.
 
 **Special thanks goes to [lib-lti1p3-core](https://github.com/oat-sa/lib-lti1p3-core)** 
 which we used to implement LTI-related functionality. 
