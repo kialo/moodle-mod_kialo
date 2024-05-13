@@ -44,6 +44,10 @@ jobs:
         php: [ '8.0', '8.1' ]  # Moodle doesn't support PHP 8.2 yet.
         moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
+        exclude:
+          # Moodle 4.4+ requires PHP 8.1+
+          - php: '8.0'
+            moodle-branch: 'MOODLE_404_STABLE'
 
     steps:
       - name: Check out repository code
