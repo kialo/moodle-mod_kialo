@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
       matrix:
         php: [ '8.0', '8.1' ]  # Moodle doesn't support PHP 8.2 yet.
-        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_402_STABLE' ]  # LTS & latest.
+        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
 
     steps:
