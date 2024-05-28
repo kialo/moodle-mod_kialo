@@ -54,6 +54,9 @@ jobs:
             moodle-branch: 'MOODLE_404_STABLE'
           - php: '7.4'
             moodle-branch: 'MOODLE_404_STABLE'
+          # Moodle 4.1 does not support PHP 8.3
+          - php: '8.3'
+            moodle-branch: 'MOODLE_401_STABLE'
 
     steps:
       - name: Check out repository code
