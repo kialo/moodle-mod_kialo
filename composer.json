@@ -1,7 +1,7 @@
 {
   "name": "kialo/moodle-plugin",
   "description": "Integrates Kialo Edu into Moodle",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "GPL-3.0-or-later",
   "authors": [
     {
@@ -19,7 +19,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7",
-    "moodlehq/moodle-cs": "^3.2",
+    "moodlehq/moodle-cs": "^3.4",
     "phpunit/phpunit": "^9.6",
     "friendsofphp/php-cs-fixer": "^3.25",
     "phpro/grumphp-shim": "^1.13"

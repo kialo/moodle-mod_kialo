@@ -87,7 +87,7 @@ class static_registration_repository implements RegistrationRepositoryInterface 
      * @param string|null $clientId
      * @return RegistrationInterface|null
      */
-    public function findByPlatformIssuer(string $issuer, string $clientId = null): ?RegistrationInterface {
+    public function findByPlatformIssuer(string $issuer, ?string $clientId = null): ?RegistrationInterface {
         $platform = $this->registration->getPlatform();
         if ($platform->getAudience() !== $issuer) {
             return null;
@@ -104,7 +104,7 @@ class static_registration_repository implements RegistrationRepositoryInterface 
      * @param string|null $clientId
      * @return RegistrationInterface|null
      */
-    public function findByToolIssuer(string $issuer, string $clientId = null): ?RegistrationInterface {
+    public function findByToolIssuer(string $issuer, ?string $clientId = null): ?RegistrationInterface {
         $tool = $this->registration->getTool();
         if ($issuer !== $tool->getAudience()) {
             return null;
