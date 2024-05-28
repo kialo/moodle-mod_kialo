@@ -41,12 +41,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0', '8.1' ]  # Moodle doesn't support PHP 8.2 yet.
+        php:  # see https://moodledev.io/general/development/policies/php
+          - '7.4'  # minimum support version by Moodle 4.1
+          - '8.0'
+          - '8.1'
+          - '8.3'  # max. supported version by Moodle 4.4 (as of writing)
         moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
         exclude:
           # Moodle 4.4+ requires PHP 8.1+
           - php: '8.0'
+            moodle-branch: 'MOODLE_404_STABLE'
+          - php: '7.4'
             moodle-branch: 'MOODLE_404_STABLE'
 
     steps:
