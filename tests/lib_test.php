@@ -37,14 +37,14 @@ require_once($CFG->dirroot . '/mod/kialo/lib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author    Kialo GmbH (support@kialo-edu.com)
  */
-class lib_test extends \advanced_testcase {
+final class lib_test extends \advanced_testcase {
 
     /**
      * Check support
      *
      * @covers ::kialo_supports
      */
-    public function test_kialo_supports() {
+    public function test_kialo_supports(): void {
         $this->resetAfterTest();
 
         $this->assertTrue(kialo_supports(FEATURE_BACKUP_MOODLE2));
@@ -68,7 +68,7 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_add_instance
      */
-    public function test_kialo_add_instance() {
+    public function test_kialo_add_instance(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
@@ -82,7 +82,7 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_update_instance
      */
-    public function test_kialo_update_instance() {
+    public function test_kialo_update_instance(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
@@ -101,7 +101,7 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_delete_instance
      */
-    public function test_kialo_delete_instance() {
+    public function test_kialo_delete_instance(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
@@ -115,7 +115,7 @@ class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_get_coursemodule_info
      */
-    public function test_kialo_get_coursemodule_info() {
+    public function test_kialo_get_coursemodule_info(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();

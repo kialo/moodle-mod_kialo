@@ -36,7 +36,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  *
  * @covers \mod_kialo\static_nonce_generator
  */
-class moodle_cache_test extends \basic_testcase {
+final class moodle_cache_test extends \basic_testcase {
     /**
      * @var moodle_cache $cache
      */
@@ -61,7 +61,7 @@ class moodle_cache_test extends \basic_testcase {
      * @covers \mod_kialo\moodle_cache::storeItemInCache
      * @covers \mod_kialo\moodle_cache::fetchObjectFromCache
      */
-    public function test_cache_gets_and_sets() {
+    public function test_cache_gets_and_sets(): void {
         $this->assertFalse($this->cache->hasItem('key'));
         $item = new CacheItem('key', true, 'value');
         $this->assertTrue($this->cache->save($item));
@@ -77,7 +77,7 @@ class moodle_cache_test extends \basic_testcase {
      * @return void
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function test_clear_all_objects() {
+    public function test_clear_all_objects(): void {
         $this->cache->save(new CacheItem('item1', true, 1));
         $this->cache->save(new CacheItem('item2', true, 2));
         $this->assertTrue($this->cache->hasItem('item1'));

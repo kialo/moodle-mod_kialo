@@ -36,12 +36,12 @@ use core_privacy\local\metadata\collection;
  * @author    Kialo GmbH <support@kialo-edu.com>
  * @covers \mod_kialo\privacy\provider
  */
-class provider_test extends \core_privacy\tests\provider_testcase {
+final class provider_test extends \core_privacy\tests\provider_testcase {
 
     /**
      * Test for provider::get_metadata().
      */
-    public function test_get_metadata() {
+    public function test_get_metadata(): void {
         $this->resetAfterTest(true);
 
         $collection = new collection('mod_kialo');

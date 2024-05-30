@@ -25,12 +25,12 @@ class mod_kialo_generator extends testing_module_generator {
 
     /**
      * Create a new instance of the Kialo activity module, setting some useful default placeholder values for tests.
-     * @param stdClass|null $record
+     * @param stdClass $record
      * @param array|null $options
      * @return stdClass
      * @throws coding_exception
      */
-    public function create_instance(?stdClass $record = null, ?array $options = null): stdClass {
+    public function create_instance($record = null, array $options = null): stdClass {
         $record = (object) (array) $record;
 
         // Set some useful defaults for tests.

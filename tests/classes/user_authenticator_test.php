@@ -37,7 +37,7 @@ use stdClass;
  * Tests the LTI user authenticator implementation.
  * @covers \mod_kialo\user_authenticator
  */
-class user_authenticator_test extends \advanced_testcase {
+final class user_authenticator_test extends \advanced_testcase {
     /**
      * @var stdClass The course that the activity is in.
      */
@@ -87,7 +87,7 @@ class user_authenticator_test extends \advanced_testcase {
      * @throws \require_login_exception
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_basic_successful_auth() {
+    public function test_basic_successful_auth(): void {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user([
             "username" => "hoschi",
@@ -129,7 +129,7 @@ class user_authenticator_test extends \advanced_testcase {
      * @throws \require_login_exception
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_default_image_not_send() {
+    public function test_default_image_not_send(): void {
         $user = $this->getDataGenerator()->create_user();
         $this->setUser($user);
         $this->getDataGenerator()->enrol_user($user->id, $this->course->id, "student");
@@ -148,7 +148,7 @@ class user_authenticator_test extends \advanced_testcase {
      * @throws \require_login_exception
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_timezone() {
+    public function test_timezone(): void {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user(["timezone" => "Asia/Tokyo"]);
         $this->setUser($user);
@@ -170,7 +170,7 @@ class user_authenticator_test extends \advanced_testcase {
      * @throws \require_login_exception
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_locale() {
+    public function test_locale(): void {
         // Given a user with a very particular set of timezone and language.
         $user = $this->getDataGenerator()->create_user(["lang" => "en"]);
         $this->setUser($user);
@@ -188,7 +188,7 @@ class user_authenticator_test extends \advanced_testcase {
      * Tests that a user that's not enrolled in the course cannot authenticate.
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_user_not_enrolled_in_course() {
+    public function test_user_not_enrolled_in_course(): void {
         // Given a user that is not enrolled in the course.
         $usernotenrolled = $this->getDataGenerator()->create_user();
         $this->setUser($usernotenrolled);
@@ -206,7 +206,7 @@ class user_authenticator_test extends \advanced_testcase {
      * Tests that a guest user cannot authenticate.
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_doesnt_work_for_guest_users() {
+    public function test_doesnt_work_for_guest_users(): void {
         global $USER;
         $this->setGuestUser();
         $this->getDataGenerator()->enrol_user($USER->id, $this->course->id, "student");
@@ -220,7 +220,7 @@ class user_authenticator_test extends \advanced_testcase {
      * Tests that non-logged-in users cannot authenticate.
      * @covers \mod_kialo\user_authenticator::authenticate
      */
-    public function test_fails_when_not_logged_in() {
+    public function test_fails_when_not_logged_in(): void {
         $this->resetAfterTest(false);
 
         try {

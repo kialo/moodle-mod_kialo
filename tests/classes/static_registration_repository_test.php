@@ -33,7 +33,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the static registration repository.
  * @covers \mod_kialo\static_registration_repository
  */
-class static_registration_repository_test extends \basic_testcase {
+final class static_registration_repository_test extends \basic_testcase {
 
     /**
      * Tests the static registration repository.
@@ -41,7 +41,7 @@ class static_registration_repository_test extends \basic_testcase {
      * @covers \mod_kialo\static_registration_repository::findAll
      * @covers \mod_kialo\static_registration_repository::findByClientId
      */
-    public function test_repository() {
+    public function test_repository(): void {
         $reg = kialo_config::get_instance()->create_registration("42");
         $this->assertEquals("kialo-moodle-registration", $reg->getIdentifier());
 
@@ -57,7 +57,7 @@ class static_registration_repository_test extends \basic_testcase {
      * Tests the static registration repository's findByPlatformIssuer method.
      * @covers \mod_kialo\static_registration_repository::findByPlatformIssuer
      */
-    public function test_find_by_platform_issuer() {
+    public function test_find_by_platform_issuer(): void {
         $reg = kialo_config::get_instance()->create_registration("42");
         $repo = new static_registration_repository($reg);
 
@@ -69,7 +69,7 @@ class static_registration_repository_test extends \basic_testcase {
      * Tests the static registration repository's findByToolIssuer method.
      * @covers \mod_kialo\static_registration_repository::findByToolIssuer
      */
-    public function test_find_by_tool_issuer() {
+    public function test_find_by_tool_issuer(): void {
         $reg = kialo_config::get_instance()->create_registration("42");
         $repo = new static_registration_repository($reg);
 
