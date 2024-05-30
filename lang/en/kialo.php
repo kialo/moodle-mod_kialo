@@ -32,34 +32,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['acceptterms'] = "Accept Terms of Service";
+$string['acceptterms_desc'] = 'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our <a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
+$string['close_prompt'] = 'You can close this window now.';
 $string['deploymentid'] = "Discussion Linked";
 $string['discussion_title'] = 'Discussion';
-$string['hello'] = 'Hello World!';
-$string['kialo:addinstance'] = 'Add a new Kialo Discussion';
-$string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
-$string['kialo:view'] = 'View Kialo discussions';
-$string['kialofieldset'] = 'Kialo Fieldset';
-$string['kialoname'] = 'Activity Name';
-$string['kialosettings'] = 'Settings';
-$string['modulename'] = 'Kialo Discussion';
-$string['modulenameplural'] = 'Kialo Discussions';
-$string['pluginadministration'] = 'Edit Kialo Discussion';
-$string['pluginname'] = 'Kialo Discussion';
-$string['select_discussion_help'] =
-        'Opens Kialo in a new tab to select a discussion for this activity. You can create a Kialo account during this process if you don’t already have one.';
-$string['select_discussion'] = 'Select Discussion';
-
-// Help texts.
-$string['modulename_help'] = 'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
-$string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
-
-// Displayed while redirecting to Kialo during the LTI flows.
-$string['close_prompt'] = 'You can close this window now.';
-$string['redirect_loading'] = "Loading";
-$string['redirect_title'] = "Loading";
-
-// Errors.
 $string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
 $string['errors:invalidrequest'] = "Invalid request";
 $string['errors:ltiauth'] = "Authentication failed due to an unexpected error. Please try again.";
@@ -70,8 +48,22 @@ $string['errors:missingsessiondata'] = "Missing session data";
 $string['errors:noguestaccess'] = "Guests cannot access this activity. Please log in.";
 $string['errors:nopermissiontoview'] = "You do not have permission to view this activity.";
 $string['errors:resourcelink'] = "Activity cannot be displayed due to an unexpected error. Please try again.";
-
-// Privacy API.
+$string['groupmode_off_info'] = '<b>Please note that Moodle groups are currently <u>not</u> automatically supported.</b> (<a href="{$a->grouphelpcenterlink}">More info</a>)';
+$string['groupmode_on_warning'] = '<b>Moodle groups are currently <u>not</u> automatically supported.</b> If you use the Kialo Moodle Plugin with a course that has multiple groups, <b>all</b> groups will find themselves in the <b>same</b> Kialo discussion.<br/><br/>To manually set up Kialo discussions for each of your groups, please follow the instructions in our <a href="{$a->grouphelpcenterlink}">help center</a>.<br/><br/>We will release automatic Moodle groups support in Q1 2024. <a href="{$a->pluginreleaseemailnotificationlink}">Submit your email address</a> to be notified when it is released.';
+$string['hello'] = 'Hello World!';
+$string['kialo:addinstance'] = 'Add a new Kialo Discussion';
+$string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
+$string['kialo:view'] = 'View Kialo discussions';
+$string['kialofieldset'] = 'Kialo Fieldset';
+$string['kialoname'] = 'Activity Name';
+$string['kialosettings'] = 'Settings';
+$string['modulename'] = 'Kialo Discussion';
+$string['modulename_help'] = 'The Kialo Discussion activity allows you to include a Kialo discussion in your Moodle course. Students can participate in the discussion directly from Moodle, without having to manually create Kialo accounts. Kialo discussions are a great way to teach and train critical thinking, argumentation and to facilitate thoughtful classroom discussions.';
+$string['modulename_link'] = 'https://support.kialo-edu.com/en/hc/moodle';
+$string['modulenameplural'] = 'Kialo Discussions';
+$string['pluginadministration'] = 'Edit Kialo Discussion';
+$string['pluginname'] = 'Kialo Discussion';
+$string['privacy:metadata:kialo'] = 'User data needs to be exchanged with Kialo Edu in order to automatically create accounts for Moodle users on kialo-edu.com, and to make the user experience as seamless as possible.';
 $string['privacy:metadata:kialo:courseid'] = 'The ID of the user’s course.';
 $string['privacy:metadata:kialo:email'] = 'The email address is sent from Moodle to allow you to access your data on Kialo Edu.';
 $string['privacy:metadata:kialo:fullname'] = 'Your full name is sent to Kialo Edu to allow a better user experience.';
@@ -82,14 +74,8 @@ $string['privacy:metadata:kialo:role'] = 'The user’s role in the course is use
 $string['privacy:metadata:kialo:timezone'] = 'Your time zone preference is sent to Kialo Edu to automatically set the user time zone.';
 $string['privacy:metadata:kialo:userid'] = 'The userid is sent from Moodle to allow you to access your data on Kialo Edu.';
 $string['privacy:metadata:kialo:username'] = 'The user name is sent from Moodle to set the default user name on Kialo Edu.';
-$string['privacy:metadata:kialo'] =
-        'User data needs to be exchanged with Kialo Edu in order to automatically create accounts for Moodle users on kialo-edu.com, and to make the user experience as seamless as possible.';
-
-// Settings.
-$string['groupmode_off_info'] = '<b>Please note that Moodle groups are currently <u>not</u> automatically supported.</b> (<a href="{$a->grouphelpcenterlink}">More info</a>)';
-$string['groupmode_on_warning'] =
-        '<b>Moodle groups are currently <u>not</u> automatically supported.</b> If you use the Kialo Moodle Plugin with a course that has multiple groups, <b>all</b> groups will find themselves in the <b>same</b> Kialo discussion.<br/><br/>To manually set up Kialo discussions for each of your groups, please follow the instructions in our <a href="{$a->grouphelpcenterlink}">help center</a>.<br/><br/>We will release automatic Moodle groups support in Q1 2024. <a href="{$a->pluginreleaseemailnotificationlink}">Submit your email address</a> to be notified when it is released.';
-$string["acceptterms_desc"] =
-        'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our <a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
-$string["acceptterms"] = "Accept Terms of Service";
-$string["termsnotaccepted"] = 'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
+$string['redirect_loading'] = "Loading";
+$string['redirect_title'] = "Loading";
+$string['select_discussion'] = 'Select Discussion';
+$string['select_discussion_help'] = 'Opens Kialo in a new tab to select a discussion for this activity. You can create a Kialo account during this process if you don’t already have one.';
+$string['termsnotaccepted'] = 'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
