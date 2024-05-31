@@ -1,3 +1,7 @@
+### v1.1.0 (Build - 2024053101)
+
+* Moodle 4.4 compatibility
+
 ### v1.0.26 (Build - 2023121501)
 
 * Improved compatibility with future PHP versions.
