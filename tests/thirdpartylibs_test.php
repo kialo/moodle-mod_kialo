@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
  * @author    Kialo GmbH (support@kialo-edu.com)
  * @coversNothing
  */
-class thirdpartylibs_test extends TestCase {
+final class thirdpartylibs_test extends TestCase {
     /**
      * Parses the composer.lock file and returns an array of composer packages with fields corresponding to those in
      * thirdpartylibs.xml.

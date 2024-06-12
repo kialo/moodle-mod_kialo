@@ -51,7 +51,7 @@ class static_nonce_generator implements NonceGeneratorInterface {
      * @param int|null $ttl TTL is ignored, because it's not supported.
      * @return NonceInterface
      */
-    public function generate(int $ttl = null): NonceInterface {
+    public function generate(?int $ttl = null): NonceInterface {
         return new Nonce($this->nonce);
     }
 }

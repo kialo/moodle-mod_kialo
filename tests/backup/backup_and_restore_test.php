@@ -43,7 +43,7 @@ use stdClass;
  * @covers \mod_kialo\backup\backup_kialo_activity_task
  * @covers \mod_kialo\backup\restore_kialo_activity_task
  */
-class backup_and_restore_test extends advanced_testcase {
+final class backup_and_restore_test extends advanced_testcase {
 
     /**
      * Setup to ensure that fixtures are loaded.
@@ -57,7 +57,7 @@ class backup_and_restore_test extends advanced_testcase {
     /**
      * Test on Kialo activity backup and restore.
      */
-    public function test_backup_restore() {
+    public function test_backup_restore(): void {
         global $DB;
         $this->resetAfterTest();
         $this->setAdminUser();

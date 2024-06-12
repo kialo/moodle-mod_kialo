@@ -52,7 +52,7 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
 /**
  * Tests the LTI flow.
  */
-class lti_flow_test extends \advanced_testcase {
+final class lti_flow_test extends \advanced_testcase {
 
     /**
      * Message is signed by the platform (the Kialo Moodle plugin).
@@ -315,7 +315,7 @@ class lti_flow_test extends \advanced_testcase {
      * @covers       \mod_kialo\lti_flow::assign_lti_roles
      * @dataProvider provide_lti_role_assertions
      */
-    public function test_assign_lti_roles(array $moodleroles, array $expectedltiroles) {
+    public function test_assign_lti_roles(array $moodleroles, array $expectedltiroles): void {
         $this->resetAfterTest(true);
 
         foreach ($moodleroles as $moodlerole) {
@@ -332,7 +332,7 @@ class lti_flow_test extends \advanced_testcase {
      *
      * @covers \mod_kialo\lti_flow::init_resource_link
      */
-    public function test_init_resource_link() {
+    public function test_init_resource_link(): void {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
 
         // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
@@ -533,7 +533,7 @@ class lti_flow_test extends \advanced_testcase {
      * @dataProvider provide_invalid_lti_auth_builders
      * @covers       \mod_kialo\lti_flow::validate_deep_linking_response
      */
-    public function test_invalid_lti_auth($signer, ?callable $builder, $exception) {
+    public function test_invalid_lti_auth($signer, ?callable $builder, $exception): void {
         // The current user must be at least a student in the course. But this LTI step works the same for students and teachers.
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
@@ -555,7 +555,7 @@ class lti_flow_test extends \advanced_testcase {
      *
      * @covers \mod_kialo\lti_flow::init_deep_link
      */
-    public function test_init_deep_link() {
+    public function test_init_deep_link(): void {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
 
         $deploymentid = "random-string-123";
@@ -643,7 +643,7 @@ class lti_flow_test extends \advanced_testcase {
      * @return void
      * @covers \mod_kialo\lti_flow::validate_deep_linking_response
      */
-    public function test_validate_deep_link_response() {
+    public function test_validate_deep_link_response(): void {
         // Given a redirect GET request from Kialo with the deep linking response.
         $this->prepare_deep_link_response_request(self::SIGNER_TOOL);
 
@@ -746,7 +746,7 @@ class lti_flow_test extends \advanced_testcase {
      * @dataProvider provide_invalid_deeplink_builders
      * @covers       \mod_kialo\lti_flow::validate_deep_linking_response
      */
-    public function test_invalid_deep_link_response($signer, ?callable $builder, $exception) {
+    public function test_invalid_deep_link_response($signer, ?callable $builder, $exception): void {
         // Given an invalid redirect GET request from Kialo with the deep linking response.
         $this->prepare_deep_link_response_request($signer, $builder);
 

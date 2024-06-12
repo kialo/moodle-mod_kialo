@@ -33,8 +33,8 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the static nonce generator.
  * @covers \mod_kialo\static_nonce_generator
  */
-class static_nonce_generator_test extends \basic_testcase {
-    public function test_generator() {
+final class static_nonce_generator_test extends \basic_testcase {
+    public function test_generator(): void {
         $generator = new static_nonce_generator("NONCE1234");
         $nonce = $generator->generate();
 
