@@ -1,3 +1,8 @@
+### v1.1.1 (Build - 2024071001)
+
+* Always render Kialo icon on neutral background
+* Prevent Kialo icon colors from being altered
+
 ### v1.1.0 (Build - 2024053101)
 
 * Moodle 4.4 compatibility
