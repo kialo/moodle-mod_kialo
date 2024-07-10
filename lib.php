@@ -47,6 +47,14 @@ function kialo_supports($feature) {
 }
 
 /**
+ * Prevent the Kialo icon from having its colors modified on Moodle >= 4.4.
+ * For < 4.4 this is handled in style.css.
+ */
+function kialo_is_branded(): bool {
+    return true;
+}
+
+/**
  * Saves a new instance of the mod_kialo into the database.
  *
  * Given an object containing all the necessary data, (defined by the form

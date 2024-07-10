@@ -1,0 +1,9 @@
+/*
+ * Prevent the Kialo icon from having its colors modified on Moodle < 4.4.
+ * For >= 4.4 this is handled in `kialo_is_branded` in `lib.php`.
+ *
+ * This long-winded selector is used to override the moodle selectors applying the filter.
+ */
+.activityiconcontainer.collaboration.modicon_kialo .activityicon:not(.nofilter) {
+    filter: unset;
+}
