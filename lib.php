@@ -29,11 +29,6 @@
  * @return true | string | null Truthy if the feature is supported, null otherwise.
  */
 function kialo_supports($feature) {
-    if (defined("FEATURE_MOD_PURPOSE") && $feature === FEATURE_MOD_PURPOSE) {
-        // Moodle 4.0 and newer.
-        return MOD_PURPOSE_COLLABORATION;
-    }
-
     switch ($feature) {
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -48,7 +43,6 @@ function kialo_supports($feature) {
 
 /**
  * Prevent the Kialo icon from having its colors modified on Moodle >= 4.4.
- * For < 4.4 this is handled in style.css.
  */
 function kialo_is_branded(): bool {
     return true;
