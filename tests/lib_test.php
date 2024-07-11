@@ -59,7 +59,7 @@ final class lib_test extends \advanced_testcase {
 
         // Moodle 4.0 and newer.
         if (defined("FEATURE_MOD_PURPOSE")) {
-            $this->assertEquals(MOD_PURPOSE_COLLABORATION, kialo_supports(FEATURE_MOD_PURPOSE));
+            $this->assertNull(kialo_supports(FEATURE_MOD_PURPOSE));
         }
     }
 
