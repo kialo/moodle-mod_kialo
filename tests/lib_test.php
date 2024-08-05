@@ -51,9 +51,11 @@ final class lib_test extends \advanced_testcase {
 
         $this->assertFalse(kialo_supports(FEATURE_MOD_INTRO));
 
-        // Grades and groups are not supported yet, but will be in the future.
-        $this->assertNull(kialo_supports(FEATURE_GROUPS));
-        $this->assertNull(kialo_supports(FEATURE_GROUPINGS));
+        // Group mode is supported.
+        $this->assertTrue(kialo_supports(FEATURE_GROUPS));
+        $this->assertTrue(kialo_supports(FEATURE_GROUPINGS));
+
+        // Grades are not supported yet, but will be in the future.
         $this->assertNull(kialo_supports(FEATURE_GRADE_HAS_GRADE));
         $this->assertNull(kialo_supports(FEATURE_ADVANCED_GRADING));
 

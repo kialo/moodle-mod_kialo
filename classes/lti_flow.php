@@ -141,6 +141,8 @@ class lti_flow {
      * @param string $deploymentid
      * @param string $moodleuserid
      * @param string $discussionurl
+     * @param int|null $groupid
+     * @param string|null $groupname
      * @return LtiMessageInterface
      * @throws LtiExceptionInterface
      * @throws \coding_exception
@@ -151,10 +153,19 @@ class lti_flow {
         int $coursemoduleid,
         string $deploymentid,
         string $moodleuserid,
-        string $discussionurl
+        string $discussionurl,
+        ?int $groupid = null,
+        ?string $groupname = null
     ): LtiMessageInterface {
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
+
+        $customclaims = [];
+
+        if (!empty($groupid) && !empty($groupname)) {
+            $customclaims['kialoGroupId'] = $groupid;
+            $customclaims['kialoGroupName'] = $groupname;
+        }
 
         return self::build_platform_originating_launch(
             LtiMessageInterface::LTI_MESSAGE_TYPE_RESOURCE_LINK_REQUEST,
@@ -172,6 +183,8 @@ class lti_flow {
                 "https://purl.imsglobal.org/spec/lti/claim/context" => [
                     "id" => $courseid,
                 ],
+
+                "https://purl.imsglobal.org/spec/lti/claim/custom" => count($customclaims) > 0 ? $customclaims : null,
             ],
         );
     }

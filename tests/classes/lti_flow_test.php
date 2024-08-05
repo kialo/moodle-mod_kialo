@@ -370,6 +370,52 @@ final class lti_flow_test extends \advanced_testcase {
         $this->assertEquals(kialo_config::get_release(), $params["kialo_plugin_version"]);
 
         $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/context")["id"], $this->course->id);
+
+        // By default there are no custom claims for groups.
+        $this->assertNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
+    }
+
+    /**
+     * Tests the initial LTI flow step with groups.
+     *
+     * @covers \mod_kialo\lti_flow::init_resource_link
+     */
+    public function test_init_resource_link_with_groups(): void {
+        // Given one student in a group.
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+        $group = $this->getDataGenerator()->create_group([
+            'courseid' => $this->course->id,
+            'name' => 'Group 1',
+        ]);
+        $this->getDataGenerator()->create_group_member([
+            'groupid' => $group->id,
+            'userid' => $this->user->id,
+        ]);
+
+        // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
+        $deploymentid = "random-string-123";
+        $discussionurl = "random-discussion-url.com";
+        $message = lti_flow::init_resource_link(
+            $this->course->id,
+            $this->cmid,
+            $deploymentid,
+            $this->user->id,
+            $discussionurl,
+            $group->id,
+            $group->name
+        );
+        $this->assertNotNull($message);
+
+        $params = $message->getParameters()->jsonSerialize();
+
+        // The message hint is a JWT Token that contains the LTI details.
+        $token = $this->assert_jwt_signed_by_platform($params['lti_message_hint']);
+
+        // Group information is passed via custom claims.
+        $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"), [
+            "kialoGroupId" => $group->id,
+            "kialoGroupName" => $group->name,
+        ]);
     }
 
     /**

@@ -36,6 +36,10 @@ function kialo_supports($feature) {
         case FEATURE_MOD_INTRO:
             return false;
 
+        case FEATURE_GROUPS:
+        case FEATURE_GROUPINGS:
+            return true;
+
         default:
             return null;
     }
