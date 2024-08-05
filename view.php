@@ -33,6 +33,7 @@ require_once('vendor/autoload.php');
 
 global $CFG;
 
+use mod_kialo\kialo_view;
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
 
@@ -61,13 +62,17 @@ if (isguestuser() || is_guest($context)) {
     throw new \moodle_exception('errors:noguestaccess', 'kialo');
 }
 
+$groupinfo = kialo_view::get_current_group_info($cm, $course);
+
 try {
     $message = lti_flow::init_resource_link(
         $course->id,
         $cm->id,
         $moduleinstance->deployment_id,
         $USER->id,
-        $moduleinstance->discussion_url
+        $moduleinstance->discussion_url,
+        $groupinfo->groupid,
+        $groupinfo->groupname,
     );
 
     $output = $PAGE->get_renderer('mod_kialo');
