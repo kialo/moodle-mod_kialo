@@ -180,7 +180,8 @@ final class kialo_view_test extends \advanced_testcase {
 
     /**
      * Tests the group info retrieval when group mode is enabled and there is a grouping.
-     * Currently, our plugin ignores groupings for group assignments.
+     * In this case we send the grouping's ID so that all users in the same grouping can collaborate in the same
+     * group within the Kialo discussion.
      *
      * @return void
      * @covers \mod_kialo\kialo_view::get_current_group_info
@@ -188,16 +189,31 @@ final class kialo_view_test extends \advanced_testcase {
     public function test_group_info_grouping(): void {
         $test = $this->create_course_and_activity(true, true);
         $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "student");
-        $this->getDataGenerator()->create_group_member(['groupid' => $test->group->id, 'userid' => $this->user->id]);
+        $group1 = $test->group;
+        $group2 = $this->getDataGenerator()->create_group(['courseid' => $test->course->id, 'name' => "group-0000"]);
+
+        // Add student to both groups.
+        $this->getDataGenerator()->create_group_member(['groupid' => $group1->id, 'userid' => $this->user->id]);
+        $this->getDataGenerator()->create_group_member(['groupid' => $group2->id, 'userid' => $this->user->id]);
 
         // Create a grouping and add the course to it.
         $grouping = $this->getDataGenerator()->create_grouping(['courseid' => $test->course->id]);
-        $this->getDataGenerator()->create_grouping_group(['groupingid' => $grouping->id, 'groupid' => $test->group->id]);
 
-        // The user is in a group that is part of a grouping, but the grouping is not relevant for the activity right now.
-        // That means, we don't take into account grouping information for group assignments in Kialo.
+        // Both groups are part of the grouping.
+        $this->getDataGenerator()->create_grouping_group(['groupingid' => $grouping->id, 'groupid' => $group2->id]);
+        $this->getDataGenerator()->create_grouping_group(['groupingid' => $grouping->id, 'groupid' => $group1->id]);
+
+        $this->assertEquals("group-0001", $group1->name);
+        $this->assertEquals("group-0000", $group2->name);
+
+        // Assume the course module is configured the grouping. Only users in groups that are part of it can see and access it.
+        // Those users are also expected to be able to collaborate on the same activity.
+        $test->cm->groupingid = $grouping->id;
+
+        // Since the grouping is active, the current group info should return the grouping's infos instead of the actual group's.
         $groupinfo = kialo_view::get_current_group_info($test->cm, $test->course);
-        $this->assertEquals($test->group->id, $groupinfo->groupid);
-        $this->assertEquals($test->group->name, $groupinfo->groupname);
+        // The grouping's id is prefixed with "grouping-" to distinguish it from a group id, in case they both use the same numbers.
+        $this->assertEquals("grouping-{$grouping->id}", $groupinfo->groupid);
+        $this->assertEquals($grouping->name, $groupinfo->groupname);
     }
 }
