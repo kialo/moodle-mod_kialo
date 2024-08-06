@@ -24,6 +24,8 @@
 
 namespace mod_kialo;
 
+use context_module;
+
 /**
  * Helpers for Kialo views.
  */
@@ -37,18 +39,28 @@ class kialo_view {
      * @return \stdClass group information (groupname and groupid)
      */
     public static function get_current_group_info(\stdClass $cm, \stdClass $course): \stdClass {
-        $groupid = groups_get_activity_group($cm, $course); // Int or false. 0 means user has access to all groups (admin).
-        if ($groupid === false || $groupid === 0) {
-            $result = new \stdClass();
-            $result->groupid = null;
-            $result->groupname = null;
+        $result = new \stdClass();
+        $result->groupid = null;
+        $result->groupname = null;
+        $isteacheroradmin = has_capability('mod/kialo:addinstance', context_module::instance($cm->id));
+        if ($isteacheroradmin) {
+            // Teachers and admins always see all groups, and are therefore not part of one specific group.
             return $result;
         }
 
-        $result = new \stdClass();
+        if ($cm->groupingid) {
+            $result->groupid = "grouping-{$cm->groupingid}";
+            $result->groupname = groups_get_grouping_name($cm->groupingid);
+            return $result;
+        }
+
+        $groupid = groups_get_activity_group($cm, $course); // Int or false. 0 means user has access to all groups (admin).
+        if ($groupid === false || $groupid === 0) {
+            return $result;
+        }
+
         $result->groupid = $groupid;
         $result->groupname = groups_get_group_name($groupid);
-        ;
         return $result;
     }
 }
