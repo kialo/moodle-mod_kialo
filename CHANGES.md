@@ -1,3 +1,7 @@
+### v1.2.0 (Build - 2024080701)
+
+* Added support for groups and groupings.
+
 ### v1.1.1 (Build - 2024071001)
 
 * Always render Kialo icon on neutral background
