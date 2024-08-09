@@ -23,8 +23,11 @@
  *
  */
 
-define("GROUP_HELP_CENTER_LINK", "https://support.kialo-edu.com/en/hc/moodle/#using-the-kialo-plugin-with-moodle-group-mode");
-define("PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK", "https://fh6m79pud11.typeform.com/to/cYurgy84");
-define("TERMS_LINK", "https://www.kialo-edu.com/terms");
-define("PRIVACY_LINK", "https://www.kialo-edu.com/privacy");
-define("DATA_SECURITY_LINK", "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/");
+define(
+    "MOD_KIALO_GROUP_HELP_CENTER_LINK",
+    "https://support.kialo-edu.com/en/hc/moodle/#using-the-kialo-plugin-with-moodle-group-mode"
+);
+define("MOD_KIALO_PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK", "https://fh6m79pud11.typeform.com/to/cYurgy84");
+define("MOD_KIALO_TERMS_LINK", "https://www.kialo-edu.com/terms");
+define("MOD_KIALO_PRIVACY_LINK", "https://www.kialo-edu.com/privacy");
+define("MOD_KIALO_DATA_SECURITY_LINK", "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/");

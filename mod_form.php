@@ -66,14 +66,14 @@ class mod_kialo_mod_form extends moodleform_mod {
             $text = '<i class="icon fa fa-info-circle text-info fa-fw"
                 title="Information" role="img" aria-label="Information"></i>';
             $text .= get_string("groupmode_off_info", "mod_kialo", [
-                "grouphelpcenterlink" => GROUP_HELP_CENTER_LINK,
+                "grouphelpcenterlink" => MOD_KIALO_GROUP_HELP_CENTER_LINK,
             ]);
         } else {
             $text = '<i class="icon fa fa-exclamation-circle text-danger fa-fw"
                 title="Warning" role="img" aria-label="Warning"></i>';
             $text .= get_string("groupmode_on_warning", "mod_kialo", [
-                "grouphelpcenterlink" => GROUP_HELP_CENTER_LINK,
-                "pluginreleaseemailnotificationlink" => PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK,
+                "grouphelpcenterlink" => MOD_KIALO_GROUP_HELP_CENTER_LINK,
+                "pluginreleaseemailnotificationlink" => MOD_KIALO_PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK,
             ]);
         }
         $text = "<div class='alert alert-info'>" . $text . "</div>";
