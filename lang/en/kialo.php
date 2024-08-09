@@ -50,7 +50,6 @@ $string['errors:nopermissiontoview'] = "You do not have permission to view this 
 $string['errors:resourcelink'] = "Activity cannot be displayed due to an unexpected error. Please try again.";
 $string['groupmode_off_info'] = '<b>Please note that Moodle groups are currently <u>not</u> automatically supported.</b> (<a href="{$a->grouphelpcenterlink}" target="_blank">More info</a>)';
 $string['groupmode_on_warning'] = '<b>Moodle groups are currently <u>not</u> automatically supported.</b> If you use the Kialo Moodle Plugin with a course that has multiple groups, <b>all</b> groups will find themselves in the <b>same</b> Kialo discussion.<br/><br/>To manually set up Kialo discussions for each of your groups, please follow the instructions in our <a href="{$a->grouphelpcenterlink}">help center</a>.<br/><br/>We will release automatic Moodle groups support in Q1 2024. <a href="{$a->pluginreleaseemailnotificationlink}">Submit your email address</a> to be notified when it is released.';
-$string['hello'] = 'Hello World!';
 $string['kialo:addinstance'] = 'Add a new Kialo Discussion';
 $string['kialo:kialo_admin'] = 'Granted Admin rights in Kialo discussions';
 $string['kialo:view'] = 'View Kialo discussions';
