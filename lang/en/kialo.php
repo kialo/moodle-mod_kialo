@@ -78,3 +78,5 @@ $string['redirect_title'] = "Loading";
 $string['select_discussion'] = 'Select Discussion';
 $string['select_discussion_help'] = 'Opens Kialo in a new tab to select a discussion for this activity. You can create a Kialo account during this process if you don’t already have one.';
 $string['termsnotaccepted'] = 'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';
+$string['information_helptext'] = 'Information';
+$string['warning_helptext'] = 'Warning';

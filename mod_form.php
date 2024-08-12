@@ -64,13 +64,17 @@ class mod_kialo_mod_form extends moodleform_mod {
         // Kialo does not support group mode yet. Show a warning if it is enabled, otherwise show an info.
         if (groups_get_course_groupmode($COURSE) == NOGROUPS) {
             $text = '<i class="icon fa fa-info-circle text-info fa-fw"
-                title="Information" role="img" aria-label="Information"></i>';
+                title="' .
+                get_string("information_helptext", "mod_kialo") .
+                '" role="img" aria-label="Information"></i>';
             $text .= get_string("groupmode_off_info", "mod_kialo", [
                 "grouphelpcenterlink" => MOD_KIALO_GROUP_HELP_CENTER_LINK,
             ]);
         } else {
             $text = '<i class="icon fa fa-exclamation-circle text-danger fa-fw"
-                title="Warning" role="img" aria-label="Warning"></i>';
+                title="'.
+                get_string("warning_helptext", "mod_kialo") .
+                '" role="img" aria-label="Warning"></i>';
             $text .= get_string("groupmode_on_warning", "mod_kialo", [
                 "grouphelpcenterlink" => MOD_KIALO_GROUP_HELP_CENTER_LINK,
                 "pluginreleaseemailnotificationlink" => MOD_KIALO_PLUGIN_RELEASE_EMAIL_NOTIFICATION_LINK,
