@@ -59,7 +59,7 @@ html {
   margin: 0 auto;
 }
 
-@keyframes spinner-fade-in {
+@keyframes kialo-spinner-fade-in {
   0% {
     opacity: 0;
   }
@@ -148,20 +148,20 @@ html {
   transform: rotate(129deg);
 }
 
-.spinner__arc-inner--right {
+.kialo-spinner__arc-inner--right {
   animation: right-expand-line 1s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
   border-left-color: transparent;
   left: -100%;
   transform: rotate(-129deg);
 }
 
-@keyframes container-rotate {
+@keyframes kialo-container-rotate {
   to {
     transform: rotate(1turn);
   }
 }
 
-@keyframes line-center-rotate {
+@keyframes kialo-line-center-rotate {
   12.5% {
     transform: rotate(135deg);
   }
@@ -188,7 +188,7 @@ html {
   }
 }
 
-@keyframes left-expand-line {
+@keyframes kialo-left-expand-line {
   0% {
     transform: rotate(130deg);
   }
@@ -200,7 +200,7 @@ html {
   }
 }
 
-@keyframes right-expand-line {
+@keyframes kialo-right-expand-line {
   0% {
     transform: rotate(-130deg);
   }
@@ -212,7 +212,7 @@ html {
   }
 }
 
-@keyframes blend-line-color {
+@keyframes kialo-blend-line-color {
   0% {
     border-color: var(--kialo-blue-color);
   }
