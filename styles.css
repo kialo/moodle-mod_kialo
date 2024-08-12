@@ -33,7 +33,7 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-.loading-text {
+.kialo-loading-text {
   display: flex;
   height: 100%;
   align-items: center;
@@ -41,7 +41,7 @@ html {
   justify-content: center;
 }
 
-.loading-title {
+.kialo-loading-title {
   margin: 0 0 8px;
   color: #656f7b;
   font-family: Roboto-subset, -apple-system, BlinkMacSystemFont, Helvetica,
@@ -52,7 +52,7 @@ html {
   text-align: center;
 }
 
-.spinner {
+.kialo-spinner {
   animation: spinner-fade-in 1.5s ease-in 1;
   overflow: hidden;
   position: relative;
@@ -68,48 +68,48 @@ html {
   }
 }
 
-.spinner--large,
-.spinner--large .spinner__circle--1 {
+.kialo-spinner--large,
+.kialo-spinner--large .kialo-spinner__circle--1 {
   height: 64px;
   width: 64px;
 }
 
-.spinner--large .spinner__circle--2 {
+.kialo-spinner--large .kialo-spinner__circle--2 {
   height: 48px;
   width: 48px;
 }
 
-.spinner--large .spinner__circle--3 {
+.kialo-spinner--large .kialo-spinner__circle--3 {
   height: 32px;
   width: 32px;
 }
 
-.spinner--large .spinner__arc-inner {
+.kialo-spinner--large .kialo-spinner__arc-inner {
   border-width: 3px;
 }
 
-.spinner__circle--1 {
+.kialo-spinner__circle--1 {
   animation: container-rotate 2s linear infinite;
   left: 0;
   position: absolute;
   top: 0;
 }
 
-.spinner__circle--2 {
+.kialo-spinner__circle--2 {
   animation: container-rotate 1.2s linear infinite;
   left: 12.5%;
   position: absolute;
   top: 12.5%;
 }
 
-.spinner__circle--3 {
+.kialo-spinner__circle--3 {
   animation: container-rotate 2s linear infinite;
   left: 25%;
   position: absolute;
   top: 25%;
 }
 
-.spinner__line {
+.kialo-spinner__line {
   animation: line-center-rotate 4s cubic-bezier(0.4, 0, 0.2, 1) infinite both,
     blend-line-color 4s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
   border-color: var(--kialo-blue-color);
@@ -119,7 +119,7 @@ html {
   width: 100%;
 }
 
-.spinner__arc {
+.kialo-spinner__arc {
   border-color: inherit;
   height: 100%;
   overflow: hidden;
@@ -127,7 +127,7 @@ html {
   width: 50%;
 }
 
-.spinner__arc-inner {
+.kialo-spinner__arc-inner {
   border-color: inherit;
   border-bottom-color: transparent;
   border-radius: 50%;
@@ -142,7 +142,7 @@ html {
   width: 200%;
 }
 
-.spinner__arc-inner--left {
+.kialo-spinner__arc-inner--left {
   animation: left-expand-line 1s cubic-bezier(0.4, 0, 0.2, 1) infinite both;
   border-right-color: transparent;
   transform: rotate(129deg);
