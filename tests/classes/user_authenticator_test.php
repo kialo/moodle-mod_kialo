@@ -53,6 +53,11 @@ final class user_authenticator_test extends \advanced_testcase {
      */
     private $registrationstub;
 
+    /**
+     * @var userauthenticator
+     */
+    private $userauthenticator;
+
     protected function setUp(): void {
         parent::setUp();
 
@@ -60,7 +65,7 @@ final class user_authenticator_test extends \advanced_testcase {
 
         $this->course = $this->getDataGenerator()->create_course();
         $this->registrationstub = $this->createStub(RegistrationInterface::class);
-        $this->user_authenticator = new user_authenticator();
+        $this->userauthenticator = new user_authenticator();
 
         // Creates a Kialo activity.
         $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
@@ -76,7 +81,7 @@ final class user_authenticator_test extends \advanced_testcase {
      */
     protected function authenticate_user(string $userid): UserAuthenticationResultInterface {
         $loginhint = "{$this->course->id}/$userid";
-        return $this->user_authenticator->authenticate($this->registrationstub, $loginhint);
+        return $this->userauthenticator->authenticate($this->registrationstub, $loginhint);
     }
 
     /**

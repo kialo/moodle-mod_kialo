@@ -39,9 +39,9 @@ if ($ADMIN->fulltree) {
         'mod_kialo/acceptterms',
         new lang_string('acceptterms', 'mod_kialo'),
         new lang_string('acceptterms_desc', 'mod_kialo', [
-            "terms" => TERMS_LINK,
-            "privacy" => PRIVACY_LINK,
-            "data_security" => DATA_SECURITY_LINK,
+            "terms" => MOD_KIALO_TERMS_LINK,
+            "privacy" => MOD_KIALO_PRIVACY_LINK,
+            "data_security" => MOD_KIALO_DATA_SECURITY_LINK,
         ]),
         0
     );
