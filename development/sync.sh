@@ -1,3 +1,6 @@
+# Ensure this script is executed in the same folder
+cd "$(dirname "$0")"
+
 # Ensure the directory exists
 mkdir -p ./moodle/mod/kialo
 
