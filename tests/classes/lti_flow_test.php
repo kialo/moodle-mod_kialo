@@ -84,6 +84,13 @@ final class lti_flow_test extends \advanced_testcase {
     private $course;
 
     /**
+     * Current course module (created in setUp).
+     *
+     * @var \stdClass
+     */
+    private $cm;
+
+    /**
      * Current module (created in setUp).
      *
      * @var \stdClass
@@ -167,7 +174,8 @@ final class lti_flow_test extends \advanced_testcase {
 
         // Creates a Kialo activity.
         $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
-        $this->cmid = get_coursemodule_from_instance("kialo", $this->module->id)->id;
+        $this->cm = get_coursemodule_from_instance("kialo", $this->module->id);
+        $this->cmid = $this->cm->id;
     }
 
     protected function tearDown(): void {
@@ -392,6 +400,11 @@ final class lti_flow_test extends \advanced_testcase {
             'userid' => $this->user->id,
         ]);
 
+        $groupinfo = (object) [
+            'groupid' => $group->id,
+            'groupname' => $group->name,
+        ];
+
         // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
         $deploymentid = "random-string-123";
         $discussionurl = "random-discussion-url.com";
@@ -401,8 +414,8 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            $group->id,
-            $group->name
+            $groupinfo->groupid,
+            $groupinfo->groupname
         );
         $this->assertNotNull($message);
 
@@ -412,10 +425,66 @@ final class lti_flow_test extends \advanced_testcase {
         $token = $this->assert_jwt_signed_by_platform($params['lti_message_hint']);
 
         // Group information is passed via custom claims.
-        $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"), [
+        $this->assertEquals([
             "kialoGroupId" => $group->id,
             "kialoGroupName" => $group->name,
+        ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
+    }
+
+    /**
+     * Tests the initial LTI flow step with groups.
+     *
+     * @covers \mod_kialo\lti_flow::init_resource_link
+     */
+    public function test_init_resource_link_with_grouping(): void {
+        // Given one student in a group.
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+        $group = $this->getDataGenerator()->create_group([
+            'courseid' => $this->course->id,
+            'name' => 'Group 1',
         ]);
+        $grouping = $this->getDataGenerator()->create_grouping([
+            'courseid' => $this->course->id,
+            'name' => 'Grouping 1',
+        ]);
+        $this->getDataGenerator()->create_grouping_group([
+            'groupingid' => $grouping->id,
+            'groupid' => $group->id,
+        ]);
+        $this->getDataGenerator()->create_group_member([
+            'groupid' => $group->id,
+            'userid' => $this->user->id,
+        ]);
+
+        $groupinfo = (object) [
+            'groupid' => "grouping-{$grouping->id}",
+            'groupname' => $grouping->name,
+        ];
+
+        // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
+        $deploymentid = "random-string-123";
+        $discussionurl = "random-discussion-url.com";
+        $message = lti_flow::init_resource_link(
+            $this->course->id,
+            $this->cmid,
+            $deploymentid,
+            $this->user->id,
+            $discussionurl,
+            $groupinfo->groupid,
+            $groupinfo->groupname
+        );
+        $this->assertNotNull($message);
+
+        $params = $message->getParameters()->jsonSerialize();
+
+        // The message hint is a JWT Token that contains the LTI details.
+        $token = $this->assert_jwt_signed_by_platform($params['lti_message_hint']);
+
+        // Group information is passed via custom claims.
+        $this->assertEquals([
+            "kialoGroupId" => "grouping-{$grouping->id}",
+            "kialoGroupName" => $grouping->name,
+        ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
     }
 
     /**
