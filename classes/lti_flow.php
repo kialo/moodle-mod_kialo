@@ -141,7 +141,7 @@ class lti_flow {
      * @param string $deploymentid
      * @param string $moodleuserid
      * @param string $discussionurl
-     * @param int $groupid
+     * @param string $groupid
      * @param string $groupname
      * @return LtiMessageInterface
      * @throws LtiExceptionInterface
