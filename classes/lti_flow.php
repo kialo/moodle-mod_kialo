@@ -154,8 +154,8 @@ class lti_flow {
         string $deploymentid,
         string $moodleuserid,
         string $discussionurl,
-        ?string $groupid = null,
-        ?string $groupname = null
+        string $groupid,
+        string $groupname
     ): LtiMessageInterface {
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);

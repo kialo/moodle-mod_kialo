@@ -71,8 +71,8 @@ try {
         $moduleinstance->deployment_id,
         $USER->id,
         $moduleinstance->discussion_url,
-        $groupinfo->groupid,
-        $groupinfo->groupname,
+        $groupinfo->groupid ?? "",
+        $groupinfo->groupname ?? "",
     );
 
     $output = $PAGE->get_renderer('mod_kialo');

@@ -346,7 +346,15 @@ final class lti_flow_test extends \advanced_testcase {
         // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
         $deploymentid = "random-string-123";
         $discussionurl = "random-discussion-url.com";
-        $message = lti_flow::init_resource_link($this->course->id, $this->cmid, $deploymentid, $this->user->id, $discussionurl);
+        $message = lti_flow::init_resource_link(
+            $this->course->id,
+            $this->cmid,
+            $deploymentid,
+            $this->user->id,
+            $discussionurl,
+            "",
+            ""
+        );
         $this->assertNotNull($message);
 
         $params = $message->getParameters()->jsonSerialize();
