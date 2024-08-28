@@ -351,9 +351,7 @@ final class lti_flow_test extends \advanced_testcase {
             $this->cmid,
             $deploymentid,
             $this->user->id,
-            $discussionurl,
-            "",
-            ""
+            $discussionurl
         );
         $this->assertNotNull($message);
 

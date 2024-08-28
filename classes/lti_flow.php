@@ -141,8 +141,8 @@ class lti_flow {
      * @param string $deploymentid
      * @param string $moodleuserid
      * @param string $discussionurl
-     * @param string $groupid
-     * @param string $groupname
+     * @param string|null $groupid
+     * @param string|null $groupname
      * @return LtiMessageInterface
      * @throws LtiExceptionInterface
      * @throws \coding_exception
@@ -154,8 +154,8 @@ class lti_flow {
         string $deploymentid,
         string $moodleuserid,
         string $discussionurl,
-        string $groupid,
-        string $groupname
+        ?string $groupid = null,
+        ?string $groupname = null
     ): LtiMessageInterface {
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
