@@ -3385,25 +3385,25 @@
         },
         {
             "name": "moodlehq/moodle-cs",
-            "version": "v3.4.6",
+            "version": "v3.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/moodlehq/moodle-cs.git",
-                "reference": "02a279ecbd9431172e8eeee5385d4f6ec57c957b"
+                "reference": "89ff0acd727f8611cbafe5aea524614090b24ad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/moodlehq/moodle-cs/zipball/02a279ecbd9431172e8eeee5385d4f6ec57c957b",
-                "reference": "02a279ecbd9431172e8eeee5385d4f6ec57c957b",
+                "url": "https://api.github.com/repos/moodlehq/moodle-cs/zipball/89ff0acd727f8611cbafe5aea524614090b24ad9",
+                "reference": "89ff0acd727f8611cbafe5aea524614090b24ad9",
                 "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
                 "ext-json": "*",
                 "php": ">=7.4.0",
-                "phpcompatibility/php-compatibility": "dev-develop#e5cd2e24",
+                "phpcompatibility/php-compatibility": "dev-develop#96072c30",
                 "phpcsstandards/phpcsextra": "^1.2.1",
-                "squizlabs/php_codesniffer": "^3.9.0"
+                "squizlabs/php_codesniffer": "^3.10.1"
             },
             "replace": {
                 "moodlehq/moodle-local_codechecker": "3.1.0"
@@ -3451,7 +3451,7 @@
                 "source": "https://github.com/moodlehq/moodle-cs",
                 "wiki": "https://github.com/moodlehq/moodle-cs/wiki"
             },
-            "time": "2024-04-03T07:22:20+00:00"
+            "time": "2024-07-04T16:34:56+00:00"
         },
         {
             "name": "myclabs/deep-copy",
