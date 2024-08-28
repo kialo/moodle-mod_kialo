@@ -5,7 +5,7 @@ vendor/*
 
 ## JavaScript
 
-node_modules/
+development/node_modules/
 
 ## IDEA
 
