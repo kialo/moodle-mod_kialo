@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "moodle-mod_kialo",
+  "devDependencies": {
+    "postcss": "^8.4.41",
+    "postcss-scss": "^4.0.9",
+    "prettier": "3.3.3",
+    "stylelint": "^15.11.0",
+    "stylelint-csstree-validator": "^3.0.0",
+    "stylelint-prettier": "4.1.0"
+  },
+  "scripts": {
+    "css:format": "./node_modules/.bin/prettier --write ../styles.css",
+    "css:lint": "./node_modules/.bin/stylelint ../styles.css"
+  }
+}

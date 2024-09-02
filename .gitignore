@@ -3,6 +3,10 @@
 vendor/*
 .php-cs-fixer.cache
 
+## JavaScript
+
+development/node_modules/
+
 ## IDEA
 
 # User-specific stuff
