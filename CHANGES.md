@@ -1,4 +1,4 @@
-### v1.2.0 (Build - 2024080701)
+### v1.2.0 (Build - 2024090201)
 
 * Added support for groups and groupings.
 
