@@ -32,6 +32,7 @@ $course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 require_course_login($course);
 
 $coursecontext = context_course::instance($course->id);
+require_capability('mod/kialo:view', $coursecontext);
 
 $PAGE->set_url('/mod/kialo/index.php', ['id' => $id]);
 $PAGE->set_title(format_string($course->fullname));
@@ -46,7 +47,7 @@ echo $OUTPUT->heading($modulenameplural);
 $kialos = get_all_instances_in_course('kialo', $course);
 
 if (empty($kialos)) {
-    notice(get_string('no$kialoinstances', 'mod_kialo'), new moodle_url('/course/view.php', ['id' => $course->id]));
+    notice(new lang_string('noinstances', 'error', 'Kialo'), new moodle_url('/course/view.php', ['id' => $course->id]));
 }
 
 $table = new html_table();

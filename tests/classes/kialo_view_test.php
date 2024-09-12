@@ -25,6 +25,8 @@
 
 namespace mod_kialo;
 
+use stdClass;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
@@ -33,6 +35,12 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the view helpers.
  */
 final class kialo_view_test extends \advanced_testcase {
+    /**
+     * The test user the tests are run as.
+     *
+     * @var stdClass
+     */
+    private stdClass $user;
 
     protected function setUp(): void {
         parent::setUp();
