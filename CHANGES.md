@@ -1,3 +1,8 @@
+### v1.2.1 (Build - 2024091201)
+
+* Namespaced styles
+* Fixed missing language strings
+
 ### v1.2.0 (Build - 2024090201)
 
 * Added support for groups and groupings.
