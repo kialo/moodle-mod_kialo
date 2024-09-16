@@ -33,30 +33,38 @@ require_once(__DIR__ . '/../../config.php');
  *
  * @return array
  */
-function lti_get_capabilities() {
-    $capabilities = [
-            'basic-lti-launch-request' => '',
-            'ContentItemSelectionRequest' => '',
-            'ResourceLink.id' => 'resource_link_id',
-            'ResourceLink.title' => 'resource_link_title',
-            'ResourceLink.description' => 'resource_link_description',
-            'User.id' => 'user_id',
-            'User.username' => '$USER->username',
-            'Person.name.full' => 'lis_person_name_full',
-            'Person.name.given' => 'lis_person_name_given',
-            'Person.name.middle' => 'lis_person_name_given',
-            'Person.name.family' => 'lis_person_name_family',
-            'Person.email.primary' => 'lis_person_contact_email_primary',
-            'Person.sourcedId' => 'lis_person_sourcedid',
-            'Membership.role' => 'roles',
-            'Result.sourcedId' => 'lis_result_sourcedid',
-            'Result.autocreate' => 'lis_outcome_service_url',
-    ];
+function lti_get_capabilities()
+{
+        $capabilities = [
+                'basic-lti-launch-request' => '',
+                'ContentItemSelectionRequest' => '',
+                'ResourceLink.id' => 'resource_link_id',
+                'ResourceLink.title' => 'resource_link_title',
+                'ResourceLink.description' => 'resource_link_description',
+                'User.id' => 'user_id',
+                'User.username' => '$USER->username',
+                'Person.name.full' => 'lis_person_name_full',
+                'Person.name.given' => 'lis_person_name_given',
+                'Person.name.middle' => 'lis_person_name_given',
+                'Person.name.family' => 'lis_person_name_family',
+                'Person.email.primary' => 'lis_person_contact_email_primary',
+                'Person.sourcedId' => 'lis_person_sourcedid',
+                'Membership.role' => 'roles',
+                'Result.sourcedId' => 'lis_result_sourcedid',
+                'Result.autocreate' => 'lis_outcome_service_url',
 
-    return $capabilities;
+        ];
+
+        return $capabilities;
 }
 
-$scopes = ['openid'];
+$scopes = [
+        'openid',
+        "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
+        "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+        "https://purl.imsglobal.org/spec/lti-ags/scope/score",
+        "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem",
+];
 $conf = [
         'issuer' => $CFG->wwwroot . '/mod/kialo',
         'token_endpoint' => (new moodle_url('/mod/kialo/lti_token.php'))->out(false),
@@ -69,7 +77,16 @@ $conf = [
         'response_types_supported' => ['id_token'],
         'subject_types_supported' => ['public', 'pairwise'],
         'id_token_signing_alg_values_supported' => ['RS256'],
-        'claims_supported' => ['sub', 'iss', 'name', 'given_name', 'middle_name', 'family_name', 'email', 'picture', 'locale',
+        'claims_supported' => [
+                'sub',
+                'iss',
+                'name',
+                'given_name',
+                'middle_name',
+                'family_name',
+                'email',
+                'picture',
+                'locale',
                 'zoneinfo',
         ],
         // This is similar to https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim, but not the same!
@@ -77,7 +94,8 @@ $conf = [
                 'product_family_code' => 'moodle_kialo_plugin',
                 'version' => $CFG->release,
                 'messages_supported' => [
-                        ['type' => 'LtiResourceLinkRequest'], ['type' => 'LtiDeepLinkingRequest', 'placements' => ['ContentArea']],
+                        ['type' => 'LtiResourceLinkRequest'],
+                        ['type' => 'LtiDeepLinkingRequest', 'placements' => ['ContentArea']],
                 ],
                 'variables' => array_keys(lti_get_capabilities()),
         ],

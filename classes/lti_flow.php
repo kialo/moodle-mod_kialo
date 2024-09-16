@@ -44,7 +44,8 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Functions implementing the LTI steps.
  */
-class lti_flow {
+class lti_flow
+{
     /**
      * The LTI standard requires a stable GUID to be send with the platform information.
      * See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
@@ -118,7 +119,8 @@ class lti_flow {
      * @throws \coding_exception
      * @see https://www.imsglobal.org/spec/lti/v1p3#lis-vocabulary-for-context-roles
      */
-    public static function assign_lti_roles($context): array {
+    public static function assign_lti_roles($context): array
+    {
         // Note: The $context parameter is intentionally not type-hinted as `context_module` because between Moodle 4.2 and other
         // versions the concrete type differs. In Moodle 4.2 it's `context_module`, in other versions it's `core\context\module`.
         // And since we need to support versions older than PHP 8.0, we can't use an union type here.
@@ -272,7 +274,8 @@ class lti_flow {
      * @throws LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid)
+    {
         $kialoconfig = kialo_config::get_instance();
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
@@ -320,7 +323,8 @@ class lti_flow {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function lti_auth(): LtiMessageInterface {
+    public static function lti_auth(): LtiMessageInterface
+    {
         global $CFG;
 
         $kialoconfig = kialo_config::get_instance();
@@ -345,6 +349,18 @@ class lti_flow {
             'product_family_code' => self::PRODUCT_FAMILY_CODE,
             'version' => $CFG->version,
         ]);
+
+        $payloadbuilder->withClaim('https://purl.imsglobal.org/spec/lti-ags/claim/endpoint', [
+            "scope" => [
+                "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
+                "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+                "https://purl.imsglobal.org/spec/lti-ags/scope/score"
+            ],
+            "lineitems" => (new moodle_url('/mod/kialo/lineitem.php?id='))->out(false)
+            "http://192.168.178.21:8080/mod/lti/services.php/2/lineitems?type_id=2",
+            "lineitem" => "http://192.168.178.21:8080/mod/lti/services.php/2/lineitems/16/lineitem?type_id=2"
+        ]);
+
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);

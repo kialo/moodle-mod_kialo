@@ -28,7 +28,8 @@
  * @param string $feature Constant representing the feature.
  * @return true | string | null Truthy if the feature is supported, null otherwise.
  */
-function kialo_supports($feature) {
+function kialo_supports($feature)
+{
     switch ($feature) {
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -40,6 +41,9 @@ function kialo_supports($feature) {
         case FEATURE_GROUPINGS:
             return true;
 
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
+
         default:
             return null;
     }
@@ -48,7 +52,8 @@ function kialo_supports($feature) {
 /**
  * Prevent the Kialo icon from having its colors modified on Moodle >= 4.4.
  */
-function kialo_is_branded(): bool {
+function kialo_is_branded(): bool
+{
     return true;
 }
 
@@ -63,7 +68,8 @@ function kialo_is_branded(): bool {
  * @param mod_kialo_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function kialo_add_instance($moduleinstance, $mform = null) {
+function kialo_add_instance($moduleinstance, $mform = null)
+{
     global $DB;
 
     $moduleinstance->timecreated = time();
@@ -83,7 +89,8 @@ function kialo_add_instance($moduleinstance, $mform = null) {
  * @param mod_kialo_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function kialo_update_instance($moduleinstance, $mform = null) {
+function kialo_update_instance($moduleinstance, $mform = null)
+{
     global $DB;
 
     $moduleinstance->timemodified = time();
@@ -98,7 +105,8 @@ function kialo_update_instance($moduleinstance, $mform = null) {
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function kialo_delete_instance($id) {
+function kialo_delete_instance($id)
+{
     global $DB;
 
     $exists = $DB->get_record('kialo', ['id' => $id]);
@@ -120,7 +128,8 @@ function kialo_delete_instance($id) {
  * @param stdClass $coursemodule
  * @return cached_cm_info info
  */
-function kialo_get_coursemodule_info($coursemodule) {
+function kialo_get_coursemodule_info($coursemodule)
+{
     $info = new cached_cm_info();
 
     $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
@@ -134,7 +143,8 @@ function kialo_get_coursemodule_info($coursemodule) {
  *
  * @return bool Whether to proceed and enable the plugin or not.
  */
-function kialo_pre_enable_plugin_actions(): bool {
+function kialo_pre_enable_plugin_actions(): bool
+{
     // If the admin hasn't accepted the terms of service, don't enable the plugin.
     $acceptterms = get_config('mod_kialo', 'acceptterms');
 
@@ -152,7 +162,8 @@ function kialo_pre_enable_plugin_actions(): bool {
  * @return void
  * @throws dml_exception
  */
-function kialo_update_visibility_depending_on_accepted_terms(): void {
+function kialo_update_visibility_depending_on_accepted_terms(): void
+{
     global $DB;
 
     $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
