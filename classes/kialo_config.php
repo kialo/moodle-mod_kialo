@@ -118,10 +118,11 @@ class kialo_config {
      */
     public function get_platform(): Platform {
         return new Platform(
-            'kialo-moodle-plugin',                              // Identifier.
-            'Kialo Moodle Plugin',                              // Name.
-            (new moodle_url('/mod/kialo'))->out(),              // Audience.
-            (new moodle_url('/mod/kialo/lti_auth.php'))->out(), // OIDC authentication url.
+            'kialo-moodle-plugin',                               // Identifier.
+            'Kialo Moodle Plugin',                               // Name.
+            (new moodle_url('/mod/kialo'))->out(),               // Audience.
+            (new moodle_url('/mod/kialo/lti_auth.php'))->out(),  // OIDC authentication url.
+            (new moodle_url('/mod/kialo/lti_token.php'))->out(), // OAuth2 access token URL.
         );
     }
 

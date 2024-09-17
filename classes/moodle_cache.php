@@ -45,6 +45,14 @@ class moodle_cache extends AbstractCachePool {
     }
 
     /**
+     * Session-based cache for access tokens.
+     * @return self
+     */
+    public static function access_token_cache() {
+        return new self("access_tokens");
+    }
+
+    /**
      * Generic cache using the Moodle cache API.
      * @param string $name Name of a cache defined in `db/caches.php`.
      */

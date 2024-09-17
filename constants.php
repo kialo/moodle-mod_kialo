@@ -23,6 +23,17 @@
  *
  */
 
+use Packback\Lti1p3\LtiConstants;
+
 define("MOD_KIALO_TERMS_LINK", "https://www.kialo-edu.com/terms");
 define("MOD_KIALO_PRIVACY_LINK", "https://www.kialo-edu.com/privacy");
 define("MOD_KIALO_DATA_SECURITY_LINK", "https://support.kialo-edu.com/en/hc/kialo-edu-data-security-and-privacy-plan/");
+
+/**
+ * Scopes required for the Kialo LTI 1.3 assignment and grading service.
+ */
+const MOD_KIALO_LTI_AGS_SCOPES = [
+    LtiConstants::AGS_SCOPE_LINEITEM_READONLY,
+    LtiConstants::AGS_SCOPE_RESULT_READONLY,
+    LtiConstants::AGS_SCOPE_SCORE,
+];

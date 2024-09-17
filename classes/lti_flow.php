@@ -24,19 +24,25 @@
 
 namespace mod_kialo;
 
+require_once(__DIR__ . '/../constants.php');
+
 use context_module;
 use GuzzleHttp\Psr7\ServerRequest;
+use moodle_url;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
 use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
 use OAT\Library\Lti1p3Core\Message\Launch\Validator\Platform\PlatformLaunchValidator;
+use OAT\Library\Lti1p3Core\Message\LtiMessage;
 use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
+use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
 use OAT\Library\Lti1p3Core\Security\Jwks\Fetcher\JwksFetcher;
 use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
+use OAT\Library\Lti1p3Core\Security\Jwt\Parser\Parser;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,8 +50,8 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Functions implementing the LTI steps.
  */
-class lti_flow
-{
+class lti_flow {
+
     /**
      * The LTI standard requires a stable GUID to be send with the platform information.
      * See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
@@ -119,8 +125,7 @@ class lti_flow
      * @throws \coding_exception
      * @see https://www.imsglobal.org/spec/lti/v1p3#lis-vocabulary-for-context-roles
      */
-    public static function assign_lti_roles($context): array
-    {
+    public static function assign_lti_roles($context): array {
         // Note: The $context parameter is intentionally not type-hinted as `context_module` because between Moodle 4.2 and other
         // versions the concrete type differs. In Moodle 4.2 it's `context_module`, in other versions it's `core\context\module`.
         // And since we need to support versions older than PHP 8.0, we can't use an union type here.
@@ -133,6 +138,28 @@ class lti_flow
         }
 
         return $roles;
+    }
+
+    /**
+     * Generates a resource link ID based on the course module ID.
+     * This is an arbitrary string, but it must be unique and identify the
+     * Kialo module in Moodle so we can link back to it later.
+     *
+     * @param int $coursemoduleid
+     * @return string
+     */
+    public static function resource_link_id(int $coursemoduleid): string {
+        return 'resource-link-' . $coursemoduleid;
+    }
+
+    /**
+     * Returns the course module ID from the resource link ID.
+     *
+     * @param string $resourcelinkid
+     * @return int
+     */
+    public static function parse_resource_link_id(string $resourcelinkid): int {
+        return (int) preg_replace('/resource-link-/', '', $resourcelinkid);
     }
 
     /**
@@ -178,15 +205,15 @@ class lti_flow
             $roles,
             [
                 // See https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                new ResourceLinkClaim('resource-link-' . $coursemoduleid, '', ''),
+                new ResourceLinkClaim(self::resource_link_id($coursemoduleid), '', ''),
 
                 // We provide the course ID as the context ID so that discussion links are scoped to the course.
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
-                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT => [
                     "id" => $courseid,
                 ],
 
-                "https://purl.imsglobal.org/spec/lti/claim/custom" => count($customclaims) > 0 ? $customclaims : null,
+                LtiMessagePayloadInterface::CLAIM_LTI_CUSTOM => count($customclaims) > 0 ? $customclaims : null,
             ],
         );
     }
@@ -218,7 +245,7 @@ class lti_flow
             throw new LtiException($message->getError());
         }
 
-        if ($payload->getMessageType() !== "LtiDeepLinkingResponse") {
+        if ($payload->getMessageType() !== LtiMessage::LTI_MESSAGE_TYPE_DEEP_LINKING_RESPONSE) {
             throw new LtiException('Expected LtiDeepLinkingResponse');
         }
 
@@ -274,8 +301,7 @@ class lti_flow
      * @throws LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid)
-    {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
         $kialoconfig = kialo_config::get_instance();
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);
@@ -309,7 +335,7 @@ class lti_flow
 
                 // We provide the course ID as the context ID so that discussion links are scoped to the course.
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
-                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT => [
                     "id" => $courseid,
                 ],
             ]
@@ -323,8 +349,7 @@ class lti_flow
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function lti_auth(): LtiMessageInterface
-    {
+    public static function lti_auth(): LtiMessageInterface {
         global $CFG;
 
         $kialoconfig = kialo_config::get_instance();
@@ -344,28 +369,50 @@ class lti_flow
         $payloadbuilder->withClaim('kialo_plugin_version', kialo_config::get_release());
 
         // See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
-        $payloadbuilder->withClaim('https://purl.imsglobal.org/spec/lti/claim/tool_platform', [
+        $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_TOOL_PLATFORM, [
             'guid' => self::PLATFORM_GUID,
             'product_family_code' => self::PRODUCT_FAMILY_CODE,
             'version' => $CFG->version,
         ]);
-
-        $payloadbuilder->withClaim('https://purl.imsglobal.org/spec/lti-ags/claim/endpoint', [
-            "scope" => [
-                "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
-                "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
-                "https://purl.imsglobal.org/spec/lti-ags/scope/score"
-            ],
-            "lineitems" => (new moodle_url('/mod/kialo/lineitem.php?id='))->out(false)
-            "http://192.168.178.21:8080/mod/lti/services.php/2/lineitems?type_id=2",
-            "lineitem" => "http://192.168.178.21:8080/mod/lti/services.php/2/lineitems/16/lineitem?type_id=2"
-        ]);
-
+        self::add_grading_service($payloadbuilder, $request);
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
 
         // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint').
         return $authenticator->authenticate($request);
+    }
+
+    /**
+     * Adds claims necessary to inform LTI consumers about the assignment and grading service we implemented
+     * according to https://www.imsglobal.org/spec/lti-ags/v2p0. Essentially it provides the endpoints necessary
+     * to use the service from the Kialo app (the LTI tool / consumer).
+     *
+     * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
+     * @param ServerRequestInterface $request The LTI authentication request
+     * @return void
+     * @throws LtiExceptionInterface
+     * @throws \moodle_exception
+     */
+    public static function add_grading_service(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
+        // Get required context for service params from original JWT token. See init_resource_link and init_deep_link.
+        $originaltoken = (new Parser())->parse(LtiMessage::fromServerRequest($request)->getParameters()->get('lti_message_hint'));
+        $courseid = $originaltoken->getClaims()->getMandatory(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT)['id'];
+        $resourcelink = $originaltoken->getClaims()->get(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK);
+        $serviceparams = [
+            "course_id" => $courseid,
+        ];
+
+        // Resource link claim is only present in resource link flows, not during deep linking.
+        if ($resourcelink) {
+            $serviceparams['resource_link_id'] = $resourcelink['id'];
+            $serviceparams['cmid'] = self::parse_resource_link_id($resourcelink['id']);
+        }
+
+        $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_AGS, [
+            "scope" => MOD_KIALO_LTI_AGS_SCOPES,
+            "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
+            "lineitem" => (new moodle_url('/mod/kialo/lti_lineitem.php', $serviceparams))->out(false),
+        ]);
     }
 }
