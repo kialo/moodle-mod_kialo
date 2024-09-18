@@ -23,10 +23,32 @@
  */
 
 /**
+ * In this version grading was first introduced.
+ */
+const VERSION_GRADING_1 = 2024091805;
+
+/**
  * Custom upgrade steps.
  * @param int $oldversion
  */
 function xmldb_kialo_upgrade($oldversion = 0): bool {
-    // This is the first public version, so there is nothing to do yet.
+    global $CFG, $DB;
+
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < VERSION_GRADING_1) {
+        // Define field id to be added to kialo.
+        $table = new xmldb_table('kialo');
+        $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', false, XMLDB_NOTNULL, false, 100, null);
+
+        // Conditionally launch add field id.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Kialo savepoint reached.
+        upgrade_mod_savepoint(true, VERSION_GRADING_1, 'kialo');
+    }
+
     return true;
 }

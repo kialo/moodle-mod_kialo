@@ -16,6 +16,7 @@
         <FIELD NAME="discussion_url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The URL of the discussion on Kialo Edu."/>
         <FIELD NAME="discussion_title" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="The title of the discussion (when it was selected)."/>
         <FIELD NAME="deployment_id" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The deployment ID of the discussion."/>
+        <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum score or grade scale."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

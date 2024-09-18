@@ -27,7 +27,9 @@ namespace mod_kialo;
 require_once(__DIR__ . '/../constants.php');
 
 use context_module;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use moodle_url;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
 use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
@@ -44,7 +46,15 @@ use OAT\Library\Lti1p3Core\Security\Jwks\Fetcher\JwksFetcher;
 use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
 use OAT\Library\Lti1p3Core\Security\Jwt\Parser\Parser;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Entity\Scope;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Factory\AuthorizationServerFactory;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Generator\AccessTokenResponseGenerator;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\AccessTokenRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\ClientRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\ScopeRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Validator\RequestAccessTokenValidator;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -414,5 +424,52 @@ class lti_flow {
             "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
             "lineitem" => (new moodle_url('/mod/kialo/lti_lineitem.php', $serviceparams))->out(false),
         ]);
+    }
+
+    public static function generate_service_access_token(): ResponseInterface {
+        $kialoconfig = kialo_config::get_instance();
+        $registrationrepo = $kialoconfig->get_registration_repository();
+
+        $factory = new AuthorizationServerFactory(
+            new ClientRepository($registrationrepo, null, new kialo_logger("ClientRepository")),
+            new AccessTokenRepository(moodle_cache::access_token_cache(), new kialo_logger("AccessTokenRepository")),
+            new ScopeRepository(array_map(fn ($scope): Scope => new Scope($scope), MOD_KIALO_LTI_AGS_SCOPES)),
+            $kialoconfig->get_platform_keychain()->getPrivateKey()->getContent(),
+        );
+
+        $keychainrepo = new static_keychain_repository($kialoconfig->get_platform_keychain());
+        $generator = new AccessTokenResponseGenerator($keychainrepo, $factory);
+        $request = ServerRequest::fromGlobals();
+        $response = new Response();
+
+        try {
+            // Extract keyChainIdentifier from request uri parameter.
+            $keychainidentifier = $kialoconfig->get_platform_keychain()->getIdentifier();
+
+            // Validate assertion, generate and sign access token response, using the key chain private key.
+            $response = $generator->generate($request, $response, $keychainidentifier);
+        } catch (OAuthServerException $exception) {
+            $response = $exception->generateHttpResponse($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param array $scopes The scopes that the service request must have.
+     * @return void
+     * @throws \dml_exception
+     */
+    public static function authenticate_service_request(array $scopes): void {
+        $kialoconfig = kialo_config::get_instance();
+        $registrationrepo = $kialoconfig->get_registration_repository();
+        $validator = new RequestAccessTokenValidator($registrationrepo, new kialo_logger("RequestAccessTokenValidator"));
+
+        // Validate request provided access token using the registration platform public key, against allowed scopes.
+        $result = $validator->validate(ServerRequest::fromGlobals(), $scopes);
+
+        if ($result->hasError()) {
+            throw new \dml_exception($result->getError());
+        }
     }
 }

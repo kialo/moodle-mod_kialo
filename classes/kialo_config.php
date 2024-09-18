@@ -19,6 +19,7 @@ namespace mod_kialo;
 use moodle_url;
 use OAT\Library\Lti1p3Core\Platform\Platform;
 use OAT\Library\Lti1p3Core\Registration\Registration;
+use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
 use OAT\Library\Lti1p3Core\Security\Key\KeyChainFactory;
 use OAT\Library\Lti1p3Core\Security\Key\KeyChainInterface;
 use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
@@ -165,5 +166,17 @@ class kialo_config {
             $platformjwksurl,               // JWKS URL for the platform. Unused by us.
             $tooljwksurl,                   // JWKS URL used to download Kialo's keyset.
         );
+    }
+
+    /**
+     * Returns a registration repository for the Kialo plugin.
+     *
+     * @param string|null $deploymentid The deployment id to use, or null, if it's not relevant.
+     * @return RegistrationRepositoryInterface
+     * @throws \dml_exception
+     */
+    public function get_registration_repository(?string $deploymentid = null): RegistrationRepositoryInterface {
+        $registration = $this->create_registration($deploymentid);
+        return new static_registration_repository($registration);
     }
 }

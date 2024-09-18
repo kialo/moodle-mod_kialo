@@ -28,8 +28,7 @@
  * @param string $feature Constant representing the feature.
  * @return true | string | null Truthy if the feature is supported, null otherwise.
  */
-function kialo_supports($feature)
-{
+function kialo_supports($feature) {
     switch ($feature) {
         case FEATURE_BACKUP_MOODLE2:
             return true;
@@ -42,6 +41,7 @@ function kialo_supports($feature)
             return true;
 
         case FEATURE_GRADE_HAS_GRADE:
+        case FEATURE_GRADE_OUTCOMES:
             return true;
 
         default:
@@ -52,8 +52,7 @@ function kialo_supports($feature)
 /**
  * Prevent the Kialo icon from having its colors modified on Moodle >= 4.4.
  */
-function kialo_is_branded(): bool
-{
+function kialo_is_branded(): bool {
     return true;
 }
 
@@ -68,13 +67,17 @@ function kialo_is_branded(): bool
  * @param mod_kialo_mod_form $mform The form.
  * @return int The id of the newly inserted record.
  */
-function kialo_add_instance($moduleinstance, $mform = null)
-{
+function kialo_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
 
     $id = $DB->insert_record('kialo', $moduleinstance);
+    $moduleinstance->id = $id;
+
+    if ($id) {
+        kialo_update_grades($moduleinstance);
+    }
 
     return $id;
 }
@@ -89,14 +92,17 @@ function kialo_add_instance($moduleinstance, $mform = null)
  * @param mod_kialo_mod_form $mform The form.
  * @return bool True if successful, false otherwise.
  */
-function kialo_update_instance($moduleinstance, $mform = null)
-{
+function kialo_update_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    return $DB->update_record('kialo', $moduleinstance);
+    $result = $DB->update_record('kialo', $moduleinstance);
+    if ($result) {
+        kialo_update_grades($moduleinstance);
+    }
+    return $result;
 }
 
 /**
@@ -105,8 +111,7 @@ function kialo_update_instance($moduleinstance, $mform = null)
  * @param int $id Id of the module instance.
  * @return bool True if successful, false on failure.
  */
-function kialo_delete_instance($id)
-{
+function kialo_delete_instance($id) {
     global $DB;
 
     $exists = $DB->get_record('kialo', ['id' => $id]);
@@ -128,8 +133,7 @@ function kialo_delete_instance($id)
  * @param stdClass $coursemodule
  * @return cached_cm_info info
  */
-function kialo_get_coursemodule_info($coursemodule)
-{
+function kialo_get_coursemodule_info($coursemodule) {
     $info = new cached_cm_info();
 
     $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
@@ -143,8 +147,7 @@ function kialo_get_coursemodule_info($coursemodule)
  *
  * @return bool Whether to proceed and enable the plugin or not.
  */
-function kialo_pre_enable_plugin_actions(): bool
-{
+function kialo_pre_enable_plugin_actions(): bool {
     // If the admin hasn't accepted the terms of service, don't enable the plugin.
     $acceptterms = get_config('mod_kialo', 'acceptterms');
 
@@ -162,8 +165,7 @@ function kialo_pre_enable_plugin_actions(): bool
  * @return void
  * @throws dml_exception
  */
-function kialo_update_visibility_depending_on_accepted_terms(): void
-{
+function kialo_update_visibility_depending_on_accepted_terms(): void {
     global $DB;
 
     $visible = get_config('mod_kialo', 'acceptterms') ? 1 : 0;
@@ -177,5 +179,55 @@ function kialo_update_visibility_depending_on_accepted_terms(): void
 
         // Ensure that the plugin status (Enabled/Disabled) is updated correctly in Plugins overview.
         \core_plugin_manager::instance()->reset_caches();
+    }
+}
+
+function kialo_grade_item_update(stdClass $kialo, $grades = null) {
+    $params = [
+        'itemname' => $kialo->name,
+        'idnumber' => $kialo->cmidnumber ?? '',
+        'itemtype' => 'mod',
+        'itemmodule' => 'kialo',
+        'itemnumber' => 0,
+    ];
+
+    if ($kialo->grade > 0) {
+        $params['gradetype'] = GRADE_TYPE_VALUE;
+        $params['grademax']  = $kialo->grade;
+        $params['grademin']  = 0;
+    } else if ($kialo->grade < 0) {
+        $params['gradetype'] = GRADE_TYPE_SCALE;
+        $params['scaleid']   = -$kialo->grade;
+    } else {
+        $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.
+    }
+
+    if ($grades === 'reset') {
+        $params['reset'] = true;
+        $grades = null;
+    }
+
+    return grade_update('mod/kialo', $kialo->course, 'mod', 'kialo', $kialo->id, 0, $grades, $params);
+}
+
+function kialo_get_user_grades($kialo, $userid) {
+    return grade_get_grades($kialo->course, 'mod', 'kialo', $kialo->id, $userid);
+}
+
+function kialo_update_grades($kialo, $userid = 0, $nullifnone = true) {
+    global $CFG, $DB;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    if (empty($kialo->assessed) || !$kialo->assessed) {
+        kialo_grade_item_update($kialo);
+    } else if ($grades = kialo_get_user_grades($kialo, $userid)) {
+        kialo_grade_item_update($kialo, $grades);
+    } else if ($userid and $nullifnone) {
+        $grade = new stdClass();
+        $grade->userid   = $userid;
+        $grade->rawgrade = null;
+        kialo_grade_item_update($kialo, $grade);
+    } else {
+        kialo_grade_item_update($kialo);
     }
 }
