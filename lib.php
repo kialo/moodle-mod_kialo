@@ -222,7 +222,7 @@ function kialo_grade_item_update(stdClass $kialo, $grades = null): int {
  * @param string $userid
  * @return stdClass
  */
-function kialo_get_user_grades($kialo, $userid) {
+function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
     return grade_get_grades($kialo->course, 'mod', 'kialo', $kialo->id, $userid);
 }
 
