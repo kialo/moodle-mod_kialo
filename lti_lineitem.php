@@ -69,7 +69,12 @@ if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/scores') {
         $grades['rawgrade'] = $scoregiven;
     }
 
-    kialo_grade_item_update($moduleinstance, $grades);
+    $result = kialo_grade_item_update($moduleinstance, $grades);
+    if ($result === GRADE_UPDATE_OK || $result === GRADE_UPDATE_MULTIPLE) {
+        http_response_code(204);
+    } else {
+        http_response_code(400);
+    }
 } else {
     // Return the line item information.
     $lineitem = new line_item();
