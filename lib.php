@@ -182,7 +182,13 @@ function kialo_update_visibility_depending_on_accepted_terms(): void {
     }
 }
 
-function kialo_grade_item_update(stdClass $kialo, $grades = null) {
+/**
+ * Writes grades for the kialo activity module.
+ * @param stdClass $kialo kialo module instance
+ * @param stdClass $grades grade object
+ * @return int Returns GRADE_UPDATE_OK, GRADE_UPDATE_FAILED, GRADE_UPDATE_MULTIPLE or GRADE_UPDATE_ITEM_LOCKED
+ */
+function kialo_grade_item_update(stdClass $kialo, $grades = null): int {
     $params = [
         'itemname' => $kialo->name,
         'idnumber' => $kialo->cmidnumber ?? '',
@@ -210,10 +216,23 @@ function kialo_grade_item_update(stdClass $kialo, $grades = null) {
     return grade_update('mod/kialo', $kialo->course, 'mod', 'kialo', $kialo->id, 0, $grades, $params);
 }
 
+/**
+ * Gets the grades of a single user.
+ * @param stdClass $kialo kialo module instance
+ * @param string $userid
+ * @return stdClass
+ */
 function kialo_get_user_grades($kialo, $userid) {
     return grade_get_grades($kialo->course, 'mod', 'kialo', $kialo->id, $userid);
 }
 
+/**
+ * Updates the grades for all users in the given kialo activity.
+ * @param stdclass $kialo kialo module instance
+ * @param $userid
+ * @param $nullifnone
+ * @return void
+ */
 function kialo_update_grades($kialo, $userid = 0, $nullifnone = true) {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
@@ -222,7 +241,7 @@ function kialo_update_grades($kialo, $userid = 0, $nullifnone = true) {
         kialo_grade_item_update($kialo);
     } else if ($grades = kialo_get_user_grades($kialo, $userid)) {
         kialo_grade_item_update($kialo, $grades);
-    } else if ($userid and $nullifnone) {
+    } else if ($userid && $nullifnone) {
         $grade = new stdClass();
         $grade->userid   = $userid;
         $grade->rawgrade = null;

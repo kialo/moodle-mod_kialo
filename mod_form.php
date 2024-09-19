@@ -39,8 +39,7 @@ require_once(__DIR__ . '/constants.php');
  * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class mod_kialo_mod_form extends moodleform_mod
-{
+class mod_kialo_mod_form extends moodleform_mod {
 
     /**
      * In LTI the deployment ID identifies an LTI tool definition or installation. Moodle sends
@@ -49,16 +48,14 @@ class mod_kialo_mod_form extends moodleform_mod
      * always has the same configuration.
      * @return string
      */
-    private function get_deployment_id(): string
-    {
+    private function get_deployment_id(): string {
         return "1";
     }
 
     /**
      * Defines forms elements
      */
-    public function definition()
-    {
+    public function definition() {
         // See https://github.com/moodle/moodle/blob/master/course/edit_form.php for an example.
         global $CFG;
         global $COURSE;
@@ -138,7 +135,7 @@ class mod_kialo_mod_form extends moodleform_mod
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
-        // Add grading elements
+        // Add grading elements.
         $this->standard_grading_coursemodule_elements();
 
         // Add standard buttons.

@@ -20,6 +20,10 @@ use Psr\Log\LoggerInterface;
 
 /**
  * A logger that writes to a file.
+ *
+ * @package     mod_kialo
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kialo_logger implements LoggerInterface {
 

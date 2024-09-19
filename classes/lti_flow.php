@@ -24,6 +24,8 @@
 
 namespace mod_kialo;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once(__DIR__ . '/../constants.php');
 
 use context_module;
