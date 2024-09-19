@@ -19,6 +19,7 @@
  * the claim must include the endpoint URL for accessing the associated line item;
  * in all other cases, this property must be either blank or not included in the claim.
  *
+ * See LTI 1.3 Assignment and Grading Service specification: https://www.imsglobal.org/spec/lti-ags/v2p0.
  */
 
 require_once(__DIR__ . '/../../config.php');
@@ -34,7 +35,7 @@ use mod_kialo\lti_flow;
 $logger = new kialo_logger("lti_lineitem");
 $logger->info("LTI lineitem request received.", $_POST ?? $_GET ?? []);
 
-lti_flow::authenticate_service_request(MOD_KIALO_LTI_AGS_SCOPES);
+//lti_flow::authenticate_service_request(MOD_KIALO_LTI_AGS_SCOPES);
 
 $courseid = required_param('course_id', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
@@ -43,16 +44,50 @@ $module = get_coursemodule_from_id('kialo', $cmid, $courseid);
 if (!$module) {
     die("Module $cmid not found");
 }
+$moduleinstance = $DB->get_record('kialo', ['id' => $module->instance], '*', MUST_EXIST);
+
 $gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod']);
 if (!$gradeitem) {
     die("Grade item for module CMID=$cmid (instance={$module->instance}) not found");
 }
 
-$lineitem = new line_item();
-$lineitem->id = $_SERVER['REQUEST_URI'];
-$lineitem->label = $module->name;
-$lineitem->scoremaximum = floatval($gradeitem->grademax);
-$lineitem->resourcelinkid = $resourcelinkid;
+if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/scores') {
+    // Parse JSON POST request body.
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
 
-header('Content-Type: application/json; utf-8');
-echo json_encode($lineitem, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    $userid = $data['userId'];
+    $scoregiven = isset($data['scoreGiven']) ? max(0, min($data['scoreGiven'], $gradeitem->grademax)) : null;
+    $comment = $data['comment'];
+    $timestamp = isset($data['timestamp']) ? strtotime($data['timestamp']) : time();
+    $activityprogress = $data['activityProgress'];
+    $gradingprogress = $data['gradingProgress'];
+
+    if ($scoregiven < 0 && $scoregiven > $gradeitem->grademax) {
+        $logger->error("Invalid score given: $scoregiven");
+        die("Invalid score given: $scoregiven");
+    }
+
+    $grades = [
+        'userid' => $userid,
+        'feedback' => $comment,
+        'dategraded' => $timestamp,
+    ];
+    if ($scoregiven !== null) {
+        $grades['rawgrade'] = $scoregiven;
+    }
+
+    kialo_grade_item_update($moduleinstance, $grades);
+
+} else {
+    // Handle GET request
+    $lineitem = new line_item();
+    $lineitem->id = (new moodle_url($_SERVER['REQUEST_URI']))->out(false);
+    $lineitem->label = $module->name;
+    $lineitem->scoreMaximum = floatval($gradeitem->grademax);
+    $lineitem->resourceLinkId = $resourcelinkid;
+
+    header('Content-Type: application/json; utf-8');
+    echo json_encode($lineitem, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+}
+

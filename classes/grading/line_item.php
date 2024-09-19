@@ -14,10 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+// phpcs:disable moodle.NamingConventions.ValidFunctionName.LowercaseMethod
+// phpcs:disable moodle.NamingConventions.ValidVariableName.MemberNameUnderscore
+
 namespace mod_kialo\grading;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Represents a line item in the LTI 1.3 Assignment and Grading Service.
+ */
 class line_item {
     /**
      * @var string|null $id
@@ -25,9 +31,9 @@ class line_item {
     public $id;
 
     /**
-     * @var float|null $scoremaximum
+     * @var float|null $scoreMaximum
      */
-    public $scoremaximum;
+    public $scoreMaximum;
 
     /**
      * @var string|null $label
@@ -35,14 +41,14 @@ class line_item {
     public $label;
 
     /**
-     * @var string|null $resourceid
+     * @var string|null $resourceId
      */
-    public $resourceid;
+    public $resourceId;
 
     /**
      * @var string|null $tag
      */
-    public $resourcelinkid;
+    public $resourceLinkId;
 
     /**
      * @var string|null $tag
@@ -51,20 +57,22 @@ class line_item {
 
     /**
      * ISO 8601 timestamp, see https://www.imsglobal.org/spec/lti-ags/v2p0#startdatetime.
-     * @var string|null $startdatetime
+     *
+     * @var string|null $startDateTime
      */
-    public $startdatetime;
+    public $startDateTime;
 
     /**
      * ISO 8601 timestamp, see https://www.imsglobal.org/spec/lti-ags/v2p0#enddatetime.
-     * @var string|null $enddatetime
+     *
+     * @var string|null $endDateTime
      */
-    public $enddatetime;
+    public $endDateTime;
 
     /**
-     * @var bool|null $gradesreleased
+     * @var bool|null $gradesReleased
      */
-    public $gradesreleased;
+    public $gradesReleased;
 
     /**
      * LineItem constructor.
@@ -72,13 +80,13 @@ class line_item {
      */
     public function __construct(?array $lineitem = null) {
         $this->id = $lineitem['id'] ?? null;
-        $this->scoremaximum = $lineitem['scoreMaximum'] ?? null;
+        $this->scoreMaximum = $lineitem['scoreMaximum'] ?? null;
         $this->label = $lineitem['label'] ?? null;
-        $this->resourceid = $lineitem['resourceId'] ?? null;
-        $this->resourcelinkid = $lineitem['resourceLinkId'] ?? null;
+        $this->resourceId = $lineitem['resourceId'] ?? null;
+        $this->resourceLinkId = $lineitem['resourceLinkId'] ?? null;
         $this->tag = $lineitem['tag'] ?? null;
-        $this->startdatetime = $lineitem['startDateTime'] ?? null;
-        $this->enddatetime = $lineitem['endDateTime'] ?? null;
-        $this->gradesreleased = $lineitem['gradesReleased'] ?? null;
+        $this->startDateTime = $lineitem['startDateTime'] ?? null;
+        $this->endDateTime = $lineitem['endDateTime'] ?? null;
+        $this->gradesReleased = $lineitem['gradesReleased'] ?? null;
     }
 }
