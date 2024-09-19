@@ -426,6 +426,11 @@ class lti_flow {
         ]);
     }
 
+    /**
+     * Generates an access token for the service to use when calling the LTI service endpoints.
+     * @return ResponseInterface
+     * @throws \dml_exception
+     */
     public static function generate_service_access_token(): ResponseInterface {
         $kialoconfig = kialo_config::get_instance();
         $registrationrepo = $kialoconfig->get_registration_repository();
@@ -443,10 +448,8 @@ class lti_flow {
         $response = new Response();
 
         try {
-            // Extract keyChainIdentifier from request uri parameter.
-            $keychainidentifier = $kialoconfig->get_platform_keychain()->getIdentifier();
-
             // Validate assertion, generate and sign access token response, using the key chain private key.
+            $keychainidentifier = $kialoconfig->get_platform_keychain()->getIdentifier();
             $response = $generator->generate($request, $response, $keychainidentifier);
         } catch (OAuthServerException $exception) {
             $response = $exception->generateHttpResponse($response);
@@ -456,6 +459,7 @@ class lti_flow {
     }
 
     /**
+     * Authenticates a service request using the LTI access token. Throws an error if authentication fails.
      * @param array $scopes The scopes that the service request must have.
      * @return void
      * @throws \dml_exception

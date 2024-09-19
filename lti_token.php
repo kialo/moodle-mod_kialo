@@ -15,26 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This endpoint returns a service access token for the use with the LTI services (e.g. for grading).
  * See also https://github.com/oat-sa/lib-lti1p3-core/blob/master/doc/service/service-server.md.
+ *
+ * @package     mod_kialo
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+// phpcs:disable moodle.Files.RequireLogin.Missing
+define('NO_DEBUG_DISPLAY', true);
+define('NO_MOODLE_COOKIES', true);
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/constants.php');
 require_once('vendor/autoload.php');
 
+use mod_kialo\kialo_view;
 use mod_kialo\lti_flow;
 
 $response = lti_flow::generate_service_access_token();
-
-// Write the response.
-$statusline = sprintf('HTTP/%s %s %s', $response->getProtocolVersion(), $response->getStatusCode(), $response->getReasonPhrase());
-header($statusline, true); /* The header replaces a previous similar header. */
-
-foreach ($response->getHeaders() as $name => $values) {
-    foreach ($values as $value) {
-        header(sprintf('%s: %s', $name, $value), false);
-    }
-}
-
-echo $response->getBody();
+kialo_view::write_response($response);

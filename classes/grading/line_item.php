@@ -19,10 +19,12 @@
 
 namespace mod_kialo\grading;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Represents a line item in the LTI 1.3 Assignment and Grading Service.
+ *
+ * @package     mod_kialo
+ * @copyright   2023 onwards, Kialo GmbH <support@kialo-edu.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class line_item {
     /**
