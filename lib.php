@@ -228,12 +228,13 @@ function kialo_get_user_grades($kialo, $userid) {
 
 /**
  * Updates the grades for all users in the given kialo activity.
+ *
  * @param stdclass $kialo kialo module instance
- * @param $userid
- * @param $nullifnone
+ * @param int $userid
+ * @param bool $nullifnone
  * @return void
  */
-function kialo_update_grades($kialo, $userid = 0, $nullifnone = true) {
+function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone = true): void {
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
