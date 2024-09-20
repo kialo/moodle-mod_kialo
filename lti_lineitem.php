@@ -67,6 +67,8 @@ if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/scores') {
     ];
     if ($scoregiven !== null) {
         $grades['rawgrade'] = $scoregiven;
+    } else {
+        $grades['rawgrade'] = null;
     }
 
     $result = kialo_grade_item_update($moduleinstance, $grades);
