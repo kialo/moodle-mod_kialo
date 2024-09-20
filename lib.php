@@ -218,7 +218,7 @@ function kialo_grade_item_update(stdClass $kialo, $grades = null): int {
 
 /**
  * Gets the grades of a single user.
- * @param stdClass $kialo kialo module instance
+ * @param stdClass $kialo
  * @param string $userid
  * @return stdClass
  */
@@ -229,7 +229,7 @@ function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
 /**
  * Updates the grades for all users in the given kialo activity.
  *
- * @param stdclass $kialo kialo module instance
+ * @param stdclass $kialo
  * @param int $userid
  * @param bool $nullifnone
  * @return void
