@@ -71,6 +71,9 @@ function kialo_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
+    if (!isset($moduleinstance->grade)) {
+        $moduleinstance->grade = 100;
+    }
 
     $id = $DB->insert_record('kialo', $moduleinstance);
     $moduleinstance->id = $id;
@@ -219,7 +222,7 @@ function kialo_grade_item_update(stdClass $kialo, $grades = null): int {
 /**
  * Gets the grades of a single user.
  * @param stdClass $kialo
- * @param string $userid
+ * @param int $userid
  * @return stdClass
  */
 function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
@@ -229,7 +232,7 @@ function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
 /**
  * Updates the grades for all users in the given kialo activity.
  *
- * @param stdclass $kialo
+ * @param stdClass $kialo
  * @param int $userid
  * @param bool $nullifnone
  * @return void
