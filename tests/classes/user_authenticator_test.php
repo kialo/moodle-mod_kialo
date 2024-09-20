@@ -68,7 +68,9 @@ final class user_authenticator_test extends \advanced_testcase {
         $this->userauthenticator = new user_authenticator();
 
         // Creates a Kialo activity.
-        $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
+        $this->module = $this->getDataGenerator()->create_module('kialo', [
+            'course' => $this->course->id,
+        ]);
     }
 
     /**

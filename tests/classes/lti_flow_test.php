@@ -39,6 +39,7 @@ use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Validator;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
+use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Security\Jwt\Converter\KeyConverter;
 use OAT\Library\Lti1p3Core\Security\Key\Key;
 use OAT\Library\Lti1p3Core\Security\Key\KeyChainFactory;
@@ -520,6 +521,9 @@ final class lti_flow_test extends \advanced_testcase {
                     "https://purl.imsglobal.org/spec/lti/claim/target_link_uri",
                     kialo_config::get_instance()->get_tool_url()
                 )
+                ->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT, [
+                    "id" => $this->course->id,
+                ])
                 ->withClaim("registration_id", "kialo-moodle-registration");
 
             if ($callback) {

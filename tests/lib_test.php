@@ -55,8 +55,10 @@ final class lib_test extends \advanced_testcase {
         $this->assertTrue(kialo_supports(FEATURE_GROUPS));
         $this->assertTrue(kialo_supports(FEATURE_GROUPINGS));
 
-        // Grades are not supported yet, but will be in the future.
-        $this->assertNull(kialo_supports(FEATURE_GRADE_HAS_GRADE));
+        // Basic grades are supported.
+        $this->assertTrue(kialo_supports(FEATURE_GRADE_HAS_GRADE));
+
+        // Advanced grading is not supported.
         $this->assertNull(kialo_supports(FEATURE_ADVANCED_GRADING));
 
         // Moodle 4.0 and newer.
@@ -74,7 +76,7 @@ final class lib_test extends \advanced_testcase {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
-        $id = kialo_add_instance((object) ["name" => "Test", "course" => $course->id]);
+        $id = kialo_add_instance((object) ["name" => "Test", "course" => $course->id, "grade" => 100]);
 
         $this->assertNotNull($id);
     }
