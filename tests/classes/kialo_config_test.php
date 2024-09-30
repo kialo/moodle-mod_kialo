@@ -86,6 +86,7 @@ final class kialo_config_test extends \advanced_testcase {
 
         $this->assertEquals("https://www.example.com/moodle/mod/kialo", $platform->getAudience());
         $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_auth.php", $platform->getOidcAuthenticationUrl());
+        $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_token.php", $platform->getOAuth2AccessTokenUrl());
         $this->assertEquals("kialo-moodle-plugin", $platform->getIdentifier());
         $this->assertEquals("Kialo Moodle Plugin", $platform->getName());
     }
@@ -124,5 +125,20 @@ final class kialo_config_test extends \advanced_testcase {
         $this->assertNull($registration->getToolKeyChain());
         $this->assertEquals("https://www.kialo-edu.com/lti/jwks.json", $registration->getToolJwksUrl());
         $this->assertEquals("https://www.example.com/moodle/mod/kialo/lti_jwks.php", $registration->getPlatformJwksUrl());
+    }
+
+    /**
+     * Tests the registration repository.
+     * @covers \mod_kialo\kialo_config::get_instance::get_registration_repository
+     */
+    public function test_registration_repository(): void {
+        $repo = kialo_config::get_instance()->get_registration_repository("DEPLID1234");
+        $this->assertNotNull($repo);
+
+        $this->assertNull($repo->find("NONEXISTENT"));
+
+        $registration = $repo->find("kialo-moodle-registration");
+        $this->assertNotNull($registration);
+        $this->assertEquals("kialo-moodle-registration", $registration->getIdentifier());
     }
 }

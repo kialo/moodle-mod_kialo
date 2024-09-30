@@ -25,6 +25,7 @@
 
 namespace mod_kialo;
 
+use GuzzleHttp\Psr7\Response;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -224,4 +225,38 @@ final class kialo_view_test extends \advanced_testcase {
         $this->assertEquals("grouping-{$grouping->id}", $groupinfo->groupid);
         $this->assertEquals($grouping->name, $groupinfo->groupname);
     }
+
+    /**
+     * Tests writing an HTTP response.
+     *
+     * @return void
+     * @covers \mod_kialo\kialo_view::write_response
+     */
+    public function test_write_response(): void {
+        $headers = [
+            'Content-Type' => 'application/json',
+            'X-Test-Header' => 'test',
+        ];
+        $json = json_encode(['message' => 'Hello, world!']);
+        $response = new Response(200, $headers, $json);
+
+        ob_start();
+        kialo_view::write_response($response);
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('HTTP/1.1 200 OK', $output);
+        $this->assertStringContainsString('Content-Type: application/json', $output);
+        $this->assertStringContainsString('X-Test-Header: test', $output);
+        $this->assertStringContainsString($json, $output);
+    }
+}
+
+/**
+ * Mocks the header function, simpling printing to stdout so it can be asserted.
+ *
+ * @param string $str
+ * @return void
+ */
+function header(string $str): void {
+    echo $str . '\n';
 }
