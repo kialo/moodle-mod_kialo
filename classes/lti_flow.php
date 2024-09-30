@@ -423,8 +423,13 @@ class lti_flow {
 
         $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_AGS, [
             "scope" => MOD_KIALO_LTI_AGS_SCOPES,
-            "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
+
+            // This is the endpoint used by Kialo to get the line item details and post student scores.
             "lineitem" => (new moodle_url('/mod/kialo/lti_lineitem.php', $serviceparams))->out(false),
+
+            // This endpoint is currently unused by Kialo and therefore not implemented. But if we end up implementing it,
+            // this is what it will be called.
+            "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
         ]);
     }
 
