@@ -86,7 +86,7 @@ final class lti_token_test extends \advanced_testcase {
     /**
      * Tests the expected result when just calling this endpoint with a GET request without necessary parameters.
      * @return void
-     * @covers lti_flow::generate_service_access_token
+     * @covers \mod_kialo\lti_flow::generate_service_access_token
      */
     public function test_access_token_request_invalid_get(): void {
         $response = lti_flow::generate_service_access_token();

@@ -102,6 +102,7 @@ final class grading_service_test extends \advanced_testcase {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
      * @throws \coding_exception
      * @throws \moodle_exception
+     * @covers \mod_kialo\grading\grading_service::get_line_item
      */
     public function test_get_line_item(): void {
         $maxgrade = 123;
@@ -130,6 +131,7 @@ final class grading_service_test extends \advanced_testcase {
      * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
      * @throws \coding_exception
      * @throws \dml_exception
+     * @covers \mod_kialo\grading\grading_service::update_grade
      */
     public function test_write_scores(): void {
         // Given a Kialo activity with a user without grades.
