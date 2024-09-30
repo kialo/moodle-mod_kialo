@@ -191,13 +191,10 @@ function kialo_update_visibility_depending_on_accepted_terms(): void {
  * @param stdClass $grades grade object
  * @return int Returns GRADE_UPDATE_OK, GRADE_UPDATE_FAILED, GRADE_UPDATE_MULTIPLE or GRADE_UPDATE_ITEM_LOCKED
  */
-function kialo_grade_item_update(stdClass $kialo, $grades = null): int {
+function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int {
     $params = [
         'itemname' => $kialo->name,
         'idnumber' => $kialo->cmidnumber ?? '',
-        'itemtype' => 'mod',
-        'itemmodule' => 'kialo',
-        'itemnumber' => 0,
     ];
 
     if ($kialo->grade > 0) {
@@ -241,9 +238,7 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
     global $CFG, $DB;
     require_once($CFG->libdir.'/gradelib.php');
 
-    if (empty($kialo->assessed) || !$kialo->assessed) {
-        kialo_grade_item_update($kialo);
-    } else if ($grades = kialo_get_user_grades($kialo, $userid)) {
+    if ($userid > 0 && $grades = kialo_get_user_grades($kialo, $userid)) {
         kialo_grade_item_update($kialo, $grades);
     } else if ($userid && $nullifnone) {
         $grade = new stdClass();
