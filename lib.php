@@ -41,7 +41,6 @@ function kialo_supports($feature) {
             return true;
 
         case FEATURE_GRADE_HAS_GRADE:
-        case FEATURE_GRADE_OUTCOMES:
             return true;
 
         default:

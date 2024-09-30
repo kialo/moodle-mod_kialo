@@ -37,11 +37,11 @@ function xmldb_kialo_upgrade($oldversion = 0): bool {
     $dbman = $DB->get_manager();
 
     if ($oldversion < VERSION_GRADING_1) {
-        // Define field id to be added to kialo.
+        // Define field 'grade' to be added to kialo.
         $table = new xmldb_table('kialo');
         $field = new xmldb_field('grade', XMLDB_TYPE_INTEGER, '10', false, XMLDB_NOTNULL, false, 100, null);
 
-        // Conditionally launch add field id.
+        // Conditionally launch add field 'grade'.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
