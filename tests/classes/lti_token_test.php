@@ -33,55 +33,6 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the LTI flow.
  */
 final class lti_token_test extends \advanced_testcase {
-    /**
-     * Backs up superglobal variables modified by this test.
-     *
-     * @return void
-     */
-    private function backup_globals(): void {
-        $this->server = $_SERVER;
-        $this->env = $_ENV;
-        $this->get = $_GET;
-    }
-
-    /**
-     * Restores superglobal variables modified by this test.
-     *
-     * @return void
-     */
-    private function restore_globals(): void {
-        if (null !== $this->server) {
-            $_SERVER = $this->server;
-        }
-        if (null !== $this->env) {
-            $_ENV = $this->env;
-        }
-        if (null !== $this->get) {
-            $_GET = $this->get;
-        }
-    }
-
-    protected function setUp(): void {
-        parent::setUp();
-
-        $this->backup_globals();
-        $this->resetAfterTest();
-
-        $this->user = $this->getDataGenerator()->create_user(["picture" => 42]);
-        $this->setUser($this->user);
-
-        $this->course = $this->getDataGenerator()->create_course();
-
-        // Creates a Kialo activity.
-        $this->module = $this->getDataGenerator()->create_module('kialo', ['course' => $this->course->id]);
-        $this->cm = get_coursemodule_from_instance("kialo", $this->module->id);
-        $this->cmid = $this->cm->id;
-    }
-
-    protected function tearDown(): void {
-        $this->restore_globals();
-        parent::tearDown();
-    }
 
     /**
      * Tests the expected result when just calling this endpoint with a GET request without necessary parameters.
