@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Handles GET and POST (/scores) requests for LTI 1.3 Assignment and Grading Service line items.
+ * Handles `GET /lti_lineitem.php` and `POST /lti_linteitem.php/scores` requests for
+ * LTI 1.3 Assignment and Grading Service line items.
  * See LTI 1.3 Assignment and Grading Service specification: https://www.imsglobal.org/spec/lti-ags/v2p0.
  *
  * @package     mod_kialo
@@ -34,56 +35,29 @@ require_once(__DIR__ . '/constants.php');
 require_once(__DIR__ . '/vendor/autoload.php');
 require_once($CFG->libdir . '/gradelib.php');
 
-use mod_kialo\grading\line_item;
+use mod_kialo\grading\grading_service;
 use mod_kialo\lti_flow;
-use OAT\Library\Lti1p3Core\Exception\LtiException;
 
+// This request can only be performed with a valid access token obtained from the token endpoint.
 lti_flow::authenticate_service_request(MOD_KIALO_LTI_AGS_SCOPES);
 
 $courseid = required_param('course_id', PARAM_INT);
 $cmid = required_param('cmid', PARAM_INT);
 $resourcelinkid = required_param('resource_link_id', PARAM_TEXT);
-$module = get_coursemodule_from_id('kialo', $cmid, $courseid, false, MUST_EXIST);
-$moduleinstance = $DB->get_record('kialo', ['id' => $module->instance], '*', MUST_EXIST);
-
-$gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod']);
-if (!$gradeitem) {
-    throw new LtiException("Grade item for module CMID=$cmid (instance={$module->instance}) not found");
-}
 
 if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/scores') {
     // Receive a score for the line item via JSON request body.
     $input = file_get_contents('php://input');
     $data = json_decode($input, true);
-    $userid = $data['userId'];
-    $scoregiven = isset($data['scoreGiven']) ? max(0, min(floatval($data['scoreGiven']), $gradeitem->grademax)) : null;
-    $comment = $data['comment'];
-    $timestamp = isset($data['timestamp']) ? strtotime($data['timestamp']) : time();
 
-    $grades = [
-        'userid' => $userid,
-        'feedback' => $comment,
-        'dategraded' => $timestamp,
-    ];
-    if ($scoregiven !== null) {
-        $grades['rawgrade'] = $scoregiven;
-    } else {
-        $grades['rawgrade'] = null;
-    }
-
-    $result = kialo_grade_item_update($moduleinstance, $grades);
-    if ($result === GRADE_UPDATE_OK || $result === GRADE_UPDATE_MULTIPLE) {
+    if (grading_service::update_grade($courseid, $cmid, $data)) {
         http_response_code(204);
     } else {
         http_response_code(400);
     }
 } else {
     // Return the line item information.
-    $lineitem = new line_item();
-    $lineitem->id = (new moodle_url($_SERVER['REQUEST_URI']))->out(false);
-    $lineitem->label = $module->name;
-    $lineitem->scoreMaximum = floatval($gradeitem->grademax);
-    $lineitem->resourceLinkId = $resourcelinkid;
+    $lineitem = grading_service::get_line_item($courseid, $cmid, $resourcelinkid);
 
     header('Content-Type: application/json; utf-8');
     echo json_encode($lineitem, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

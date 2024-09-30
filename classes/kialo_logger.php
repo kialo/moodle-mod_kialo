@@ -52,6 +52,11 @@ class kialo_logger implements LoggerInterface {
      * @return void
      */
     protected function write(string $level, string $message, array $context): void {
+        global $CFG;
+        if (!$CFG->debug) {
+            return;
+        }
+
         $log = date('Y-m-d H:i:s') . ' [' . $this->name . '] [' . $level . '] ' . $message . ' ' . json_encode($context) . PHP_EOL;
         $path = __DIR__ . '/../kialo.log';
         if (!file_exists($path)) {

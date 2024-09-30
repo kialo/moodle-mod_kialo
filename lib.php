@@ -187,11 +187,28 @@ function kialo_update_visibility_depending_on_accepted_terms(): void {
 
 /**
  * Writes grades for the kialo activity module.
+ *
  * @param stdClass $kialo kialo module instance
- * @param stdClass $grades grade object
+ * @param stdClass|null $grades grade object
  * @return int Returns GRADE_UPDATE_OK, GRADE_UPDATE_FAILED, GRADE_UPDATE_MULTIPLE or GRADE_UPDATE_ITEM_LOCKED
+ * @var moodle_database $DB
  */
 function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int {
+    global $DB;
+
+    if ($grades !== null) {
+        // The user should exist.
+        if (!($user = $DB->get_record('user', ['id' => $grades->userid]))) {
+            return GRADE_UPDATE_FAILED;
+        }
+
+        // The user should be enrolled in the course.
+        $context = \context_course::instance($kialo->course);
+        if (!is_enrolled($context, $user)) {
+            return GRADE_UPDATE_FAILED;
+        }
+    }
+
     $params = [
         'itemname' => $kialo->name,
         'idnumber' => $kialo->cmidnumber ?? '',

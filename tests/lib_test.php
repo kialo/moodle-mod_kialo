@@ -276,15 +276,13 @@ final class lib_test extends \advanced_testcase {
      *
      * @covers ::kialo_grade_item_update
      * @covers ::kialo_get_user_grades
-     * @var $DB \DB
      */
     public function test_kialo_get_and_set_user_grades(): void {
-        global $DB;
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
-        $user = $this->getDataGenerator()->create_user();
         $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_and_enrol($course);
 
         // Initially there should be no grade.
         $grades = kialo_get_user_grades($kialo, $user->id);
@@ -327,5 +325,61 @@ final class lib_test extends \advanced_testcase {
 
         // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
         $this->expectOutputRegex('/(The instance of this module does not exist)+/');
+    }
+
+    /**
+     * Cannot grade non-existent users. It should return an error.
+     *
+     * @return void
+     * @covers ::kialo_grade_item_update
+     */
+    public function test_kialo_grade_item_update_error_on_invalid_user(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Set a grade but use an invalid user id.
+        $invaliduserid = 1234;
+        $this->assertNotEquals($invaliduserid, $user->id);
+        $grade = new \stdClass();
+        $grade->userid = $invaliduserid;
+        $grade->rawgrade = 50;
+        $grade->feedback = 'Good job!';
+        $grade->datesubmitted = time();
+        $result = kialo_grade_item_update($kialo, $grade);
+
+        // Cannot grade a non-existent user.
+        $this->assertEquals(GRADE_UPDATE_FAILED, $result);
+    }
+
+    /**
+     * Cannot grade users that are not participants in the course. This should return an error.
+     *
+     * @return void
+     * @covers ::kialo_grade_item_update
+     */
+    public function test_kialo_grade_item_update_error_on_non_participant(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_user();
+
+        // User is not enrolled in the course.
+        $context = \context_course::instance($course->id);
+        $this->assertFalse(is_enrolled($context, $user->id));
+
+        // Set a grade but use a user that is not enrolled in the course.
+        $grade = new \stdClass();
+        $grade->userid = $user->id;
+        $grade->rawgrade = 50;
+        $grade->feedback = 'Good job!';
+        $grade->datesubmitted = time();
+        $result = kialo_grade_item_update($kialo, $grade);
+
+        // Cannot grade a non-participant.
+        $this->assertEquals(GRADE_UPDATE_FAILED, $result);
     }
 }

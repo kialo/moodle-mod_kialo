@@ -548,7 +548,11 @@ final class lti_flow_test extends \advanced_testcase {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
         // Given a redirect GET request from Kialo with the LTI auth response.
-        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM);
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
+            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+                "id" => lti_flow::resource_link_id($this->cmid),
+            ]);
+        });
 
         // Do the actual LTI auth step, as if the user was just redirected to the plugin by Kialo.
         $message = lti_flow::lti_auth();
@@ -588,6 +592,47 @@ final class lti_flow_test extends \advanced_testcase {
         $expectedpicture = new \user_picture($USER);
         $expectedpicture->size = 128;
         $this->assertEquals($expectedpicture->get_url($PAGE), $token->claims()->get("picture"));
+    }
+
+    /**
+     * The LTI authentication response should contain information about the AGS (Assignment and Grading) service endpoints.
+     *
+     * @covers \mod_kialo\lti_flow::lti_auth
+     */
+    public function test_lti_auth_response_contains_grading_service(): void {
+        // The current user must be at least a student in the course. But this LTI step works the same for students and teachers.
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+
+        // Given a redirect GET request from Kialo with the LTI auth response.
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
+            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+                "id" => lti_flow::resource_link_id($this->cmid),
+            ]);
+        });
+
+        // The response message should contain information about the Assignment and Grading service endpoints of the plugin.
+        $message = lti_flow::lti_auth();
+        $token = $this->assert_jwt_signed_by_platform($message->getParameters()->get("id_token"));
+        $claim = $token->claims()->get(LtiMessagePayloadInterface::CLAIM_LTI_AGS);
+
+        $this->assertEquals(MOD_KIALO_LTI_AGS_SCOPES, $claim["scope"]);
+
+        $courseid = $this->course->id;
+        $cmid = $this->cmid;
+        $resourcelinkid = lti_flow::resource_link_id($cmid);
+
+        $this->assertEquals(
+            "https://www.example.com/moodle" .
+            "/mod/kialo/lti_lineitem.php?course_id={$courseid}&resource_link_id={$resourcelinkid}&cmid={$cmid}",
+            $claim["lineitem"]
+        );
+
+        // Unused, but included for potential future use.
+        $this->assertEquals(
+            "https://www.example.com/moodle" .
+            "/mod/kialo/lti_lineitems.php?course_id={$courseid}&resource_link_id={$resourcelinkid}&cmid={$cmid}",
+            $claim["lineitems"]
+        );
     }
 
     /**
