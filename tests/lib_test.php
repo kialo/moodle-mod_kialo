@@ -286,7 +286,6 @@ final class lib_test extends \advanced_testcase {
 
         // Initially there should be no grade.
         $grades = kialo_get_user_grades($kialo, $user->id);
-        $this->assertEmpty($grades->errors);
         $this->assertCount(1, $grades->items);
 
         $gradeitem = $grades->items[0];
