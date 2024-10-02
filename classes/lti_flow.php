@@ -427,8 +427,12 @@ class lti_flow {
             // This is the endpoint used by Kialo to get the line item details and post student scores.
             "lineitem" => (new moodle_url('/mod/kialo/lti_lineitem.php', $serviceparams))->out(false),
 
-            // This endpoint is currently unused by Kialo and therefore not implemented. But if we end up implementing it,
-            // this is what it will be called.
+            // The lineitems (plural) endpoint is used by Kialo to look up line items by resource link ID
+            // only if the line item URL is not included in the launch data.
+            // Since our plugin always includes the line item URL in the launch data (in this very claim),
+            // Kialo never needs to use this endpoint.
+            // So this endpoint is currently not necessary and therefore not implemented.
+            // But if we end up implementing it, this is what it will be called.
             "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
         ]);
     }
