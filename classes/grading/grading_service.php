@@ -54,7 +54,9 @@ class grading_service {
 
         $gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod']);
         if (!$gradeitem) {
-            throw new LtiException("Grade item for module CMID=$cmid (instance={$module->instance}) not found");
+            $maxscore = 100;
+        } else {
+            $maxscore = $gradeitem->grademax;
         }
 
         $lineitem = new line_item();
@@ -62,7 +64,7 @@ class grading_service {
         // Assuming this is called from /mod/kialo/lti_lineitem.php. The ID is the URL of the request.
         $lineitem->id = (new moodle_url($_SERVER['REQUEST_URI']))->out(false);
         $lineitem->label = $module->name;
-        $lineitem->scoreMaximum = floatval($gradeitem->grademax);
+        $lineitem->scoreMaximum = floatval($maxscore);
         $lineitem->resourceLinkId = $resourcelinkid;
 
         return $lineitem;
@@ -85,11 +87,6 @@ class grading_service {
 
         $module = get_coursemodule_from_id('kialo', $cmid, $courseid, false, MUST_EXIST);
         $moduleinstance = $DB->get_record('kialo', ['id' => $module->instance], '*', MUST_EXIST);
-
-        $gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod']);
-        if (!$gradeitem) {
-            throw new LtiException("Grade item for module CMID=$cmid (instance={$module->instance}) not found");
-        }
 
         // Validate that the userId exist in $data.
         if (!isset($data['userId'])) {

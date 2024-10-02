@@ -125,6 +125,44 @@ final class grading_service_test extends \advanced_testcase {
     }
 
     /**
+     * Tests getting the line item for a course module. This is used by Kialo to get the max. grade configured in the LMS,
+     * as well as the endpoint to send grades to.
+     * Activities created with previous versions have no grade book item.
+     * We just return the max grade default value of 100 in this case.
+     *
+     * @return void
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @covers \mod_kialo\grading\grading_service::get_line_item
+     * @var moodle_database $DB
+     */
+    public function test_get_line_item_with_missing_grade_book_entry(): void {
+        global $DB;
+
+        $maxgrade = 100;
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course->id, 'grade' => null]);
+        $coursemodule = get_coursemodule_from_instance("kialo", $kialo->id);
+
+        // Delete the grade book item.
+        $DB->delete_records("grade_items", ["iteminstance" => $kialo->id]);
+
+        $courseid = $course->id;
+        $coursemoduleid = $coursemodule->id;
+        $resourcelinkid = lti_flow::resource_link_id($coursemoduleid);
+
+        $endpoint = "/mod/kialo/lti_lineitem.php?course_id={$courseid}&cmid={$coursemoduleid}&resource_link_id={$resourcelinkid}";
+        $_SERVER['REQUEST_URI'] = $endpoint;
+
+        $lineitem = grading_service::get_line_item($courseid, $coursemoduleid, $resourcelinkid);
+        $this->assertEquals("https://www.example.com/moodle" . $endpoint, $lineitem->id);
+        $this->assertEquals($coursemodule->name, $lineitem->label);
+        $this->assertEquals($maxgrade, $lineitem->scoreMaximum);
+        $this->assertEquals($resourcelinkid, $lineitem->resourceLinkId);
+    }
+
+    /**
      * Scores should be written to the gradebook as expected.
      *
      * @return void
@@ -143,6 +181,71 @@ final class grading_service_test extends \advanced_testcase {
         $courseid = $course->id;
         $coursemoduleid = $coursemodule->id;
         $resourcelinkid = lti_flow::resource_link_id($coursemoduleid);
+
+        // When a score is posted to the LTI line item endpoint.
+        $endpoint = "/mod/kialo/lti_lineitem.php?course_id={$courseid}&cmid={$coursemoduleid}&resource_link_id={$resourcelinkid}";
+        $_SERVER['REQUEST_URI'] = $endpoint;
+
+        $score = 72;
+        $feedback = "nice try";
+        $data = [
+            'userId' => $user->id,
+            'comment' => $feedback,
+            'scoreGiven' => $score,
+            'timestamp' => '2023-01-01T00:00:00Z',
+        ];
+
+        $result = grading_service::update_grade($courseid, $coursemoduleid, $data);
+        $this->assertTrue($result);
+
+        // The gradebook entry should have been created accordingly.
+        $grades = kialo_get_user_grades($kialo, $user->id);
+        $this->assertCount(1, $grades->items);
+
+        $gradeitem = current($grades->items);
+        $this->assertEquals('mod', $gradeitem->itemtype);
+        $this->assertEquals('kialo', $gradeitem->itemmodule);
+        $this->assertEquals($coursemodule->instance, $gradeitem->iteminstance);
+        $this->assertEquals($kialo->name, $gradeitem->name);
+        $this->assertEquals($gradeitem->grademax, 100);
+
+        $this->assertCount(1, $gradeitem->grades);
+        $grade = current($gradeitem->grades);
+        $this->assertEquals($score, $grade->grade);
+        $this->assertEquals($feedback, $grade->feedback);
+        $this->assertEquals(FORMAT_MOODLE, $grade->feedbackformat);
+
+        // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
+        $this->expectOutputRegex('/(The instance of this module does not exist)+/');
+    }
+
+
+    /**
+     * Activities created with previous versions have no grade book item.
+     * It should be created when the score is written.
+     *
+     * @return void
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @covers \mod_kialo\grading\grading_service::update_grade
+     * @var moodle_database $DB
+     */
+    public function test_write_scores_without_grade_book_item(): void {
+        global $DB;
+
+        // Given a Kialo activity with a user without grades.
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course->id]);
+        $coursemodule = get_coursemodule_from_instance("kialo", $kialo->id);
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+
+        $courseid = $course->id;
+        $coursemoduleid = $coursemodule->id;
+        $resourcelinkid = lti_flow::resource_link_id($coursemoduleid);
+
+        // Delete the grade book item.
+        $DB->delete_records("grade_items", ["iteminstance" => $kialo->id]);
 
         // When a score is posted to the LTI line item endpoint.
         $endpoint = "/mod/kialo/lti_lineitem.php?course_id={$courseid}&cmid={$coursemoduleid}&resource_link_id={$resourcelinkid}";
