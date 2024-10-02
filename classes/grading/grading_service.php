@@ -74,7 +74,7 @@ class grading_service {
      *
      * @param int $courseid
      * @param int $cmid
-     * @param array $data array with required fields userId, scoreGiven, comment, timestamp
+     * @param array $data array with required field userId
      * @return bool Returns true if the grade information could be persisted.
      * @throws LtiException
      * @throws \coding_exception
@@ -91,14 +91,14 @@ class grading_service {
             throw new LtiException("Grade item for module CMID=$cmid (instance={$module->instance}) not found");
         }
 
-        // Validate that the required fields exist in $data.
-        if (!isset($data['userId']) || !isset($data['scoreGiven']) || !isset($data['timestamp'])) {
-            throw new LtiException("Missing required fields in the request body");
+        // Validate that the userId exist in $data.
+        if (!isset($data['userId'])) {
+            throw new LtiException("Missing userId in the request body");
         }
 
         // Receive a score for the line item via JSON request body.
         $userid = $data['userId'];
-        $scoregiven = isset($data['scoreGiven']) ? max(0, min(floatval($data['scoreGiven']), $gradeitem->grademax)) : null;
+        $scoregiven = isset($data['scoreGiven']) ? floatval($data['scoreGiven']) : null;
         $comment = $data['comment'] ?? '';
         $timestamp = isset($data['timestamp']) ? strtotime($data['timestamp']) : time();
 

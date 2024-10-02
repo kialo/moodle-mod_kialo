@@ -213,7 +213,7 @@ function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int
         'idnumber' => $kialo->cmidnumber ?? '',
     ];
 
-    if ($kialo->grade > 0) {
+    if ($kialo->grade >= 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
         $params['grademax']  = $kialo->grade;
         $params['grademin']  = 0;
