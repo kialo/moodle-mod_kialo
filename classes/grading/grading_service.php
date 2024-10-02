@@ -88,7 +88,6 @@ class grading_service {
         $module = get_coursemodule_from_id('kialo', $cmid, $courseid, false, MUST_EXIST);
         $moduleinstance = $DB->get_record('kialo', ['id' => $module->instance], '*', MUST_EXIST);
 
-        // Validate that the userId exist in $data.
         if (!isset($data['userId'])) {
             throw new LtiException("Missing userId in the request body");
         }
@@ -104,11 +103,7 @@ class grading_service {
             'feedback' => $comment,
             'dategraded' => $timestamp,
         ];
-        if ($scoregiven !== null) {
-            $grades['rawgrade'] = $scoregiven;
-        } else {
-            $grades['rawgrade'] = null;
-        }
+        $grades['rawgrade'] = $scoregiven;
 
         $result = kialo_grade_item_update($moduleinstance, (object) $grades);
         return ($result === GRADE_UPDATE_OK || $result === GRADE_UPDATE_MULTIPLE);
