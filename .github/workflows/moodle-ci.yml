@@ -46,14 +46,18 @@ jobs:
           - '8.0'
           - '8.1'
           - '8.3'  # max. supported version by Moodle 4.4 (as of writing)
-        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE' ]  # LTS & latest.
+        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE', 'main' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
         exclude:
           # Moodle 4.4+ requires PHP 8.1+
           - php: '8.0'
             moodle-branch: 'MOODLE_404_STABLE'
+          - php: '8.0'
+            moodle-branch: 'main'
           - php: '7.4'
             moodle-branch: 'MOODLE_404_STABLE'
+          - php: '7.4'
+            moodle-branch: 'main'
           # Moodle 4.1 does not support PHP 8.3
           - php: '8.3'
             moodle-branch: 'MOODLE_401_STABLE'
