@@ -1,34 +1,44 @@
-# https://hub.docker.com/r/bitnami/moodle
-version: '2'
+name: moodle-dev
 services:
   mariadb:
-    image: docker.io/bitnami/mariadb:10.6
+    image: docker.io/bitnami/mariadb:10.7
     ports:
       - '8833:3306'
       - '8443:443'
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
-      - MARIADB_USER=bn_moodle
-      - MARIADB_DATABASE=bitnami_moodle
+      - MARIADB_USER=moodle
+      - MARIADB_DATABASE=moodle
       - MARIADB_CHARACTER_SET=utf8mb4
       - MARIADB_COLLATE=utf8mb4_unicode_ci
+    # liveness probe
+    healthcheck:
+      test: ["CMD", "mysqladmin", "status", "-uroot"]
+      interval: 2s
+      timeout: 1s
+      retries: 10
   moodle:
-    image: docker.io/bitnami/moodle:4.4
+    build:
+      dockerfile: Dockerfile
+      context: moodleimage
+      args:
+        # main (latest), MOODLE_405_STABLE etc, see https://github.com/moodle/moodle/branches
+        MOODLE_BRANCH: ${MOODLE_BRANCH:-main}
+        # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
+        PHP_VERSION: ${PHP_VERSION:-8.1}
     ports:
-      - '8080:8080'
+      - '8080:80'
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
-      - MOODLE_DATABASE_USER=bn_moodle
-      - MOODLE_DATABASE_NAME=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
       - MOODLE_PASSWORD=kialo1234
       # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
-      - MOODLE_HOST=${MOODLE_HOST:-localhost:8080}
-    volumes:
-      - './moodle:/bitnami/moodle'
+      - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
+#    volumes:
+#      - './moodle:/var/www/html'
     depends_on:
       - mariadb
   moodleapp:
