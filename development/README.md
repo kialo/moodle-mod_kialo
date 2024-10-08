@@ -56,7 +56,13 @@ This also enables web services for mobile (required for the mobile app) and enab
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
 
 The folder `moodle` is mounted locally in the `development` folder. To test changes to the plugin code,
-you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.
+you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.A
+
+### Moodle versions
+
+The Docker setup is configured to run the latest moodle version (`main` branch) by default.
+If you want to run a specific version, like one of the LTS versions, you can change the `MOODLE_VERSION` in the `.env` file.
+See `.env.example` for details.
 
 ### Using the Moodle Mobile app
 

@@ -11,7 +11,7 @@
 #
 name: Moodle Plugin CI
 
-on: [ push, pull_request ]
+on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   test:
@@ -45,17 +45,17 @@ jobs:
           - '7.4'  # minimum support version by Moodle 4.1
           - '8.0'
           - '8.1'
-          - '8.3'  # max. supported version by Moodle 4.4 (as of writing)
-        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_404_STABLE', 'main' ]  # LTS & latest.
+          - '8.3'  # max. supported version by Moodle 4.5 (as of writing)
+        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_405_STABLE', 'main' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
         exclude:
           # Moodle 4.4+ requires PHP 8.1+
           - php: '8.0'
-            moodle-branch: 'MOODLE_404_STABLE'
+            moodle-branch: 'MOODLE_405_STABLE'
           - php: '8.0'
             moodle-branch: 'main'
           - php: '7.4'
-            moodle-branch: 'MOODLE_404_STABLE'
+            moodle-branch: 'MOODLE_405_STABLE'
           - php: '7.4'
             moodle-branch: 'main'
           # Moodle 4.1 does not support PHP 8.3
