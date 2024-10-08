@@ -14,5 +14,7 @@ ENV MOODLE_BRANCH=${MOODLE_BRANCH}
 RUN git clone git://git.moodle.org/moodle.git /var/www/html --depth=1 --branch ${MOODLE_BRANCH}
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY config.php /var/www/html/config_kialo.php
+
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["apache2-foreground"]

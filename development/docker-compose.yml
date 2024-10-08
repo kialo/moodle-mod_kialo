@@ -1,4 +1,4 @@
-name: moodle-dev
+name: mod_kialo
 services:
   mariadb:
     image: docker.io/bitnami/mariadb:10.7
@@ -37,8 +37,8 @@ services:
       # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
-#    volumes:
-#      - './moodle:/var/www/html'
+    volumes:
+      - './moodle_mod:/var/www/html/mod/kialo'
     depends_on:
       - mariadb
   moodleapp:
