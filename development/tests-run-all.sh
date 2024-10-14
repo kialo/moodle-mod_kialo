@@ -1,2 +1,5 @@
+# Ensure files are up-to-date
+./sync.sh
+
 # Run the tests
-docker exec -i development-moodle-1 /bin/bash -c "cd /bitnami/moodle; vendor/bin/phpunit --testsuite mod_kialo_testsuite"
+docker exec -i mod_kialo-moodle-1 /bin/bash -c "cd /var/www/html; vendor/bin/phpunit --testsuite mod_kialo_testsuite"

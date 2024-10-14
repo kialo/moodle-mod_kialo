@@ -63,12 +63,27 @@ class kialo_config {
      * @return array|string
      */
     public function get_tool_url() {
+        $targeturlfromconfig = get_config('mod_kialo', 'kialourl');  // See settings.php.
         $targeturlfromenv = getenv('TARGET_KIALO_URL');
-        if (!empty($targeturlfromenv)) {
-            return $targeturlfromenv;
+
+        if (!empty($targeturlfromconfig)) {
+            $kialourl = $targeturlfromconfig;
+
+            // Is the URL valid?
+            if (!filter_var($kialourl, FILTER_VALIDATE_URL)) {
+                throw new \dml_exception("Invalid Kialo URL: $kialourl");
+            }
+        } else if (!empty($targeturlfromenv)) {
+            $kialourl = $targeturlfromenv;
         } else {
-            return "https://www.kialo-edu.com";
+            $kialourl = "https://www.kialo-edu.com";
         }
+
+        // Ensure $kialourl is a proper URL and does not have a trailing slash.
+        if (!preg_match('/^https?:\/\//', $kialourl)) {
+            $kialourl = "https://" . $kialourl;
+        }
+        return rtrim($kialourl, '/');
     }
 
     /**

@@ -39,6 +39,9 @@ class kialo_configcheckbox extends admin_setting_configcheckbox {
      */
     public function force_readonly(bool $forcereadonly) {
         $this->forcereadonly = $forcereadonly;
+
+        // If the checkbox is read-only, it should not be saved. It would be reset to its default otherwise when saving.
+        $this->nosave = $forcereadonly;
     }
 
     /**

@@ -33,25 +33,42 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the mod_kialo config.
  */
 final class kialo_config_test extends \advanced_testcase {
+    public function setUp(): void {
+        parent::setUp();
+
+        $this->resetAfterTest();
+
+        // The variable TARGET_KIALO_URL is only set in Kialo test environments. By default it's not defined.
+        putenv("TARGET_KIALO_URL=");
+        set_config('kialourl', null, 'mod_kialo');
+    }
+
     /**
      * Tests the default tool URL.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
      */
     public function test_default_tool_url(): void {
-        // The variable TARGET_KIALO_URL is only set in Kialo test environments. By default it's not defined.
-        putenv("TARGET_KIALO_URL=");
-
         // In production, kialo-edu.com is always the endpoint for our plugin.
         $this->assertEquals("https://www.kialo-edu.com", kialo_config::get_instance()->get_tool_url());
     }
 
     /**
-     * Tests that the tool URL can be overridden.
+     * Tests that the tool URL can be overridden via environment variable.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
      */
-    public function test_custom_tool_url(): void {
+    public function test_custom_tool_url_via_env(): void {
         putenv("TARGET_KIALO_URL=http://localhost:5000");
         $this->assertEquals("http://localhost:5000", kialo_config::get_instance()->get_tool_url());
+    }
+
+    /**
+     * Tests that the tool URL can be overridden via environment config, and it that is has precedence over the env var.
+     * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
+     */
+    public function test_custom_tool_url_via_config(): void {
+        set_config('kialourl', 'https://www.example.com', 'mod_kialo');
+        putenv("TARGET_KIALO_URL=http://localhost:5000");
+        $this->assertEquals("https://www.example.com", kialo_config::get_instance()->get_tool_url());
     }
 
     /**

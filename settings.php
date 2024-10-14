@@ -35,7 +35,8 @@ require_once(__DIR__ . '/constants.php');
 
 // Terms and conditions need to have been accepted before the activity can be used.
 if ($ADMIN->fulltree) {
-    $setting = new kialo_configcheckbox(
+    $termswerealreadyaccepted = get_config('mod_kialo', 'acceptterms') == 1;
+    $acceptterms = new kialo_configcheckbox(
         'mod_kialo/acceptterms',
         new lang_string('acceptterms', 'mod_kialo'),
         new lang_string('acceptterms_desc', 'mod_kialo', [
@@ -43,15 +44,29 @@ if ($ADMIN->fulltree) {
             "privacy" => MOD_KIALO_PRIVACY_LINK,
             "data_security" => MOD_KIALO_DATA_SECURITY_LINK,
         ]),
-        0
+        $termswerealreadyaccepted ? 1 : 0,
     );
 
     // Once the terms have been accepted, they cannot be unaccepted.
-    $setting->force_readonly(get_config('mod_kialo', 'acceptterms'));
+    if ($termswerealreadyaccepted) {
+        $acceptterms->force_readonly(get_config('mod_kialo', 'acceptterms'));
+    }
 
     // Enable the module once the terms have been accepted.
-    $setting->set_updatedcallback('kialo_update_visibility_depending_on_accepted_terms');
+    $acceptterms->set_updatedcallback('kialo_update_visibility_depending_on_accepted_terms');
 
     /** @var admin_settingpage $settings */
-    $settings->add($setting);
+    $settings->add($acceptterms);
+
+    // For internal Kialo use only: Allow changing the Kialo target URL.
+    if (!empty(getenv('TARGET_KIALO_URL'))) {
+        $kialourl = new admin_setting_configtext(
+            'mod_kialo/kialourl',
+            new lang_string('kialourl', 'mod_kialo'),
+            new lang_string('kialourl_desc', 'mod_kialo'),
+            'https://www.kialo-edu.com',
+        );
+
+        $settings->add($kialourl);
+    }
 }
