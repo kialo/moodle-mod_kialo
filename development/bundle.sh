@@ -15,12 +15,11 @@ cd development
 
 # Create a new ZIP file
 rm mod_kialo.zip
-cd moodle/mod
-rm -rf kialo/vendor_extra
-zip -qr ../../mod_kialo.zip kialo
+rm -rf mod_kialo/vendor_extra
+zip -qr mod_kialo.zip mod_kialo
 
 # restore full dependencies (including dev dependencies)
-cd ../../..
+cd ..
 composer install
 
 echo "-----------------------------"
