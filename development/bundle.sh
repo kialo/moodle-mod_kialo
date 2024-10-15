@@ -14,9 +14,13 @@ cd development
 ./sync.sh
 
 # Create a new ZIP file
-rm mod_kialo.zip
+rm -f mod_kialo.zip
 rm -rf mod_kialo/vendor_extra
-zip -qr mod_kialo.zip mod_kialo
+
+# The folder in the zip file needs to be called just "kialo"
+mv mod_kialo kialo
+zip -qr mod_kialo.zip kialo
+mv kialo mod_kialo
 
 # restore full dependencies (including dev dependencies)
 cd ..
