@@ -15,8 +15,8 @@ cd development
 
 # Create a new ZIP file
 rm mod_kialo.zip
-rm -rf moodle_mod/vendor_extra
-zip -qr mod_kialo.zip moodle_mod
+rm -rf mod_kialo/vendor_extra
+zip -qr mod_kialo.zip mod_kialo
 
 # restore full dependencies (including dev dependencies)
 cd ..

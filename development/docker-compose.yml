@@ -38,7 +38,7 @@ services:
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
     volumes:
-      - './moodle_mod:/var/www/html/mod/kialo'
+      - './mod_kialo:/var/www/html/mod/kialo'
     depends_on:
       - mariadb
   moodleapp:
