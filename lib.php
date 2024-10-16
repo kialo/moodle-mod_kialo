@@ -40,6 +40,9 @@ function kialo_supports($feature) {
         case FEATURE_GROUPINGS:
             return true;
 
+        case FEATURE_GRADE_HAS_GRADE:
+            return true;
+
         default:
             return null;
     }
@@ -67,8 +70,16 @@ function kialo_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
+    if (!isset($moduleinstance->grade)) {
+        $moduleinstance->grade = 100;
+    }
 
     $id = $DB->insert_record('kialo', $moduleinstance);
+    $moduleinstance->id = $id;
+
+    if ($id) {
+        kialo_update_grades($moduleinstance);
+    }
 
     return $id;
 }
@@ -89,7 +100,11 @@ function kialo_update_instance($moduleinstance, $mform = null) {
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
 
-    return $DB->update_record('kialo', $moduleinstance);
+    $result = $DB->update_record('kialo', $moduleinstance);
+    if ($result) {
+        kialo_update_grades($moduleinstance);
+    }
+    return $result;
 }
 
 /**
@@ -166,5 +181,87 @@ function kialo_update_visibility_depending_on_accepted_terms(): void {
 
         // Ensure that the plugin status (Enabled/Disabled) is updated correctly in Plugins overview.
         \core_plugin_manager::instance()->reset_caches();
+    }
+}
+
+/**
+ * Writes grades for the kialo activity module.
+ *
+ * @param stdClass $kialo kialo module instance
+ * @param stdClass|null $grades grade object
+ * @return int Returns GRADE_UPDATE_OK, GRADE_UPDATE_FAILED, GRADE_UPDATE_MULTIPLE or GRADE_UPDATE_ITEM_LOCKED
+ * @var moodle_database $DB
+ */
+function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int {
+    global $DB;
+
+    if ($grades !== null) {
+        // The user should exist.
+        if (!($user = $DB->get_record('user', ['id' => $grades->userid]))) {
+            return GRADE_UPDATE_FAILED;
+        }
+
+        // The user should be enrolled in the course.
+        $context = \context_course::instance($kialo->course);
+        if (!is_enrolled($context, $user)) {
+            return GRADE_UPDATE_FAILED;
+        }
+    }
+
+    $params = [
+        'itemname' => $kialo->name,
+        'idnumber' => $kialo->cmidnumber ?? '',
+    ];
+
+    if ($kialo->grade >= 0) {
+        $params['gradetype'] = GRADE_TYPE_VALUE;
+        $params['grademax']  = $kialo->grade;
+        $params['grademin']  = 0;
+    } else if ($kialo->grade < 0) {
+        $params['gradetype'] = GRADE_TYPE_SCALE;
+        $params['scaleid']   = -$kialo->grade;
+    } else {
+        $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.
+    }
+
+    if ($grades === 'reset') {
+        $params['reset'] = true;
+        $grades = null;
+    }
+
+    return grade_update('mod/kialo', $kialo->course, 'mod', 'kialo', $kialo->id, 0, $grades, $params);
+}
+
+/**
+ * Gets the grades of a single user.
+ * @param stdClass $kialo
+ * @param int $userid
+ * @return stdClass
+ */
+function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
+    return grade_get_grades($kialo->course, 'mod', 'kialo', $kialo->id, $userid);
+}
+
+/**
+ * Updates the grades for all users in the given kialo activity.
+ *
+ * @param stdClass $kialo
+ * @param int $userid
+ * @param bool $nullifnone
+ * @return void
+ */
+function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone = true): void {
+    global $CFG, $DB;
+    require_once($CFG->libdir.'/gradelib.php');
+
+    if ($userid > 0 && $grades = kialo_get_user_grades($kialo, $userid)) {
+        kialo_grade_item_update($kialo, $grades);
+    } else if ($userid && $nullifnone) {
+        $grade = new stdClass();
+        $grade->userid   = $userid;
+        $grade->rawgrade = null;
+        kialo_grade_item_update($kialo, $grade);
+    } else {
+        kialo_grade_item_update($kialo);
     }
 }

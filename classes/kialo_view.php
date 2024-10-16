@@ -25,6 +25,7 @@
 namespace mod_kialo;
 
 use context_module;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Helpers for Kialo views.
@@ -62,5 +63,29 @@ class kialo_view {
         $result->groupid = $groupid;
         $result->groupname = groups_get_group_name($groupid);
         return $result;
+    }
+
+    /**
+     * Writes a response to the client.
+     *
+     * @param ResponseInterface $response
+     * @return void
+     */
+    public static function write_response(ResponseInterface $response): void {
+        $statusline = sprintf(
+            'HTTP/%s %s %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
+        header($statusline);
+
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header(sprintf('%s: %s', $name, $value), false);
+            }
+        }
+
+        echo $response->getBody();
     }
 }

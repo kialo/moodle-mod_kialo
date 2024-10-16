@@ -46,5 +46,8 @@ development/node_modules/
 # Local History for Visual Studio Code
 .history/
 
+## vim
+.phpactor.json
+
 # macOS
 .DS_Store

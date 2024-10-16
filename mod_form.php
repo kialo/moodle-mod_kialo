@@ -135,6 +135,9 @@ class mod_kialo_mod_form extends moodleform_mod {
         // Add standard elements.
         $this->standard_coursemodule_elements();
 
+        // Add grading elements.
+        $this->standard_grading_coursemodule_elements();
+
         // Add standard buttons.
         $this->add_action_buttons();
     }

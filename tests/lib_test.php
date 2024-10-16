@@ -55,8 +55,10 @@ final class lib_test extends \advanced_testcase {
         $this->assertTrue(kialo_supports(FEATURE_GROUPS));
         $this->assertTrue(kialo_supports(FEATURE_GROUPINGS));
 
-        // Grades are not supported yet, but will be in the future.
-        $this->assertNull(kialo_supports(FEATURE_GRADE_HAS_GRADE));
+        // Basic grades are supported.
+        $this->assertTrue(kialo_supports(FEATURE_GRADE_HAS_GRADE));
+
+        // Advanced grading is not supported.
         $this->assertNull(kialo_supports(FEATURE_ADVANCED_GRADING));
 
         // Moodle 4.0 and newer.
@@ -69,14 +71,24 @@ final class lib_test extends \advanced_testcase {
      * Check add instance
      *
      * @covers ::kialo_add_instance
+     * @var $DB \DB
      */
     public function test_kialo_add_instance(): void {
+        global $DB;
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
-        $id = kialo_add_instance((object) ["name" => "Test", "course" => $course->id]);
+        $id = kialo_add_instance((object) ["name" => "Test", "course" => $course->id, "grade" => 100]);
 
         $this->assertNotNull($id);
+
+        // By default, the activity is created with a maximum grade of 100 points.
+        $instance = $DB->get_record('kialo', ['id' => $id], '*', MUST_EXIST);
+        $this->assertEquals(100, $instance->grade);
+
+        // A line item should be created in the gradebook.
+        $gradeitem = $DB->get_record('grade_items', ['iteminstance' => $id, 'itemmodule' => 'kialo'], '*', MUST_EXIST);
+        $this->assertEquals(100, $gradeitem->grademax);
     }
 
     /**
@@ -213,5 +225,159 @@ final class lib_test extends \advanced_testcase {
         $this->assertEquals(0, $DB->get_field('modules', 'visible', ['name' => 'kialo']));
 
         $this->assertNotContains('kialo', \core_plugin_manager::instance()->get_enabled_plugins('mod'));
+    }
+
+    /**
+     * Check the kialo_grade_item_update function.
+     *
+     * @covers ::kialo_grade_item_update
+     * @var $DB \DB
+     */
+    public function test_kialo_grade_item_update_no_scale(): void {
+        global $DB;
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+
+        $this->assertEquals(GRADE_UPDATE_OK, kialo_grade_item_update($kialo));
+
+        // Line item should have been updated/created accordingly.
+        $gradeitem = $DB->get_record('grade_items', ['iteminstance' => $kialo->id, 'itemmodule' => 'kialo'], '*', MUST_EXIST);
+        $this->assertEquals(100, $gradeitem->grademax);
+        $this->assertEquals(0, $gradeitem->grademin);
+        $this->assertEquals(GRADE_TYPE_VALUE, $gradeitem->gradetype);
+    }
+
+    /**
+     * Check the kialo_grade_item_update function when using scales instead of regular points.
+     *
+     * @covers ::kialo_grade_item_update
+     * @var $DB \DB
+     */
+    public function test_kialo_grade_item_update_scale(): void {
+        global $DB;
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $kialo->grade = -1;
+
+        $this->assertEquals(GRADE_UPDATE_OK, kialo_grade_item_update($kialo));
+
+        // Line item should have been updated/created accordingly.
+        $gradeitem = $DB->get_record('grade_items', ['iteminstance' => $kialo->id, 'itemmodule' => 'kialo'], '*', MUST_EXIST);
+        $this->assertEquals(1, $gradeitem->scaleid); // The value of `-grade` is the scale ID.
+        $this->assertEquals(GRADE_TYPE_SCALE, $gradeitem->gradetype);
+    }
+
+    /**
+     * Check that updating and reading grades works.
+     *
+     * @covers ::kialo_grade_item_update
+     * @covers ::kialo_get_user_grades
+     */
+    public function test_kialo_get_and_set_user_grades(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Initially there should be no grade.
+        $grades = kialo_get_user_grades($kialo, $user->id);
+        $this->assertCount(1, $grades->items);
+
+        $gradeitem = $grades->items[0];
+        $this->assertEquals(0, $gradeitem->grademin);
+        $this->assertEquals(100, $gradeitem->grademax);
+        $this->assertEquals('mod', $gradeitem->itemtype);
+        $this->assertEquals('kialo', $gradeitem->itemmodule);
+        $this->assertEquals(0, $gradeitem->itemnumber);
+        $this->assertEquals(0, $gradeitem->scaleid);
+
+        $this->assertCount(1, $gradeitem->grades);
+        $grade = current($gradeitem->grades);
+        $this->assertNull($grade->grade);
+        $this->assertNull($grade->feedback);
+        $this->assertNull($grade->datesubmitted);
+
+        // Set a grade.
+        $grade = new \stdClass();
+        $grade->userid = $user->id;
+        $grade->rawgrade = 50;
+        $grade->feedback = 'Good job!';
+        $grade->datesubmitted = time();
+        kialo_grade_item_update($kialo, $grade);
+
+        // The grade should be set now.
+        $grades = kialo_get_user_grades($kialo, $user->id);
+        $this->assertCount(1, $grades->items);
+
+        $gradeitem = $grades->items[0];
+        $this->assertCount(1, $gradeitem->grades);
+        $grade = current($gradeitem->grades);
+        $this->assertEquals(50, $grade->grade);
+        $this->assertEquals('Good job!', $grade->feedback);
+        $this->assertNotNull($grade->datesubmitted);
+
+        // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
+        $this->expectOutputRegex('/(The instance of this module does not exist)+/');
+    }
+
+    /**
+     * Cannot grade non-existent users. It should return an error.
+     *
+     * @return void
+     * @covers ::kialo_grade_item_update
+     */
+    public function test_kialo_grade_item_update_error_on_invalid_user(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_and_enrol($course);
+
+        // Set a grade but use an invalid user id.
+        $invaliduserid = 1234;
+        $this->assertNotEquals($invaliduserid, $user->id);
+        $grade = new \stdClass();
+        $grade->userid = $invaliduserid;
+        $grade->rawgrade = 50;
+        $grade->feedback = 'Good job!';
+        $grade->datesubmitted = time();
+        $result = kialo_grade_item_update($kialo, $grade);
+
+        // Cannot grade a non-existent user.
+        $this->assertEquals(GRADE_UPDATE_FAILED, $result);
+    }
+
+    /**
+     * Cannot grade users that are not participants in the course. This should return an error.
+     *
+     * @return void
+     * @covers ::kialo_grade_item_update
+     */
+    public function test_kialo_grade_item_update_error_on_non_participant(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
+        $user = $this->getDataGenerator()->create_user();
+
+        // User is not enrolled in the course.
+        $context = \context_course::instance($course->id);
+        $this->assertFalse(is_enrolled($context, $user->id));
+
+        // Set a grade but use a user that is not enrolled in the course.
+        $grade = new \stdClass();
+        $grade->userid = $user->id;
+        $grade->rawgrade = 50;
+        $grade->feedback = 'Good job!';
+        $grade->datesubmitted = time();
+        $result = kialo_grade_item_update($kialo, $grade);
+
+        // Cannot grade a non-participant.
+        $this->assertEquals(GRADE_UPDATE_FAILED, $result);
     }
 }

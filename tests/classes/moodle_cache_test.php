@@ -54,6 +54,17 @@ final class moodle_cache_test extends \basic_testcase {
     }
 
     /**
+     * Tests that the nonce cache is created correctly.
+     *
+     * @return void
+     * @covers \mod_kialo\moodle_cache::nonce_cache
+     */
+    public function test_access_token_cache(): void {
+        $this->cache = moodle_cache::access_token_cache();
+        $this->assertInstanceOf(moodle_cache::class, $this->cache);
+    }
+
+    /**
      * Tests that setting and getting of individual cache items works.
      *
      * @return void

@@ -47,6 +47,9 @@ class mod_kialo_generator extends testing_module_generator {
         if (!isset($record->discussion_url)) {
             $record->discussion_url = "https://www.kialo-edu.com/42";
         }
+        if (!isset($record->grade)) {
+            $record->grade = 100;
+        }
 
         return parent::create_instance($record, $options);
     }

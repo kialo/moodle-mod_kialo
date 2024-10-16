@@ -24,27 +24,46 @@
 
 namespace mod_kialo;
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once(__DIR__ . '/../constants.php');
+
 use context_module;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ServerRequest;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use moodle_url;
 use OAT\Library\Lti1p3Core\Exception\LtiException;
 use OAT\Library\Lti1p3Core\Exception\LtiExceptionInterface;
 use OAT\Library\Lti1p3Core\Message\Launch\Builder\PlatformOriginatingLaunchBuilder;
 use OAT\Library\Lti1p3Core\Message\Launch\Validator\Platform\PlatformLaunchValidator;
+use OAT\Library\Lti1p3Core\Message\LtiMessage;
 use OAT\Library\Lti1p3Core\Message\LtiMessageInterface;
 use OAT\Library\Lti1p3Core\Message\Payload\Builder\MessagePayloadBuilder;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\DeepLinkingSettingsClaim;
 use OAT\Library\Lti1p3Core\Message\Payload\Claim\ResourceLinkClaim;
+use OAT\Library\Lti1p3Core\Message\Payload\LtiMessagePayloadInterface;
 use OAT\Library\Lti1p3Core\Resource\LtiResourceLink\LtiResourceLinkInterface;
 use OAT\Library\Lti1p3Core\Security\Jwks\Fetcher\JwksFetcher;
 use OAT\Library\Lti1p3Core\Security\Jwt\Builder\Builder as JwtBuilder;
+use OAT\Library\Lti1p3Core\Security\Jwt\Parser\Parser;
 use OAT\Library\Lti1p3Core\Security\Nonce\NonceRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Entity\Scope;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Factory\AuthorizationServerFactory;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Generator\AccessTokenResponseGenerator;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\AccessTokenRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\ClientRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Repository\ScopeRepository;
+use OAT\Library\Lti1p3Core\Security\OAuth2\Validator\RequestAccessTokenValidator;
 use OAT\Library\Lti1p3Core\Security\Oidc\OidcAuthenticator;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Functions implementing the LTI steps.
  */
 class lti_flow {
+
     /**
      * The LTI standard requires a stable GUID to be send with the platform information.
      * See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
@@ -134,6 +153,28 @@ class lti_flow {
     }
 
     /**
+     * Generates a resource link ID based on the course module ID.
+     * This is an arbitrary string, but it must be unique and identify the
+     * Kialo module in Moodle so we can link back to it later.
+     *
+     * @param int $coursemoduleid
+     * @return string
+     */
+    public static function resource_link_id(int $coursemoduleid): string {
+        return 'resource-link-' . $coursemoduleid;
+    }
+
+    /**
+     * Returns the course module ID from the resource link ID.
+     *
+     * @param string $resourcelinkid
+     * @return int
+     */
+    public static function parse_resource_link_id(string $resourcelinkid): int {
+        return (int) preg_replace('/resource-link-/', '', $resourcelinkid);
+    }
+
+    /**
      * Initializes an LTI flow that ends up just taking the user to the target_link_uri on the tool (i.e. Kialo).
      *
      * @param int $courseid
@@ -176,15 +217,15 @@ class lti_flow {
             $roles,
             [
                 // See https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
-                new ResourceLinkClaim('resource-link-' . $coursemoduleid, '', ''),
+                new ResourceLinkClaim(self::resource_link_id($coursemoduleid), '', ''),
 
                 // We provide the course ID as the context ID so that discussion links are scoped to the course.
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
-                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT => [
                     "id" => $courseid,
                 ],
 
-                "https://purl.imsglobal.org/spec/lti/claim/custom" => count($customclaims) > 0 ? $customclaims : null,
+                LtiMessagePayloadInterface::CLAIM_LTI_CUSTOM => count($customclaims) > 0 ? $customclaims : null,
             ],
         );
     }
@@ -216,7 +257,7 @@ class lti_flow {
             throw new LtiException($message->getError());
         }
 
-        if ($payload->getMessageType() !== "LtiDeepLinkingResponse") {
+        if ($payload->getMessageType() !== LtiMessage::LTI_MESSAGE_TYPE_DEEP_LINKING_RESPONSE) {
             throw new LtiException('Expected LtiDeepLinkingResponse');
         }
 
@@ -306,7 +347,7 @@ class lti_flow {
 
                 // We provide the course ID as the context ID so that discussion links are scoped to the course.
                 // See https://www.imsglobal.org/spec/lti/v1p3#context-claim.
-                "https://purl.imsglobal.org/spec/lti/claim/context" => [
+                LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT => [
                     "id" => $courseid,
                 ],
             ]
@@ -340,16 +381,110 @@ class lti_flow {
         $payloadbuilder->withClaim('kialo_plugin_version', kialo_config::get_release());
 
         // See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
-        $payloadbuilder->withClaim('https://purl.imsglobal.org/spec/lti/claim/tool_platform', [
+        $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_TOOL_PLATFORM, [
             'guid' => self::PLATFORM_GUID,
             'product_family_code' => self::PRODUCT_FAMILY_CODE,
             'version' => $CFG->version,
         ]);
+        self::add_grading_service($payloadbuilder, $request);
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
 
         // Perform the login authentication (delegating to the $userAuthenticator with the hint 'loginHint').
         return $authenticator->authenticate($request);
+    }
+
+    /**
+     * Adds claims necessary to inform LTI consumers about the assignment and grading service we implemented
+     * according to https://www.imsglobal.org/spec/lti-ags/v2p0. Essentially it provides the endpoints necessary
+     * to use the service from the Kialo app (the LTI tool / consumer).
+     *
+     * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
+     * @param ServerRequestInterface $request The LTI authentication request
+     * @return void
+     * @throws LtiExceptionInterface
+     * @throws \moodle_exception
+     */
+    public static function add_grading_service(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
+        // Get required context for service params from original JWT token. See init_resource_link and init_deep_link.
+        $originaltoken = (new Parser())->parse(LtiMessage::fromServerRequest($request)->getParameters()->get('lti_message_hint'));
+        $courseid = $originaltoken->getClaims()->getMandatory(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT)['id'];
+        $resourcelink = $originaltoken->getClaims()->get(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK);
+        $serviceparams = [
+            "course_id" => $courseid,
+        ];
+
+        // Resource link claim is only present in resource link flows, not during deep linking.
+        if ($resourcelink) {
+            $serviceparams['resource_link_id'] = $resourcelink['id'];
+            $serviceparams['cmid'] = self::parse_resource_link_id($resourcelink['id']);
+        }
+
+        $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_AGS, [
+            "scope" => MOD_KIALO_LTI_AGS_SCOPES,
+
+            // This is the endpoint used by Kialo to get the line item details and post student scores.
+            "lineitem" => (new moodle_url('/mod/kialo/lti_lineitem.php', $serviceparams))->out(false),
+
+            // The lineitems (plural) endpoint is used by Kialo to look up line items by resource link ID
+            // only if the line item URL is not included in the launch data.
+            // Since our plugin always includes the line item URL in the launch data (in this very claim),
+            // Kialo never needs to use this endpoint.
+            // So this endpoint is currently not necessary and therefore not implemented.
+            // But if we end up implementing it, this is what it will be called.
+            "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
+        ]);
+    }
+
+    /**
+     * Generates an access token for the service to use when calling the LTI service endpoints.
+     * @return ResponseInterface
+     * @throws \dml_exception
+     */
+    public static function generate_service_access_token(): ResponseInterface {
+        $kialoconfig = kialo_config::get_instance();
+        $registrationrepo = $kialoconfig->get_registration_repository();
+
+        $factory = new AuthorizationServerFactory(
+            new ClientRepository($registrationrepo, null, new kialo_logger("ClientRepository")),
+            new AccessTokenRepository(moodle_cache::access_token_cache(), new kialo_logger("AccessTokenRepository")),
+            new ScopeRepository(array_map(fn ($scope): Scope => new Scope($scope), MOD_KIALO_LTI_AGS_SCOPES)),
+            $kialoconfig->get_platform_keychain()->getPrivateKey()->getContent(),
+        );
+
+        $keychainrepo = new static_keychain_repository($kialoconfig->get_platform_keychain());
+        $generator = new AccessTokenResponseGenerator($keychainrepo, $factory);
+        $request = ServerRequest::fromGlobals();
+        $response = new Response();
+
+        try {
+            // Validate assertion, generate and sign access token response, using the key chain private key.
+            $keychainidentifier = $kialoconfig->get_platform_keychain()->getIdentifier();
+            $response = $generator->generate($request, $response, $keychainidentifier);
+        } catch (OAuthServerException $exception) {
+            $response = $exception->generateHttpResponse($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Authenticates a service request using the LTI access token. Throws an error if authentication fails.
+     * @param array $scopes The scopes that the service request must have.
+     * @return void
+     * @throws \dml_exception
+     */
+    public static function authenticate_service_request(array $scopes): void {
+        $kialoconfig = kialo_config::get_instance();
+        $registrationrepo = $kialoconfig->get_registration_repository();
+        $validator = new RequestAccessTokenValidator($registrationrepo, new kialo_logger("RequestAccessTokenValidator"));
+
+        // Validate request provided access token using the registration platform public key, against allowed scopes.
+        $result = $validator->validate(ServerRequest::fromGlobals(), $scopes);
+
+        if ($result->hasError()) {
+            throw new \dml_exception($result->getError());
+        }
     }
 }
