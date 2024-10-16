@@ -1,3 +1,8 @@
+### v1.3.0 (Build - 2024101601)
+
+* Added Grading
+* Improved Moodle 4.5 compatibility
+
 ### v1.2.1 (Build - 2024091201)
 
 * Namespaced styles
