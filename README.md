@@ -65,6 +65,10 @@ We are ISO 27001 compliant, and how we handle your data can be seen in detail in
 
 ### Installing via uploaded ZIP file ###
 
+You can find the latest version of the plugin in the [Moodle plugins directory](https://moodle.org/plugins/mod_kialo),
+or on the [Releases page](https://github.com/kialo/moodle-mod_kialo/releases). If you download from the releases page,
+**make sure to download the "mod_kialo.zip" asset**, not simply the source code.
+
 1. Log in to your Moodle site as an admin and go to _Site administration >
    Plugins > Install plugins_.
 2. Upload the ZIP file with the plugin code. You should only be prompted to add
@@ -77,6 +81,8 @@ We are ISO 27001 compliant, and how we handle your data can be seen in detail in
 The plugin can be also installed by putting the contents of this directory to
 
     {your/moodle/dirroot}/mod/kialo
+
+**Important**: The plugin depends on a number of external libraries that are not directly included in the repository. Therefore, you will need to run `composer install` to install the dependencies.
 
 Afterwards, log in to your Moodle site as an admin and go to _Site administration >
 Notifications_ to complete the installation.
