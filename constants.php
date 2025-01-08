@@ -37,3 +37,13 @@ const MOD_KIALO_LTI_AGS_SCOPES = [
     LtiConstants::AGS_SCOPE_RESULT_READONLY,
     LtiConstants::AGS_SCOPE_SCORE,
 ];
+
+/**
+ * Value used to indicate that the Kialo app should be displayed in the same Moodle window as an embed.
+ */
+const MOD_KIALO_DISPLAY_IN_EMBED = 'embed';
+
+/**
+ * Value used to indicate that the Kialo app should be displayed in a new window.
+ */
+const MOD_KIALO_DISPLAY_IN_NEW_WINDOW = 'new-window';

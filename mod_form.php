@@ -132,13 +132,28 @@ class mod_kialo_mod_form extends moodleform_mod {
             </script>");
         $mform->addHelpButton("kialo_select_discussion", "select_discussion", "mod_kialo");
 
-        // Add standard elements.
+        $this->display_options_elements();
         $this->standard_coursemodule_elements();
-
-        // Add grading elements.
         $this->standard_grading_coursemodule_elements();
-
-        // Add standard buttons.
         $this->add_action_buttons();
+    }
+
+    /**
+     * Adds display option elements.
+     * @return void
+     * @throws coding_exception
+     */
+    protected function display_options_elements() {
+        $mform = $this->_form;
+        $fieldname = "display";
+
+        $launchoptions = [
+            MOD_KIALO_DISPLAY_IN_EMBED => get_string('display_embed', 'mod_kialo'),
+            MOD_KIALO_DISPLAY_IN_NEW_WINDOW => get_string('display_new_window', 'mod_kialo'),
+        ];
+
+        $mform->addElement('select', $fieldname, get_string('display_label', 'mod_kialo'), $launchoptions);
+        $mform->addHelpButton($fieldname, $fieldname, 'mod_kialo');
+        $mform->setAdvanced($fieldname); // This field is in the "Show more" section.
     }
 }

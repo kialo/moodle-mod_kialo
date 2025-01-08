@@ -219,3 +219,17 @@
         border-color: var(--kialo-blue-color);
     }
 }
+
+/* ---- EMBEDDED VIEW ---- */
+
+.kialo-embedded .secondary-navigation {
+    display: none;
+}
+
+.kialo-embedded .page-context-header {
+    display: none !important;
+}
+
+#kialocontentframe {
+    border: none;
+}

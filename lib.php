@@ -22,6 +22,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/constants.php');
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -129,17 +132,19 @@ function kialo_delete_instance($id) {
 /**
  * Given a coursemodule object, this function returns the extra
  * information needed to print this activity in various places.
- * For this module we just need to support external urls as
- * activity icons
  *
  * @param stdClass $coursemodule
  * @return cached_cm_info info
  */
 function kialo_get_coursemodule_info($coursemodule) {
+    global $DB;
     $info = new cached_cm_info();
 
-    $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
-    $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
+    $instance = $DB->get_record('kialo', ['id' => $coursemodule->instance], '*', MUST_EXIST);
+    if ($instance->display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW) {
+        $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
+        $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
+    }
 
     return $info;
 }
