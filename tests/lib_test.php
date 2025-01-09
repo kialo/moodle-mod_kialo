@@ -138,11 +138,12 @@ final class lib_test extends \advanced_testcase {
             'course' => $course,
             'display' => MOD_KIALO_DISPLAY_IN_NEW_WINDOW,
         ]);
-        $info = kialo_get_coursemodule_info($activity);
+        $cm = get_coursemodule_from_instance("kialo", $activity->id);
+        $info = kialo_get_coursemodule_info($cm);
 
         // Clicking the activity name should open a new window by default.
         $this->assertStringContainsString("window.open", $info->onclick);
-        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $activity->id, $info->onclick);
+        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $info->onclick);
     }
 
     /**
