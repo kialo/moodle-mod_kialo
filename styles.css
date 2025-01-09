@@ -227,7 +227,8 @@
 }
 
 .kialo-embedded .page-context-header {
-    display: none !important;
+    /* Moodle's own styles use !important, so we need to use it too. */
+    display: none !important; /* stylelint-disable-line declaration-no-important */
 }
 
 #kialocontentframe {
