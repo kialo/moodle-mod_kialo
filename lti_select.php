@@ -41,11 +41,16 @@ $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
 $deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
+require_login($courseid ?? null, false);
+global $SESSION;  // Initialized by Moodle itself.
+
 if ($courseid && $deploymentid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
-    require_login($courseid, false);
     require_capability('mod/kialo:addinstance', context_course::instance($courseid));
-    $_SESSION["kialo_deployment_id"] = $deploymentid;
+    $SESSION->kialo_deployment_id = $deploymentid;
+
+    $PAGE->set_url('/mod/kialo/lti_select.php', ['courseid' => $courseid, 'deploymentid' => $deploymentid]);
+    $PAGE->set_title(get_string("redirect_title", "mod_kialo"));
 
     // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
     try {
@@ -65,10 +70,14 @@ if ($courseid && $deploymentid) {
         get_string("redirect_loading", "mod_kialo"),
         $deeplinkmsg->toHtmlRedirectForm()
     ));
-} else if ($idtoken && isset($_SESSION["kialo_deployment_id"])) {
+} else if ($idtoken && isset($SESSION->kialo_deployment_id)) {
     // Received LtiDeepLinkingResponse from Kialo.
-    $deploymentid = $_SESSION["kialo_deployment_id"];
-    unset($_SESSION["kialo_deployment_id"]);
+    $deploymentid = $SESSION->kialo_deployment_id;
+    unset($SESSION->kialo_deployment_id);
+
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url('/mod/kialo/lti_select.php', ['idtoken' => $idtoken]);
+    $PAGE->set_title(get_string('close_prompt', 'mod_kialo'));
 
     try {
         $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
@@ -92,6 +101,9 @@ if ($courseid && $deploymentid) {
     // The user should basically not see this, or just very briefly.
     echo "<br><br><br><br><center>" . get_string('close_prompt', 'mod_kialo') . "</center>";
 } else {
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url('/mod/kialo/lti_select.php', ['idtoken' => $idtoken, 'courseid' => $courseid, 'deploymentid' => $deploymentid]);
+
     $error = "errors:invalidrequest";
     if (empty($_SESSION['kialo_deployment_id'])) {
         $error = "errors:missingsessiondata";
@@ -102,6 +114,7 @@ if ($courseid && $deploymentid) {
     } else if (empty($idtoken)) {
         $error = "errors:missingidtoken";
     }
+    $PAGE->set_title(get_string($error, 'mod_kialo'));
 
     // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
     throw new \moodle_exception('errors:deeplinking', 'kialo', "", null, get_string($error, 'mod_kialo'));
