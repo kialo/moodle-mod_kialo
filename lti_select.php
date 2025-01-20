@@ -93,14 +93,14 @@ if ($courseid && $deploymentid) {
     echo "<br><br><br><br><center>" . get_string('close_prompt', 'mod_kialo') . "</center>";
 } else {
     $error = "errors:invalidrequest";
-    if (empty($deploymentid)) {
+    if (empty($_SESSION['kialo_deployment_id'])) {
+        $error = "errors:missingsessiondata";
+    } else if (empty($deploymentid)) {
         $error = "errors:missingdeploymentid";
     } else if (empty($courseid)) {
         $error = "errors:missingcourseid";
     } else if (empty($idtoken)) {
         $error = "errors:missingidtoken";
-    } else if (empty($_SESSION['kialo_deployment_id'])) {
-        $error = "errors:missingsessiondata";
     }
 
     // Should not happen (but could if someone intentionally calls this page with wrong params). Display moodle error page.
