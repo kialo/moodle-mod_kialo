@@ -242,7 +242,7 @@ class lti_flow {
      */
     public static function validate_deep_linking_response(
         ServerRequestInterface $request,
-        string $deploymentid
+        string $deploymentid = KIALO_LTI_DEPLOYMENT_ID
     ): deep_linking_result {
         $kialoconfig = kialo_config::get_instance();
         $registration = $kialoconfig->create_registration($deploymentid);
@@ -313,7 +313,7 @@ class lti_flow {
      * @throws LtiExceptionInterface
      * @throws \dml_exception
      */
-    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid) {
+    public static function init_deep_link(int $courseid, string $moodleuserid, string $deploymentid = KIALO_LTI_DEPLOYMENT_ID) {
         $kialoconfig = kialo_config::get_instance();
 
         $deeplinkingreturnurl = (new \moodle_url('/mod/kialo/lti_select.php'))->out(false);

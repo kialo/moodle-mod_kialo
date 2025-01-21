@@ -39,17 +39,17 @@ use mod_kialo\output\loading_page;
 
 $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
-$deploymentid = optional_param("deploymentid", "", PARAM_TEXT);
 
 require_login($courseid ?? null, false);
 global $SESSION;  // Initialized by Moodle itself.
 
-if ($courseid && $deploymentid) {
+if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
-    require_capability('mod/kialo:addinstance', context_course::instance($courseid));
-    $SESSION->kialo_deployment_id = $deploymentid;
+    $context = context_course::instance($courseid);
+    $PAGE->set_context($context);
+    require_capability('mod/kialo:addinstance', $context);
 
-    $PAGE->set_url('/mod/kialo/lti_select.php', ['courseid' => $courseid, 'deploymentid' => $deploymentid]);
+    $PAGE->set_url('/mod/kialo/lti_select.php', ['courseid' => $courseid]);
     $PAGE->set_title(get_string("redirect_title", "mod_kialo"));
 
     // This will throw an exception and result in a generic error page, if the deep linking response is invalid.
@@ -57,7 +57,6 @@ if ($courseid && $deploymentid) {
         $deeplinkmsg = lti_flow::init_deep_link(
             $courseid,
             $USER->id,
-            $deploymentid,
         );
     } catch (Throwable $e) {
         // Show Moodle's default error page including some debug info.
@@ -70,17 +69,14 @@ if ($courseid && $deploymentid) {
         get_string("redirect_loading", "mod_kialo"),
         $deeplinkmsg->toHtmlRedirectForm()
     ));
-} else if ($idtoken && isset($SESSION->kialo_deployment_id)) {
+} else if ($idtoken) {
     // Received LtiDeepLinkingResponse from Kialo.
-    $deploymentid = $SESSION->kialo_deployment_id;
-    unset($SESSION->kialo_deployment_id);
-
     $PAGE->set_context(context_system::instance());
     $PAGE->set_url('/mod/kialo/lti_select.php', ['idtoken' => $idtoken]);
     $PAGE->set_title(get_string('close_prompt', 'mod_kialo'));
 
     try {
-        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals(), $deploymentid);
+        $link = lti_flow::validate_deep_linking_response(ServerRequest::fromGlobals());
     } catch (Throwable $e) {
         // Show Moodle's default error page including some debug info.
         throw new \moodle_exception('errors:deeplinking', 'kialo', '', null, $e->getMessage());
@@ -89,7 +85,6 @@ if ($courseid && $deploymentid) {
     // Inform the activity form about the successful selection. When acknowledged by the form, close the window.
     $message = json_encode([
             "type" => "kialo_discussion_selected",
-            "deploymentid" => $link->deploymentid,
             "discussionurl" => $link->discussionurl,
             "discussiontitle" => $link->discussiontitle,
     ]);
@@ -102,14 +97,10 @@ if ($courseid && $deploymentid) {
     echo "<br><br><br><br><center>" . get_string('close_prompt', 'mod_kialo') . "</center>";
 } else {
     $PAGE->set_context(context_system::instance());
-    $PAGE->set_url('/mod/kialo/lti_select.php', ['idtoken' => $idtoken, 'courseid' => $courseid, 'deploymentid' => $deploymentid]);
+    $PAGE->set_url('/mod/kialo/lti_select.php', ['idtoken' => $idtoken, 'courseid' => $courseid]);
 
     $error = "errors:invalidrequest";
-    if (empty($_SESSION['kialo_deployment_id'])) {
-        $error = "errors:missingsessiondata";
-    } else if (empty($deploymentid)) {
-        $error = "errors:missingdeploymentid";
-    } else if (empty($courseid)) {
+    if (empty($courseid)) {
         $error = "errors:missingcourseid";
     } else if (empty($idtoken)) {
         $error = "errors:missingidtoken";
