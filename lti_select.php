@@ -41,7 +41,6 @@ $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
 
 require_login($courseid ?? null, false);
-global $SESSION;  // Initialized by Moodle itself.
 
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
