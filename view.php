@@ -68,7 +68,7 @@ try {
     $message = lti_flow::init_resource_link(
         $course->id,
         $cm->id,
-        $moduleinstance->deployment_id,
+        KIALO_LTI_DEPLOYMENT_ID,
         $USER->id,
         $moduleinstance->discussion_url,
         $groupinfo->groupid,

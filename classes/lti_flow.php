@@ -179,7 +179,7 @@ class lti_flow {
      *
      * @param int $courseid
      * @param int $coursemoduleid
-     * @param string $deploymentid
+     * @param string $deploymentid Usually KIALO_LTI_DEPLOYMENT_ID
      * @param string $moodleuserid
      * @param string $discussionurl
      * @param string|null $groupid
