@@ -5,7 +5,8 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreUnreadableDirs()
     ->in(__DIR__)
     ->exclude('development')
-    ->exclude('node_modules');
+    ->exclude('node_modules')
+    ->exclude('vendor');
 
 $config = new PhpCsFixer\Config();
 

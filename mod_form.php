@@ -42,17 +42,6 @@ require_once(__DIR__ . '/constants.php');
 class mod_kialo_mod_form extends moodleform_mod {
 
     /**
-     * In LTI the deployment ID identifies an LTI tool definition or installation. Moodle sends
-     * the same ID for all activities that are based on the same LTI external tool definition.
-     * We always send 1 for the plugin because there can only be one Kialo plugin installed which
-     * always has the same configuration.
-     * @return string
-     */
-    private function get_deployment_id(): string {
-        return "1";
-    }
-
-    /**
      * Defines forms elements
      */
     public function definition() {
@@ -91,14 +80,8 @@ class mod_kialo_mod_form extends moodleform_mod {
         $mform->addElement("hidden", "discussion_url", "");
         $mform->setType("discussion_url", PARAM_RAW);
 
-        // Deployment ID, filled when selecting the discussion.
-        $deploymentid = $this->get_deployment_id();
-        $mform->addElement("hidden", "deployment_id", $deploymentid);
-        $mform->setType("deployment_id", PARAM_RAW);
-
         // Deep Linking Button, allowing the user to select a discussion on Kialo.
         $deeplinkurl = (new moodle_url('/mod/kialo/lti_select.php', [
-            "deploymentid" => $deploymentid,
             "courseid" => $COURSE->id,
         ]))->out(false);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
@@ -116,7 +99,6 @@ class mod_kialo_mod_form extends moodleform_mod {
 
                   // Fill in the deep-linked details.
                   document.querySelector('input[name=discussion_url]').value = event.data.discussionurl;
-                  document.querySelector('input[name=deployment_id]').value = event.data.deploymentid;
                   document.querySelector('input[name=discussion_title]').value = event.data.discussiontitle;
 
                   // Prefill activity name based on discussion title if user hasn't entered one yet.
