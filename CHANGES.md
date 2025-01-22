@@ -1,3 +1,7 @@
+### v1.3.2 (Build - 2025012201)
+
+* Bugfixes
+
 ### v1.3.0 (Build - 2024101601)
 
 * Added Grading
