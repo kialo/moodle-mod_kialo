@@ -152,7 +152,7 @@ class kialo_config {
             'kialo-edu',                // Identifier.
             'Kialo Edu',                // Name.
             $toolurl,                   // Audience.
-            $toolurl . "/lti/start",    // OIDC initiation url.
+            $toolurl . "/lti/login",    // OIDC initiation url.
             $toolurl . '/lti/launch',   // Launch url.
             $toolurl . '/lti/deeplink'  // Deep linking url.
         );

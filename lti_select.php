@@ -40,12 +40,11 @@ use mod_kialo\output\loading_page;
 $courseid = optional_param('courseid', 0, PARAM_INT);
 $idtoken = optional_param("JWT", "", PARAM_TEXT);
 
-require_login($courseid ?? null, false);
-
 if ($courseid) {
     // Called by our activity creation form in Moodle to start the deeplinking flow.
     $context = context_course::instance($courseid);
     $PAGE->set_context($context);
+    require_login($courseid, false);
     require_capability('mod/kialo:addinstance', $context);
 
     $PAGE->set_url('/mod/kialo/lti_select.php', ['courseid' => $courseid]);
