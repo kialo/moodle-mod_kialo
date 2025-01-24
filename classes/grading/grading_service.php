@@ -52,7 +52,7 @@ class grading_service {
     public static function get_line_item(int $courseid, int $cmid, string $resourcelinkid): line_item {
         $module = get_coursemodule_from_id('kialo', $cmid, $courseid, false, MUST_EXIST);
 
-        $gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod']);
+        $gradeitem = grade_item::fetch(['iteminstance' => $module->instance, 'itemtype' => 'mod', 'itemmodule' => 'kialo']);
         if (!$gradeitem) {
             $maxscore = 100;
         } else {

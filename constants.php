@@ -47,3 +47,11 @@ const MOD_KIALO_DISPLAY_IN_EMBED = 'embed';
  * Value used to indicate that the Kialo app should be displayed in a new window.
  */
 const MOD_KIALO_DISPLAY_IN_NEW_WINDOW = 'new-window';
+
+/**
+ * In LTI the deployment ID identifies an LTI tool definition or installation. Moodle sends
+ * the same ID for all activities that are based on the same LTI external tool definition.
+ * We always send 1 for the plugin because there can only be one Kialo plugin installed which
+ * always has the same configuration.
+ */
+const KIALO_LTI_DEPLOYMENT_ID = "1";

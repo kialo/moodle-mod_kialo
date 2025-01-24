@@ -1,3 +1,11 @@
+### v1.3.3 (Build - 2025012401)
+
+* Bugfixes: grade syncing issues ("LMS configuration issue")
+
+### v1.3.2 (Build - 2025012201)
+
+* Bugfixes
+
 ### v1.3.0 (Build - 2024101601)
 
 * Added Grading

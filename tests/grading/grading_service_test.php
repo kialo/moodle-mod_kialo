@@ -125,6 +125,41 @@ final class grading_service_test extends \advanced_testcase {
     }
 
     /**
+     * Tests getting the line item for a course module when we have same courseid and iteminstance for moodle's build-in
+     * lti client and the plugin.
+     * This is used by Kialo to get the max. grade configured in the LMS,
+     * as well as the endpoint to send grades to.
+     *
+     * @return void
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @covers \mod_kialo\grading\grading_service::get_line_item
+     */
+    public function test_get_line_item_conflict_between_moodle_lti_client_and_plugin(): void {
+        $maxgrade = 123;
+        $course = $this->getDataGenerator()->create_course();
+        $kialo = $this->getDataGenerator()->create_module('kialo', ['course' => $course->id, 'grade' => $maxgrade]);
+        // Create a grade item for the moodle's build-in lti client with same iteminstance and courseid.
+        $this->getDataGenerator()->create_grade_item(['iteminstance' => $kialo->id, 'courseid' => $course->id,
+            'itemmodule' => 'lti', 'itemtype' => 'mod']);
+        $coursemodule = get_coursemodule_from_instance("kialo", $kialo->id);
+
+        $courseid = $course->id;
+        $coursemoduleid = $coursemodule->id;
+        $resourcelinkid = lti_flow::resource_link_id($coursemoduleid);
+
+        $endpoint = "/mod/kialo/lti_lineitem.php?course_id={$courseid}&cmid={$coursemoduleid}&resource_link_id={$resourcelinkid}";
+        $_SERVER['REQUEST_URI'] = $endpoint;
+
+        $lineitem = grading_service::get_line_item($courseid, $coursemoduleid, $resourcelinkid);
+        $this->assertEquals("https://www.example.com/moodle" . $endpoint, $lineitem->id);
+        $this->assertEquals($coursemodule->name, $lineitem->label);
+        $this->assertEquals($maxgrade, $lineitem->scoreMaximum);
+        $this->assertEquals($resourcelinkid, $lineitem->resourceLinkId);
+    }
+
+    /**
      * Tests getting the line item for a course module. This is used by Kialo to get the max. grade configured in the LMS,
      * as well as the endpoint to send grades to.
      * Activities created with previous versions have no grade book item.

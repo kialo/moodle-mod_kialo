@@ -36,7 +36,6 @@ $string['acceptterms'] = "Accept Terms of Service";
 $string['acceptterms_desc'] = 'To enable the Kialo plugin you have to accept Kialo Edu’s <a href="{$a->terms}" target="_blank">Terms of Service</a> on behalf of all users of this Moodle instance. Here is a link to our <a href="{$a->privacy}" target="_blank">Privacy Policy</a> and to our <a href="{$a->data_security}" target="_blank">Data Security and Privacy Plan.</a>';
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 $string['close_prompt'] = 'You can close this window now.';
-$string['deploymentid'] = "Discussion Linked";
 $string['discussion_title'] = 'Discussion';
 $string['display'] = 'Display';
 $string['display_embed'] = 'Display in embed';
@@ -47,7 +46,6 @@ $string['errors:deeplinking'] = "Something went wrong with the discussion select
 $string['errors:invalidrequest'] = "Invalid request";
 $string['errors:ltiauth'] = "Authentication failed due to an unexpected error. Please try again.";
 $string['errors:missingcourseid'] = "Missing course id";
-$string['errors:missingdeploymentid'] = "Missing deployment id";
 $string['errors:missingidtoken'] = "Missing id token";
 $string['errors:missingsessiondata'] = "Missing session data";
 $string['errors:noguestaccess'] = "Guests cannot access this activity. Please log in.";
