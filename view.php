@@ -76,11 +76,59 @@ try {
     );
 
     $output = $PAGE->get_renderer('mod_kialo');
-    echo $output->render(new loading_page(
-        get_string("redirect_title", "mod_kialo"),
-        get_string("redirect_loading", "mod_kialo"),
-        $message->toHtmlRedirectForm()
-    ));
+    $PAGE->set_url('/mod/kialo/view.php', ['id' => $cm->id]);
+    $PAGE->set_title($moduleinstance->name);
+
+    if ($moduleinstance->display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW) {
+        echo $output->render(new loading_page(
+            get_string("redirect_title", "mod_kialo"),
+            get_string("redirect_loading", "mod_kialo"),
+            $message->toHtmlRedirectForm()
+        ));
+    } else {
+        $PAGE->set_pagelayout('incourse');
+        $PAGE->add_body_class('kialo-embedded');
+        $PAGE->requires->css('/mod/kialo/styles.css');
+
+        echo $OUTPUT->header();
+
+        // We can't use html_writer here because it escapes our required query params.
+        echo '<iframe id="kialocontentframe"
+             height="600px"
+             width="100%"
+             src="' . $message->toUrl() . '&embedded"
+             allowfullscreen="true">
+      </iframe>';
+
+        // This resize script was taken directly from moodle's own mod/lti/view.php.
+        // It ensures that our Iframe has as much height as it can get.
+        $resizescript = <<<JS
+        <script type="text/javascript">
+            //<![CDATA[
+            YUI().use("node", "event", function(Y) {
+                var doc = Y.one("body");
+                var frame = Y.one("#kialocontentframe");
+                var padding = 15;
+                var lastHeight;
+                var resize = function(e) {
+                    var viewportHeight = doc.get("winHeight");
+                    if (lastHeight !== Math.min(doc.get("docHeight"), viewportHeight)) {
+                        frame.setStyle("height", viewportHeight - frame.getY() - padding + "px");
+                        lastHeight = Math.min(doc.get("docHeight"), viewportHeight);
+                    }
+                };
+
+                resize();
+                Y.on("windowresize", resize);
+            });
+            //]]
+        </script>
+    JS;
+
+        echo $resizescript;
+
+        echo $OUTPUT->footer();
+    }
 } catch (Throwable $e) {
     // Show Moodle's default error page including some debug info.
     throw new \moodle_exception('errors:resourcelink', 'kialo', '', null, $e->getMessage());

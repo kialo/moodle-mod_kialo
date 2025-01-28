@@ -44,10 +44,11 @@ cp .env.example .env # before starting compose, check instructions in this file
 docker compose up
 ```
 
+At this point Moodle should be running locally on port 8080. You can use any hostname that resolves to localhost, e.g. `http://localhost:8080`. You can also add an entry to your `/etc/hosts` file to use a custom hostname like 'moodle.localhost'.
+
 After you started Moodle for the first time, do the following to set some useful default settings:
 
-* Copy `development/config.php` into `development/moodle` to apply some default settings useful for development.
-* Import `development/config/kialo-admin-preset.xml` via http://localhost:8080/admin/tool/admin_presets/index.php?action=import.
+* Import `development/config/kialo-admin-preset-universal.xml` via http://localhost:8080/admin/tool/admin_presets/index.php?action=import.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
 testing Kialo locally won't work, as communication will be blocked by Moodle.
@@ -55,8 +56,9 @@ This also enables web services for mobile (required for the mobile app) and enab
 
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
 
-The folder `moodle` is mounted locally in the `development` folder. To test changes to the plugin code,
-you can use `development/sync.sh` to copy over the code into the `moodle/mod/kialo` folder.A
+To update the plugin in Moodle during development, 
+you have to use `development/sync.sh` to copy over the code into the `development/mod_kialo` folder,
+which is mounted in the Moodle docker container.
 
 ### Moodle versions
 
@@ -91,10 +93,10 @@ To add a new dependency, run `composer require <package-name>`.
 Whenever any dependency is changed (when `composer.lock` changes), you need to ensure to update `thirdpartylibs.xml` accordingly. Run the test `tests/thirdpartylibs_test.php` to check that 
 the thirdpartylibs.xml file is up to date.
 
-If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBS=1` to automatically regenerate the file:
+If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBSXML=1` to automatically regenerate the file:
 
 ```shell
-UPDATE_THIRDPARTYLIBS=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
+UPDATE_THIRDPARTYLIBSXML=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
 ```
 
 ## Linting

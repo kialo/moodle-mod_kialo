@@ -37,6 +37,11 @@ $string['acceptterms_desc'] = 'To enable the Kialo plugin you have to accept Kia
 $string['cachedef_nonces'] = "Used to store temporary nonces to secure LTI requests.";
 $string['close_prompt'] = 'You can close this window now.';
 $string['discussion_title'] = 'Discussion';
+$string['display'] = 'Display';
+$string['display_embed'] = 'Display in embed';
+$string['display_help'] = "Choose how the Kialo discussion should be displayed in Moodle. By default it will be embedded.";
+$string['display_label'] = 'Display';
+$string['display_new_window'] = 'Display in new window';
 $string['errors:deeplinking'] = "Something went wrong with the discussion selection. Please try again.";
 $string['errors:invalidrequest'] = "Invalid request";
 $string['errors:ltiauth'] = "Authentication failed due to an unexpected error. Please try again.";
@@ -75,4 +80,5 @@ $string['redirect_loading'] = "Loading";
 $string['redirect_title'] = "Loading";
 $string['select_discussion'] = 'Select Discussion';
 $string['select_discussion_help'] = 'Opens Kialo in a new tab to select a discussion for this activity. You can create a Kialo account during this process if you don’t already have one.';
+$string["showmore"] = "Show more";
 $string['termsnotaccepted'] = 'You have to accept Kialo’s <a href="{$a->terms}" target="_blank">Terms of Service</a> before you can enable the Kialo plugin.';

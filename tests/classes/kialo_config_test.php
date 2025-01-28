@@ -120,7 +120,7 @@ final class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("Kialo Edu", $tool->getName());
         $this->assertEquals("https://www.kialo-edu.com", $tool->getAudience());
         $this->assertEquals("https://www.kialo-edu.com/lti/launch", $tool->getLaunchUrl());
-        $this->assertEquals("https://www.kialo-edu.com/lti/login", $tool->getOidcInitiationUrl());
+        $this->assertEquals("https://www.kialo-edu.com/lti/start", $tool->getOidcInitiationUrl());
         $this->assertEquals("https://www.kialo-edu.com/lti/deeplink", $tool->getDeepLinkingUrl());
     }
 

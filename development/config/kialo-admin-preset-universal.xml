@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PRESET>
+    <NAME>kialo</NAME>
+    <COMMENTS>Applies only the essential settings, that are the same across all Moodle versions.</COMMENTS>
+    <PRESET_DATE>1691656563</PRESET_DATE>
+    <SITE_URL>http://localhost:8080</SITE_URL>
+    <AUTHOR></AUTHOR>
+    <MOODLE_VERSION>2023042401</MOODLE_VERSION>
+    <MOODLE_RELEASE>4.2.1 (Build: 20230612)</MOODLE_RELEASE>
+    <ADMIN_SETTINGS>
+        <NONE>
+            <SETTINGS>
+                <PASSWORDPOLICY>0</PASSWORDPOLICY>
+                <PASSWORDPOLICYCHECKONLOGIN>0</PASSWORDPOLICYCHECKONLOGIN>
+                <CURLSECURITYBLOCKEDHOSTS></CURLSECURITYBLOCKEDHOSTS>
+                <CURLSECURITYALLOWEDPORT>443
+                    80
+                    5000</CURLSECURITYALLOWEDPORT>
+            </SETTINGS>
+        </NONE>
+    </ADMIN_SETTINGS>
+</PRESET>
