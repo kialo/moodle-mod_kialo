@@ -33,7 +33,7 @@ const VERSION_GRADING_1 = 2024091805;
 /**
  * In this version display options (embed vs new window) were first introduced.
  */
-const VERSION_DISPLAY_OPTIONS_1 = 2025011501;
+const VERSION_DISPLAY_OPTIONS_1 = 2025012402;
 
 /**
  * Custom upgrade steps.
