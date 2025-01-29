@@ -1,3 +1,7 @@
+### v1.4.0 (Build - 2025012402)
+
+* added display option that allows to choose to display the activity in an embed or new window
+
 ### v1.3.3 (Build - 2025012401)
 
 * Bugfixes: grade syncing issues ("LMS configuration issue")
