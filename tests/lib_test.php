@@ -28,6 +28,7 @@ namespace mod_kialo;
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/kialo/lib.php');
+require_once($CFG->dirroot . '/mod/kialo/constants.php');
 
 /**
  * Kialo Library tests class.
@@ -125,20 +126,24 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
-     * Check course module
+     * Check course module opens in new window if that has been configured.
      *
      * @covers ::kialo_get_coursemodule_info
      */
-    public function test_kialo_get_coursemodule_info(): void {
+    public function test_kialo_get_coursemodule_info_new_window(): void {
         $this->resetAfterTest();
 
         $course = $this->getDataGenerator()->create_course();
-        $activity = $this->getDataGenerator()->create_module('kialo', ['course' => $course]);
-        $info = kialo_get_coursemodule_info($activity);
+        $activity = $this->getDataGenerator()->create_module('kialo', [
+            'course' => $course,
+            'display' => MOD_KIALO_DISPLAY_IN_NEW_WINDOW,
+        ]);
+        $cm = get_coursemodule_from_instance("kialo", $activity->id);
+        $info = kialo_get_coursemodule_info($cm);
 
         // Clicking the activity name should open a new window by default.
         $this->assertStringContainsString("window.open", $info->onclick);
-        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $activity->id, $info->onclick);
+        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $info->onclick);
     }
 
     /**

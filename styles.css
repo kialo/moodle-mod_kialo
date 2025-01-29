@@ -219,3 +219,18 @@
         border-color: var(--kialo-blue-color);
     }
 }
+
+/* ---- EMBEDDED VIEW ---- */
+
+.kialo-embedded .secondary-navigation {
+    display: none;
+}
+
+.kialo-embedded .page-context-header {
+    /* Moodle's own styles use !important, so we need to use it too. */
+    display: none !important; /* stylelint-disable-line declaration-no-important */
+}
+
+#kialocontentframe {
+    border: none;
+}

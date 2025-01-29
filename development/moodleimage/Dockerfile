@@ -1,6 +1,6 @@
 # See https://moodledev.io/general/development/policies/php for the list of available PHP versions.
 # Different versions of Moodle require different versions of PHP.
-ARG PHP_VERSION="8.1"
+ARG PHP_VERSION="8.2"
 
 FROM moodlehq/moodle-php-apache:${PHP_VERSION}
 
@@ -12,6 +12,9 @@ ARG MOODLE_BRANCH="main"
 ENV MOODLE_BRANCH=${MOODLE_BRANCH}
 
 RUN git clone git://git.moodle.org/moodle.git /var/www/html --depth=1 --branch ${MOODLE_BRANCH}
+
+# Install dnsutils
+RUN apt-get update && apt-get install -y dnsutils
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY config.php /var/www/html/config_kialo.php

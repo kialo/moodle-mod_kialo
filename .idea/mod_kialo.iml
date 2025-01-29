@@ -6,8 +6,254 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/development/moodle" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/admin/presets/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/admin/roles/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/admin/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/ai/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/analytics/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/auth/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/availability/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/backup/controller/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/backup/converter/moodle1/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/backup/moodle2/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/backup/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/backup/util" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/badges/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/blocks/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/blog/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/cache/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/calendar/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/cohort/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/comment/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/communication/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/competency/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/completion/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/contentbank/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/course/format/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/course/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/customfield/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/enrol/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/favourites/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/files/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/filter/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/grade/grading/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/grade/import/csv/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/grade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/group/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/h5p/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/iplookup/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/ddl/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/dml/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/editor/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/external/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/filebrowser/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/filestorage/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/form/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/grade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/phpunit/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/table/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/testing" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/userkey/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/lib/xapi/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/login/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/message/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/mnet/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/my/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/notes/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/payment/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/plagiarism/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/portfolio/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/privacy/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/question/engine/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/question/engine/upgrade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/question/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/question/type/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/rating/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/reportbuilder/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/repository/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/rss/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/search/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/sms/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/tag/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/user/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/moodle/webservice/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/development/mod_kialo/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/admin/presets/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/admin/roles/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/admin/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/ai/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/analytics/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/auth/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/availability/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/backup/controller/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/backup/converter/moodle1/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/backup/moodle2/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/backup/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/backup/util" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/badges/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/blocks/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/blog/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/cache/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/calendar/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/cohort/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/comment/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/communication/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/competency/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/completion/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/contentbank/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/course/format/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/course/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/customfield/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/enrol/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/favourites/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/files/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/filter/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/grade/grading/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/grade/import/csv/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/grade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/group/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/h5p/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/iplookup/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/ddl/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/dml/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/editor/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/external/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/filebrowser/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/filestorage/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/form/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/grade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/phpunit/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/table/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/testing" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/userkey/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/lib/xapi/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/login/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/message/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/mnet/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/my/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/notes/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/payment/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/plagiarism/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/portfolio/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/privacy/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/question/engine/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/question/engine/upgrade/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/question/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/question/type/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/rating/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/reportbuilder/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/repository/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/rss/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/search/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/sms/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/tag/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/user/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/moodle/webservice/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/development/moodle" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/cache/adapter-common" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/cache/tag-interop" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/clue/ndjson-react" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/codercat/jwk-to-pem" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/dealerdirect/phpcodesniffer-composer-installer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/defuse/php-encryption" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/fidry/cpu-core-counter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/friendsofphp/php-cs-fixer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/event" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/oauth2-server" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/uri" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/league/uri-interfaces" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/moodlehq/moodle-cs" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nesbot/carbon" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/nyholm/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/oat-sa/lib-lti1p3-core" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/manifest" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phar-io/version" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/php-http/message-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpcompatibility/php-compatibility" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpcsstandards/phpcsextra" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpcsstandards/phpcsutils" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpro/grumphp-shim" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpseclib/phpseclib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-code-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-file-iterator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-invoker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-text-template" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-timer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-factory" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ralouphie/getallheaders" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/collection" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/child-process" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/react/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/cli-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/code-unit" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/code-unit-reverse-lookup" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/complexity" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/diff" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/environment" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/exporter" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/global-state" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/lines-of-code" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/object-enumerator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/object-reflector" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/resource-operations" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/type" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/version" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/squizlabs/php_codesniffer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/filesystem" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-grapheme" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php73" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php81" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/stopwatch" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/string" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/theseer/tokenizer" />
+      <excludeFolder url="file://$MODULE_DIR$/development/mod_kialo" />
+      <excludeFolder url="file://$MODULE_DIR$/development/node_modules" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

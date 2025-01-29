@@ -1,7 +1,7 @@
 name: mod_kialo
 services:
   mariadb:
-    image: docker.io/bitnami/mariadb:10.7
+    image: docker.io/bitnami/mariadb:10.11
     ports:
       - '8833:3306'
       - '8443:443'
@@ -26,7 +26,7 @@ services:
         # main (latest), MOODLE_405_STABLE etc, see https://github.com/moodle/moodle/branches
         MOODLE_BRANCH: ${MOODLE_BRANCH:-main}
         # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
-        PHP_VERSION: ${PHP_VERSION:-8.1}
+        PHP_VERSION: ${PHP_VERSION:-8.2}
     ports:
       - '8080:80'
     environment:
