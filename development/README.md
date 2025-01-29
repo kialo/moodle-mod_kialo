@@ -40,8 +40,14 @@ It may take a few minutes for the `moodle` container to finish downloading and i
 
 ```shell
 cd development
-cp .env.example .env # before starting compose, check instructions in this file
-./sync.sh            # run this once to set up the Kialo plugin and prevent initialization errors
+
+# Follow instructions in the .env file depending on your Kialo setup.
+cp .env.example .env
+
+# Run this once to set up the Kialo plugin and prevent initialization errors.
+# May need sudo on Linux.
+./sync.sh
+
 docker compose up
 ```
 
