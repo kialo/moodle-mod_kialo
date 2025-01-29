@@ -31,30 +31,37 @@ into the mounted moodle plugin folder on every change.
 
 ## How to run Moodle
 
-Before you run Moodle copy `.env.example` to `.env` and adjust the values to your needs. 
-See `.env.example` for instructions.
+### First time setup
 
-The following command starts Moodle locally on port 8080 with MariaDB running on port 3366.
+The following commands starts Moodle locally on port 8080 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
 It also starts the hosted version of the Moodle app on port 8100.
+It may take a few minutes for the `moodle` container to finish downloading and installing the app.
 
 ```shell
 cd development
 cp .env.example .env # before starting compose, check instructions in this file
+./sync.sh            # run this once to set up the Kialo plugin and prevent initialization errors
 docker compose up
 ```
 
-At this point Moodle should be running locally on port 8080. You can use any hostname that resolves to localhost, e.g. `http://localhost:8080`. You can also add an entry to your `/etc/hosts` file to use a custom hostname like 'moodle.localhost'.
+At this point Moodle should be running locally on port 8080.
+You may access the site using any hostname that resolves to localhost, e.g. `http://localhost:8080`.
+**If you are running Kialo in Docker, you must use a non-localhost hostname** so the Kialo backend can connect to the `moodle` container using the same name.
+This can be the IP address of the `moodle` container or the Docker hostname of the `moodle` container (`moodle` by default).
+You can add an entry to your `/etc/hosts` file so the custom hostname resolves correctly (see `.env.example`).
 
 After you started Moodle for the first time, do the following to set some useful default settings:
 
-* Import `development/config/kialo-admin-preset-universal.xml` via http://localhost:8080/admin/tool/admin_presets/index.php?action=import.
+* Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
 testing Kialo locally won't work, as communication will be blocked by Moodle.
 This also enables web services for mobile (required for the mobile app) and enables debug messages for developers.
 
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
+
+### Developing the plugin
 
 To update the plugin in Moodle during development, 
 you have to use `development/sync.sh` to copy over the code into the `development/mod_kialo` folder,
@@ -186,3 +193,15 @@ To release a new version, follow these steps:
 
 This can happen if you deleted your docker containers before for some reason and then tried running `docker compose up` again.
 Try deleting both the docker images, and the folder `development/moodle`, and then run `docker compose up` again.
+
+### The LTI flow fails when connecting linking or launching a discussion
+
+This can occur if the Kialo backend cannot connect to the `moodle` container or vice versa.
+Check that the Kialo backend and `moodle` containers can `ping` or `curl` the other.
+
+If the Kialo backend container cannot reach the `moodle` container, check the following:
+* The containers are on the same Docker network.
+* The hostname used for Moodle is one of the network aliases of the `moodle` container. Run `docker inspect {moodle_container_name}` to check.
+
+If the `moodle` container cannot reach the Kialo backend container, check the following:
+* The containers are on the same Docker network.

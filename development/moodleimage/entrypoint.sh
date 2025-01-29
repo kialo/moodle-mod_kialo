@@ -8,7 +8,11 @@ su - www-data -s /bin/bash -c "php /var/www/html/admin/cli/install.php --non-int
 # The line should be added before the last line "require_once(__DIR__ . '/lib/setup.php');".
 sed -i '/require_once/i\require_once(__DIR__ . "/config_kialo.php");' /var/www/html/config.php
 
-# Make localhost.kialolabs.com point to the host machine IP address.
-echo "$(dig +short A host.docker.internal | head -n 1) localhost.kialolabs.com" >> /etc/hosts
+# Replace the default Apache port 80 with the exposed port 8080. When running Moodle and
+# Kialo in the same Docker network, it is necessary for the container port to be the same
+# as the exposed port so the Kialo backend can connect to the Moodle container using the
+# same address as in the browser.
+sed -i "/^\s*Listen 80/c\Listen 8080" /etc/apache2/*.conf \
+    && sed -i "/^\s*<VirtualHost \*:80>/c\<VirtualHost \*:8080>" /etc/apache2/sites-available/000-default.conf
 
 exec /usr/local/bin/moodle-docker-php-entrypoint "$@"

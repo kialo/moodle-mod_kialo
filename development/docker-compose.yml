@@ -28,7 +28,7 @@ services:
         # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
         PHP_VERSION: ${PHP_VERSION:-8.2}
     ports:
-      - '8080:80'
+      - '8080:8080'
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
