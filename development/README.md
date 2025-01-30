@@ -67,6 +67,13 @@ This also enables web services for mobile (required for the mobile app) and enab
 
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
 
+If you'd like to set up the instance with some test users and classes, run the following commands:
+```shell
+docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-users.sql
+docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-courses-and-groups.sql
+```
+All users will have the password "kialo1234".
+
 ### Developing the plugin
 
 To update the plugin in Moodle during development, 
