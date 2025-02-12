@@ -105,10 +105,11 @@ class lti_flow {
         string $moodleuserid,
         int $courseid,
         array $roles,
-        array $optionalclaims
+        array $optionalclaims,
+        ?bool $deeplink = false
     ): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration($deploymentid);
+        $registration = $kialoconfig->create_registration($deploymentid, $deeplink);
 
         // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
         // We also assert that it's the same moodle user that was used in the first step.
@@ -350,7 +351,8 @@ class lti_flow {
                 LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT => [
                     "id" => $courseid,
                 ],
-            ]
+            ],
+            true,
         );
     }
 

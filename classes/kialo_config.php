@@ -146,13 +146,13 @@ class kialo_config {
      * Returns the LTI tool interface representing kialo-edu.com.
      * @return Tool
      */
-    public function get_tool(): Tool {
+    public function get_tool(?bool $deeplink = false): Tool {
         $toolurl = $this->get_tool_url();
         return new Tool(
             'kialo-edu',                // Identifier.
             'Kialo Edu',                // Name.
             $toolurl,                   // Audience.
-            $toolurl . "/lti/start",    // OIDC initiation url.
+            $toolurl . ($deeplink ? "/lti/login" : "/lti/start"),    // OIDC initiation url.
             $toolurl . '/lti/launch',   // Launch url.
             $toolurl . '/lti/deeplink'  // Deep linking url.
         );
@@ -164,8 +164,8 @@ class kialo_config {
      * @return Registration
      * @throws \dml_exception
      */
-    public function create_registration(?string $deploymentid = null): Registration {
-        $tool = $this->get_tool();
+    public function create_registration(?string $deploymentid = null, ?bool $deeplink = false): Registration {
+        $tool = $this->get_tool($deeplink);
         $platformjwksurl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();
         $tooljwksurl = $this->get_tool_url() . "/lti/jwks.json";
         $deploymentids = $deploymentid ? [$deploymentid] : [];

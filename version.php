@@ -28,8 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_kialo';
 
 // See https://moodledev.io/docs/apis/commonfiles/version.php.
-$plugin->version = 2025012402;  // Must be incremented for each new release!
-$plugin->release = '1.4.0';  // Semantic version.
+$plugin->version = 2025021201;  // Must be incremented for each new release!
+$plugin->release = '1.4.1';  // Semantic version.
 
 // Officially we require PHP 7.4. The first Moodle version that requires this as a minimum is Moodle 4.1.
 // But technically this plugin also runs on older Moodle versions, as long as they run on PHP 7.4,
