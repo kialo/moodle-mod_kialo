@@ -111,6 +111,8 @@ final class kialo_config_test extends \advanced_testcase {
 
     /**
      * Tests the tool configuration.
+     * @param bool $usedeeplink Whether to use deep linking.
+     * @param string $expectedoidcinitiationurl The expected OIDC initiation URL.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool
      * @dataProvider tool_provider
      */
