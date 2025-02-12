@@ -130,7 +130,7 @@ final class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("https://www.kialo-edu.com/lti/launch", $tool->getLaunchUrl());
         $this->assertEquals("https://www.kialo-edu.com/lti/deeplink", $tool->getDeepLinkingUrl());
 
-        // Assert the URL that changes based on deep linking.
+        // Assert the URL that changes based on embedded parm.
         $this->assertEquals($expectedoidcinitiationurl, $tool->getOidcInitiationUrl());
     }
 
