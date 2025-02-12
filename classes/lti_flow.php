@@ -94,6 +94,7 @@ class lti_flow {
      * @param int $courseid The Moodle course ID of the course that the activity is in.
      * @param array $roles The LTI roles to assign to the user, e.g. Instructor or Learner.
      * @param array $optionalclaims Optional claims to include in the LTI message.
+     * @param bool|null $deeplink Whether this is a deep linking flow. Defaults to false.
      * @return LtiMessageInterface The LTI message that can be used to launch Kialo.
      * @throws LtiExceptionInterface
      * @throws \dml_exception

@@ -144,6 +144,7 @@ class kialo_config {
 
     /**
      * Returns the LTI tool interface representing kialo-edu.com.
+     * @param bool|null $deeplink Whether the tool is being used in a deeplink flow, defaults to false.
      * @return Tool
      */
     public function get_tool(?bool $deeplink = false): Tool {
@@ -161,6 +162,7 @@ class kialo_config {
     /**
      * Creates a new LTI tool registration for Kialo and one specific deployment id.
      * @param string|null $deploymentid The deployment id to use, or null, if it's not relevant.
+     * @param bool|null $deeplink Whether the registration is being created for a deeplink flow, defaults to false.
      * @return Registration
      * @throws \dml_exception
      */
