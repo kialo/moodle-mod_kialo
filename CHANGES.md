@@ -1,3 +1,7 @@
+### v1.4.1 (Build - 2025021201)
+
+* Bugfixes
+
 ### v1.4.0 (Build - 2025012402)
 
 * added display option that allows to choose to display the activity in an embed or new window
