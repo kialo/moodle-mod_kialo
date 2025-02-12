@@ -92,9 +92,9 @@ class lti_flow {
      * @param string $deploymentid The unique deployment ID of this activity (used to link the discussion on Kialo's side).
      * @param string $moodleuserid The Moodle user ID of the user that is launching the activity.
      * @param int $courseid The Moodle course ID of the course that the activity is in.
+     * @param bool $embedded Whether to display the Kialo app embedded in Moodle or in a new window.
      * @param array $roles The LTI roles to assign to the user, e.g. Instructor or Learner.
      * @param array $optionalclaims Optional claims to include in the LTI message.
-     * @param bool|null $deeplink Whether this is a deep linking flow. Defaults to false.
      * @return LtiMessageInterface The LTI message that can be used to launch Kialo.
      * @throws LtiExceptionInterface
      * @throws \dml_exception
@@ -105,12 +105,12 @@ class lti_flow {
         string $deploymentid,
         string $moodleuserid,
         int $courseid,
+        bool $embedded,
         array $roles,
-        array $optionalclaims,
-        ?bool $deeplink = false
+        array $optionalclaims
     ): LtiMessageInterface {
         $kialoconfig = kialo_config::get_instance();
-        $registration = $kialoconfig->create_registration($deploymentid, $deeplink);
+        $registration = $kialoconfig->create_registration($deploymentid, $embedded);
 
         // In lti_auth.php we require the user to be logged into Moodle and have permissions on the course.
         // We also assert that it's the same moodle user that was used in the first step.
@@ -184,6 +184,7 @@ class lti_flow {
      * @param string $deploymentid Usually KIALO_LTI_DEPLOYMENT_ID
      * @param string $moodleuserid
      * @param string $discussionurl
+     * @param bool $embedded
      * @param string|null $groupid
      * @param string|null $groupname
      * @return LtiMessageInterface
@@ -197,6 +198,7 @@ class lti_flow {
         string $deploymentid,
         string $moodleuserid,
         string $discussionurl,
+        bool $embedded,
         ?string $groupid = null,
         ?string $groupname = null
     ): LtiMessageInterface {
@@ -216,6 +218,7 @@ class lti_flow {
             $deploymentid,
             $moodleuserid,
             $courseid,
+            $embedded,
             $roles,
             [
                 // See https://www.imsglobal.org/spec/lti/v1p3#resource-link-claim.
@@ -333,6 +336,7 @@ class lti_flow {
             $deploymentid,
             $moodleuserid,
             $courseid,
+            false,
             ['http://purl.imsglobal.org/vocab/lis/v2/membership#Instructor'], // Only teachers can deeplink.
             [
                 new DeepLinkingSettingsClaim(
@@ -353,7 +357,6 @@ class lti_flow {
                     "id" => $courseid,
                 ],
             ],
-            true,
         );
     }
 
