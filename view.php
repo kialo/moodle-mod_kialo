@@ -54,7 +54,6 @@ if ($id) {
 }
 
 $context = context_module::instance($cm->id);
-
 require_login($course, false, $cm);
 require_capability('mod/kialo:view', $context);
 
@@ -64,6 +63,8 @@ if (isguestuser() || is_guest($context)) {
 
 $groupinfo = kialo_view::get_current_group_info($cm, $course);
 
+$embedded = $moduleinstance->display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW;
+
 try {
     $message = lti_flow::init_resource_link(
         $course->id,
@@ -71,6 +72,7 @@ try {
         KIALO_LTI_DEPLOYMENT_ID,
         $USER->id,
         $moduleinstance->discussion_url,
+        $embedded,
         $groupinfo->groupid,
         $groupinfo->groupname,
     );
@@ -79,7 +81,7 @@ try {
     $PAGE->set_url('/mod/kialo/view.php', ['id' => $cm->id]);
     $PAGE->set_title($moduleinstance->name);
 
-    if ($moduleinstance->display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW) {
+    if ($embedded) {
         echo $output->render(new loading_page(
             get_string("redirect_title", "mod_kialo"),
             get_string("redirect_loading", "mod_kialo"),

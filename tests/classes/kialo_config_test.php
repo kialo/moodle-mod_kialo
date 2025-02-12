@@ -111,16 +111,17 @@ final class kialo_config_test extends \advanced_testcase {
 
     /**
      * Tests the tool configuration.
-     * @param bool $usedeeplink Whether to use deep linking.
+     *
+     * @param bool $embedded Whether to display within embed.
      * @param string $expectedoidcinitiationurl The expected OIDC initiation URL.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool
      * @dataProvider tool_provider
      */
-    public function test_get_tool_parametrized(bool $usedeeplink, string $expectedoidcinitiationurl): void {
+    public function test_get_tool_parametrized(bool $embedded, string $expectedoidcinitiationurl): void {
         // Ensure no environment variable interferes.
         putenv("TARGET_KIALO_URL=");
         // Get the tool with the parameter.
-        $tool = kialo_config::get_instance()->get_tool($usedeeplink);
+        $tool = kialo_config::get_instance()->get_tool($embedded);
 
         // Assert the common values.
         $this->assertEquals("kialo-edu", $tool->getIdentifier());
@@ -140,9 +141,9 @@ final class kialo_config_test extends \advanced_testcase {
     public static function tool_provider(): array {
         return [
             // When not using deep linking.
-            'normal tool' => [false, "https://www.kialo-edu.com/lti/start"],
+            'embedded' => [true, "https://www.kialo-edu.com/lti/start"],
             // When using deep linking.
-            'deeplink tool' => [true, "https://www.kialo-edu.com/lti/login"],
+            'new window' => [false, "https://www.kialo-edu.com/lti/login"],
         ];
     }
 
