@@ -337,6 +337,29 @@ final class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * Tests the platform configuration.
+     *
+     * @covers \mod_kialo\lti_flow::init_resource_link
+     */
+    public function test_init_non_embedded_resource_link(): void {
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "teacher");
+
+        // Construct the initial LTI message sent to Kialo when the user clicks on the activity.
+        $deploymentid = "random-string-123";
+        $discussionurl = "random-discussion-url.com";
+        $message = lti_flow::init_resource_link(
+            $this->course->id,
+            $this->cmid,
+            $deploymentid,
+            $this->user->id,
+            $discussionurl,
+            false
+        );
+
+        $this->assertStringContainsString('/lti/login', $message->getUrl());
+    }
+
+    /**
      * Tests the initial LTI flow step, when Moodle redirects the user to Kialo.
      *
      * @covers \mod_kialo\lti_flow::init_resource_link
@@ -352,11 +375,15 @@ final class lti_flow_test extends \advanced_testcase {
             $this->cmid,
             $deploymentid,
             $this->user->id,
-            $discussionurl
+            $discussionurl,
+            true
         );
         $this->assertNotNull($message);
 
         $params = $message->getParameters()->jsonSerialize();
+
+        $this->assertStringContainsString('/lti/start', $message->getUrl());
+
         $this->assertEquals('https://www.example.com/moodle/mod/kialo', $params['iss']);
         $this->assertEquals($this->course->id . "/" . $this->user->id, $params['login_hint']);
         $this->assertEquals($discussionurl, $params['target_link_uri']);
@@ -421,6 +448,7 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
+            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );
@@ -477,6 +505,7 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
+            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );
@@ -731,6 +760,8 @@ final class lti_flow_test extends \advanced_testcase {
         $deploymentid = "random-string-123";
         $message = lti_flow::init_deep_link($this->course->id, $this->user->id, $deploymentid);
         $this->assertNotNull($message);
+
+        $this->assertStringContainsString('/lti/login', $message->getUrl());
 
         $params = $message->getParameters()->jsonSerialize();
         $this->assertEquals('https://www.example.com/moodle/mod/kialo', $params['iss']);

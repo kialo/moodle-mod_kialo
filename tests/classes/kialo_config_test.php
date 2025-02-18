@@ -108,20 +108,43 @@ final class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("Kialo Moodle Plugin", $platform->getName());
     }
 
+
     /**
      * Tests the tool configuration.
+     *
+     * @param bool $embedded Whether to display within embed.
+     * @param string $expectedoidcinitiationurl The expected OIDC initiation URL.
      * @covers \mod_kialo\kialo_config::get_instance::get_tool
+     * @dataProvider tool_provider
      */
-    public function test_get_tool(): void {
+    public function test_get_tool_parametrized(bool $embedded, string $expectedoidcinitiationurl): void {
+        // Ensure no environment variable interferes.
         putenv("TARGET_KIALO_URL=");
-        $tool = kialo_config::get_instance()->get_tool();
+        // Get the tool with the parameter.
+        $tool = kialo_config::get_instance()->get_tool($embedded);
 
+        // Assert the common values.
         $this->assertEquals("kialo-edu", $tool->getIdentifier());
         $this->assertEquals("Kialo Edu", $tool->getName());
         $this->assertEquals("https://www.kialo-edu.com", $tool->getAudience());
         $this->assertEquals("https://www.kialo-edu.com/lti/launch", $tool->getLaunchUrl());
-        $this->assertEquals("https://www.kialo-edu.com/lti/start", $tool->getOidcInitiationUrl());
         $this->assertEquals("https://www.kialo-edu.com/lti/deeplink", $tool->getDeepLinkingUrl());
+
+        // Assert the URL that changes based on embedded parm.
+        $this->assertEquals($expectedoidcinitiationurl, $tool->getOidcInitiationUrl());
+    }
+
+    /**
+     * Provides the tool configuration parameters.
+     * @return array
+     */
+    public static function tool_provider(): array {
+        return [
+            // When not using deep linking.
+            'embedded' => [true, "https://www.kialo-edu.com/lti/start"],
+            // When using deep linking.
+            'new window' => [false, "https://www.kialo-edu.com/lti/login"],
+        ];
     }
 
     /**
