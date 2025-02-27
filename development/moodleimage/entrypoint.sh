@@ -9,6 +9,6 @@ su - www-data -s /bin/bash -c "php /var/www/html/admin/cli/install.php --non-int
 sed -i '/require_once/i\require_once(__DIR__ . "/config_kialo.php");' /var/www/html/config.php
 
 # Make localhost.kialolabs.com point to the host machine IP address.
-echo "$(dig +short A host.docker.internal | head -n 1) localhost.kialolabs.com" >> /etc/hosts
+echo "$HOST_IP localhost.kialolabs.com" >> /etc/hosts
 
 exec /usr/local/bin/moodle-docker-php-entrypoint "$@"
