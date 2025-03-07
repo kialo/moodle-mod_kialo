@@ -212,9 +212,18 @@ Try deleting both the docker images, and the folder `development/moodle`, and th
 This can occur if the Kialo backend cannot connect to the `moodle` container or vice versa.
 Check that the Kialo backend and `moodle` containers can `ping` or `curl` the other.
 
+#### Kialo running with Docker
 If the Kialo backend container cannot reach the `moodle` container, check the following:
 * The containers are on the same Docker network.
 * The hostname used for Moodle is one of the network aliases of the `moodle` container. Run `docker inspect {moodle_container_name}` to check.
 
 If the `moodle` container cannot reach the Kialo backend container, check the following:
 * The containers are on the same Docker network.
+
+#### Kialo running with Honcho
+If the `moodle` container cannot reach the Kialo backend, check the following:
+* On Linux, the firewall may be preventing the `moodle` container from connecting to Kialo running on localhost. Example steps with `ufw`:
+   * Find the IP range for the docker network: `docker network inspect kialo_default`.
+   * Find the corresponding network interface created by docker with this IP address: `ip a`. It may have a name like `br-{RANDOM HASH}`. Copy this name.
+   * Add a new rule to allow traffic from the docker network to the host: `sudo ufw allow in on {NETWORK INTERFACE NAME} from {DOCKER NETWORK IP RANGE}`.
+   * After you are done with moodle, clean up the firewall rule. Find the rule number with `sudo ufw status numbered` and delete it with `sudo ufw delete {RULE NUMBER}`.
