@@ -1,5 +1,27 @@
 #!/bin/bash
 
+is_kialo_reachable() {
+    curl -s --connect-timeout 5 "$TARGET_KIALO_URL" > /dev/null
+}
+
+if ! is_kialo_reachable; then
+    KIALO_IP="${KIALO_IP:-$(dig +short A host.docker.internal | head -n 1)}"
+    if [[ -n "$KIALO_IP" ]]; then
+        echo "Adding $KIALO_IP as the IP for local Kialo"
+        echo "$KIALO_IP localhost.kialolabs.com" >> /etc/hosts
+    else
+        echo "No IP found for local Kialo. If you are using Linux, make sure to set a KIALO_IP in the .env file. Exiting"
+        exit 1
+    fi
+
+    is_kialo_reachable || {
+        echo "Could not connect to local Kialo. Make sure that Kialo is running or consult the README for troubleshooting. Exiting"
+        exit 1
+    }
+fi
+
+echo "Moodle can reach local Kialo, continuing with installation"
+
 # Install Moodle. See https://docs.moodle.org/404/en/Installing_Moodle#Command_line_installer
 chown -R www-data /var/www/html
 su - www-data -s /bin/bash -c "php /var/www/html/admin/cli/install.php --non-interactive --agree-license --allow-unstable --wwwroot=$MOODLE_HOST --dataroot=/var/www/moodledata --dbtype=mariadb --dbhost=$MOODLE_DATABASE_HOST --dbname=moodle --dbuser=moodle --dbport=$MOODLE_DATABASE_PORT_NUMBER --fullname=Moodle --shortname=moodle --adminuser=user --adminpass=$MOODLE_PASSWORD --adminemail=sre@kialo.com --supportemail=sre@kialo.com"
