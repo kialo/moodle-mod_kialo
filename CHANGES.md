@@ -2,70 +2,62 @@
 
 * Bugfixes
 
-### v1.4.0 (Build - 2025012402)
+### Release Notes v1.4.1
 
-* added display option that allows to choose to display the activity in an embed or new window
+* Streamlined activity setup process, making it quicker and easier to get started.
 
-### v1.3.3 (Build - 2025012401)
+### Release Notes v1.4.0
 
-* Bugfixes: grade syncing issues ("LMS configuration issue")
+* **New:** You can now choose to display discussions right inside Moodle, making it easier for students to participate.
 
-### v1.3.2 (Build - 2025012201)
+### Release Notes v1.3.3
 
-* Bugfixes
+* **Fix:** Grading-related issues have been fixed, normally occurring when there were plugin and non-plugin Kialo activities set up in the same course.
 
-### v1.3.0 (Build - 2024101601)
+### Release Notes v1.3.2
 
-* Added Grading
-* Improved Moodle 4.5 compatibility
+* Minor, internal improvements have been rolled out.
 
-### v1.2.1 (Build - 2024091201)
+### Release Notes v1.3.0
 
-* Namespaced styles
-* Fixed missing language strings
+* **New:** Educators utilizing the grading feature in Kialo can now sync grades from a discussion with Moodle, meaning that grades and feedback given to students in discussion activities in courses are now viewable directly in Moodle.
 
-### v1.2.0 (Build - 2024090201)
+### Release Notes v1.2.1
 
-* Added support for groups and groupings.
+* Improved plugin to ensure compatibility and conformity with the Moodle platform.
 
-### v1.1.1 (Build - 2024071001)
+### Release Notes v1.2.0
 
-* Always render Kialo icon on neutral background
-* Prevent Kialo icon colors from being altered
+* **New:** Improved group mode support for Kialo activities in Moodle, allowing educators to split students into separate, unique groups with their own discussions and theses. In addition to the current small group assignment functionality available natively in Kialo, students can be assigned into Kialo discussion groups corresponding to those in their Moodle course.
 
-### v1.1.0 (Build - 2024053101)
+### Release Notes v1.1.1
 
-* Moodle 4.4 compatibility
+* **Fix:** Minor change making the Kialo logo appear correctly and consistently in Moodle.
 
-### v1.0.26 (Build - 2023121501)
+### Release Notes v1.1.0
 
-* Improved compatibility with future PHP versions.
+* Minor update to support the latest version of Moodle, 4.4.
 
-### v1.0.25 (Build - 2023112901)
+### Release Notes v1.0.26
 
-* Minor internal improvements
+* Final release for the initial iteration of the Kialo Moodle plugin with minor code changes and updates.
 
-### v1.0.24 (Build - 2023111702)
+### Release Notes v1.0.25
 
-* Send plugin's version and "platform" information using standard LTI claims.
-* Replaced hardcoded strings in lti_select.php.
+* Minor change to allow the Moodle platform to correctly parse language strings from Kialo.
 
-### v1.0.23 (Build - 2023102005)
+### Release Notes v1.0.24
 
-* Send plugin version number to Kialo.
-* Fix help center link.
-* Minor internal improvements.
-* Added warning about group mode support.
+* Replaced leftover hard-coded strings in Kialo for compatibility with Moodle platform.
 
-### v1.0.22 (Build - 2023091401)
+### Release Notes v1.0.23
 
-* Do not send the default picture to Kialo when the user has no profile picture set in Moodle.
+* **New:** Introduced automated user provisioning, enabling automatic Kialo account creation for Moodle users participating in discussions via Moodle activities.
 
-### v1.0.21 (Build - 2023091107)
+### Release Notes v1.0.22
 
-* Initial, public release of the Kialo plugin for Moodle.
-* Automatic release via GitHub actions.
+* Improved avatar import, so that users with the default Moodle avatar get a new default avatar in Kialo.
 
-### v1.0.20 and earlier
+### Release Notes v1.0.21
 
-* Internal test releases.
+* Initial release of the Kialo plugin for Moodle.
