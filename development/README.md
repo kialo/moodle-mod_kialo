@@ -135,6 +135,11 @@ Each time you add new test files, you need to run `development/tests-init.sh` ag
 
 ## Creating Releases
 
+### Writing Release Notes
+
+See our [process document](https://docs.google.com/document/d/1iiZu7URlU0aeUQjig49_E6hHAXkJA-Yv0dee6Lo9Qts/edit?tab=t.0#heading=h.35vhdy4o8n97)
+on how to write release notes.
+
 ### Automatic Release
 
 We use GitHub Actions to automatically create a release whenever a new tag is pushed to the repository.
@@ -143,7 +148,7 @@ which is configured as a secret in this GitHub repo.
 
 To create a new release, follow these steps:
 
-1. Ensure the version in `version.php` has been incremented and `CHANGES.md` has been updated accordingly. 
+1. Ensure the version in `version.php` has been incremented and `CHANGES.md` has been [updated accordingly](https://docs.google.com/document/d/1iiZu7URlU0aeUQjig49_E6hHAXkJA-Yv0dee6Lo9Qts/edit?tab=t.0#heading=h.35vhdy4o8n97).
 2. Create a new tag, e.g. `git tag v1.2.3`.
    * For pre-releases that should not be pushed to the moodle plugin directory, use a tag name like `v1.2.3-beta1`.
         As long as the name contains the keyword `beta`, the release will not be pushed to the moodle plugin directory.
