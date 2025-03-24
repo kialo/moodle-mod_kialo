@@ -71,6 +71,24 @@ jobs:
         with:
           path: plugin
 
+      # Cache Composer cache for both plugin and CI installation steps.
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      # Cache the plugin's vendor directory.
+      - name: Cache Plugin Vendor Directory
+        uses: actions/cache@v4
+        with:
+          path: plugin/vendor
+          key: ${{ runner.os }}-plugin-vendor-${{ hashFiles('plugin/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-plugin-vendor-
+
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
         with:
@@ -85,6 +103,15 @@ jobs:
         run: |
           cd plugin
           composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader
+
+      # Cache the moodle-plugin-ci vendor directory.
+      - name: Cache Moodle Plugin CI Directory
+        uses: actions/cache@v4
+        with:
+          path: ci/vendor
+          key: ${{ runner.os }}-moodle-plugin-ci-${{ hashFiles('ci/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-moodle-plugin-ci-
 
       - name: Initialise moodle-plugin-ci
         run: |
