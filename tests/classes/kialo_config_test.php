@@ -25,6 +25,9 @@
 
 namespace mod_kialo;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\CoversMethod;
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
@@ -45,6 +48,7 @@ final class kialo_config_test extends \advanced_testcase {
 
     /**
      * Tests the default tool URL.
+     *
      * @covers \mod_kialo\kialo_config::get_instance::get_tool_url
      */
     public function test_default_tool_url(): void {
@@ -108,13 +112,13 @@ final class kialo_config_test extends \advanced_testcase {
         $this->assertEquals("Kialo Moodle Plugin", $platform->getName());
     }
 
-
+    #[DataProvider('tool_provider')]
     /**
      * Tests the tool configuration.
      *
      * @param bool $embedded Whether to display within embed.
-     * @param string $expectedoidcinitiationurl The expected OIDC initiation URL.
-     * @covers \mod_kialo\kialo_config::get_instance::get_tool
+     * @param string $expectedoidcinitiationurl The expected OIDC initiation URL
+     * @covers       \mod_kialo\kialo_config::get_instance::get_tool
      * @dataProvider tool_provider
      */
     public function test_get_tool_parametrized(bool $embedded, string $expectedoidcinitiationurl): void {
@@ -141,9 +145,15 @@ final class kialo_config_test extends \advanced_testcase {
     public static function tool_provider(): array {
         return [
             // When not using deep linking.
-            'embedded' => [true, "https://www.kialo-edu.com/lti/start"],
+            'embedded' => [
+                'embedded' => true,
+                'expectedoidcinitiationurl' => "https://www.kialo-edu.com/lti/start",
+            ],
             // When using deep linking.
-            'new window' => [false, "https://www.kialo-edu.com/lti/login"],
+            'new window' => [
+                'embedded' => false,
+                'expectedoidcinitiationurl' => "https://www.kialo-edu.com/lti/login",
+            ],
         ];
     }
 

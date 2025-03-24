@@ -25,6 +25,9 @@
 
 namespace mod_kialo;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\CoversFunction;
+
 defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->dirroot . '/mod/kialo/lib.php');
@@ -42,7 +45,6 @@ final class lib_test extends \advanced_testcase {
 
     /**
      * Check support
-     *
      * @covers ::kialo_supports
      */
     public function test_kialo_supports(): void {
@@ -146,6 +148,7 @@ final class lib_test extends \advanced_testcase {
         $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $info->onclick);
     }
 
+    #[DataProvider('kialo_pre_enable_plugin_actions_provider')]
     /**
      * Check the kialo_pre_enable_plugin_actions function.
      *
@@ -165,6 +168,7 @@ final class lib_test extends \advanced_testcase {
         $this->assertEquals($expected, kialo_pre_enable_plugin_actions());
     }
 
+    #[DataProvider('kialo_pre_enable_plugin_actions_provider')]
     /**
      * Check the kialo_pre_enable_plugin_actions function.
      *
@@ -192,9 +196,18 @@ final class lib_test extends \advanced_testcase {
      */
     public static function kialo_pre_enable_plugin_actions_provider(): array {
         return [
-                'Initially unset' => [null, false],
-                'Set to false' => [false, false],
-                'Initially set' => [true, true],
+            'Initially unset' => [
+                'initialstate' => null,
+                'expected' => false,
+            ],
+            'Set to false' => [
+                'initialstate' => false,
+                'expected' => false,
+            ],
+            'Initially set' => [
+                'initialstate' => true,
+                'expected' => true,
+            ],
         ];
     }
 
