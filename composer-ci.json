@@ -1,0 +1,58 @@
+{
+  "name": "kialo/moodle-plugin",
+  "description": "Integrates Kialo Edu into Moodle",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Kialo",
+      "email": "support@kialo-edu.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "oat-sa/lib-lti1p3-core": "^6.9",
+    "guzzlehttp/guzzle": "^6.5 || ^7.0",
+    "ext-openssl": "*",
+    "ext-json": "*",
+    "cache/adapter-common": "^1.2"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
+    "moodlehq/moodle-cs": "^v3.4.10",
+    "phpunit/phpunit": "^9.6",
+    "friendsofphp/php-cs-fixer": "^3.58",
+    "phpro/grumphp-shim": "^1.13"
+  },
+  "config": {
+    "platform": {
+      "php": "7.4"
+    },
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "phpro/grumphp-shim": true
+    }
+  },
+  "autoload-dev": {
+    "exclude-from-classmap": ["vendor/phpunit/"]
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=moodle",
+    "php-cs-fixer": "php-cs-fixer --config=.php-cs-fixer.php",
+    "post-install-cmd": [
+      "phpcs --config-set default_standard moodle"
+    ],
+    "lint": [
+      "phpcs --standard=moodle --ignore=vendor,development -s .",
+      "php-cs-fixer fix --dry-run --diff"
+    ],
+    "fix": [
+      "phpcbf --standard=moodle --ignore=vendor,development .",
+      "php-cs-fixer fix"
+    ],
+    "bundle": [
+      "cd development && ./bundle.sh"
+    ]
+  }
+}

@@ -82,6 +82,8 @@ jobs:
           coverage: none
 
       - name: Install plugin dependencies
+        env:
+          COMPOSER: composer-ci.json
         run: |
           cd plugin
           composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader
@@ -97,6 +99,7 @@ jobs:
       - name: Install moodle-plugin-ci
         run: |
           moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
+
         env:
           DB: ${{ matrix.database }}
           MOODLE_BRANCH: ${{ matrix.moodle-branch }}
