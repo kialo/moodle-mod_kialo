@@ -39,16 +39,14 @@ It also starts the hosted version of the Moodle app on port 8100.
 It may take a few minutes for the `moodle` container to finish downloading and installing the app.
 
 ```shell
-cd development
-
 # Follow instructions in the .env file depending on your Kialo setup.
-cp .env.example .env
+cp development/.env.example development/.env
 
 # Run this once to set up the Kialo plugin and prevent initialization errors.
-# May need sudo on Linux.
-./sync.sh
+# May need to run the sync script directly with sudo on Linux.
+composer docker:sync
 
-docker compose up
+composer docker:up
 ```
 
 At this point Moodle should be running locally on port 8080.
@@ -60,6 +58,7 @@ You can add an entry to your `/etc/hosts` file so the custom hostname resolves c
 After you started Moodle for the first time, do the following to set some useful default settings:
 
 * Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import.
+* Accept Kialo plugin ToS at http://{MOODLE_HOST}:8080/admin/settings.php?section=modsettingkialo.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
 testing Kialo locally won't work, as communication will be blocked by Moodle.
@@ -67,10 +66,9 @@ This also enables web services for mobile (required for the mobile app) and enab
 
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
 
-If you'd like to set up the instance with some test users and classes, run the following commands:
+If you'd like to set up the instance with some test users and classes, run the following command:
 ```shell
-docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-users.sql
-docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-courses-and-groups.sql
+composer docker:populate-users
 ```
 All users will have the password "kialo1234".
 
@@ -139,16 +137,16 @@ because they require access to the Moodle instance.
 
 To run all tests, follow these steps:
 
-1. Start the docker compose setup: `cd development; docker compose up`
+1. Start the docker compose setup: `composer docker:up`
 2. Initialise the test environment: `development/tests-init.sh`
-3. Ensure the plugin files are synchronized with the Moodle instance: `cd development; sync.sh`
+3. Ensure the plugin files are synchronized with the Moodle instance: `composer docker:sync`
 4. Run the tests:
 
    * To run all tests, execute `development/tests-run-all.sh`
    * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
    * Alternatively, you can use `composer test` to run both init and all tests.
 
-Each time you change the plugin code or a test, you need to run `cd development; sync.sh` again.
+Each time you change the plugin code or a test, you need to run `composer docker:sync` again.
 If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
 
 Each time you add new test files, you need to run `development/tests-init.sh` again.
@@ -202,10 +200,10 @@ To release a new version, follow these steps:
 
 ## Troubleshooting
 
-### When running `docker compose up` the moodle container exits shortly after startup with exit code 1
+### When running `composer docker:up` the moodle container exits shortly after startup with exit code 1
 
-This can happen if you deleted your docker containers before for some reason and then tried running `docker compose up` again.
-Try deleting both the docker images, and the folder `development/moodle`, and then run `docker compose up` again.
+This can happen if you deleted your docker containers before for some reason and then tried running `composer docker:up` again.
+Try resetting the docker images with `composer docker:reset`, delete the folder `development/moodle`, and then run `composer docker:up` again.
 
 ### The LTI flow fails when connecting linking or launching a discussion
 
