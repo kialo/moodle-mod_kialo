@@ -28,7 +28,7 @@ services:
         # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
         PHP_VERSION: ${PHP_VERSION:-8.2}
     ports:
-      - '8080:80'
+      - '8080:8080'
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
@@ -36,6 +36,7 @@ services:
       - MOODLE_PASSWORD=kialo1234
       # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
+      - KIALO_IP=${KIALO_IP}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
     volumes:
       - './mod_kialo:/var/www/html/mod/kialo'

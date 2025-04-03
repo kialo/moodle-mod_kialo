@@ -31,30 +31,48 @@ into the mounted moodle plugin folder on every change.
 
 ## How to run Moodle
 
-Before you run Moodle copy `.env.example` to `.env` and adjust the values to your needs. 
-See `.env.example` for instructions.
+### First time setup
 
-The following command starts Moodle locally on port 8080 with MariaDB running on port 3366.
+The following commands starts Moodle locally on port 8080 with MariaDB running on port 3366.
 This is using non-default ports to avoid conflicts with already running services.
 It also starts the hosted version of the Moodle app on port 8100.
+It may take a few minutes for the `moodle` container to finish downloading and installing the app.
 
 ```shell
-cd development
-cp .env.example .env # before starting compose, check instructions in this file
-docker compose up
+# Follow instructions in the .env file depending on your Kialo setup.
+cp development/.env.example development/.env
+
+# Run this once to set up the Kialo plugin and prevent initialization errors.
+# May need to run the sync script directly with sudo on Linux.
+composer docker:sync
+
+composer docker:up
 ```
 
-At this point Moodle should be running locally on port 8080. You can use any hostname that resolves to localhost, e.g. `http://localhost:8080`. You can also add an entry to your `/etc/hosts` file to use a custom hostname like 'moodle.localhost'.
+At this point Moodle should be running locally on port 8080.
+You may access the site using any hostname that resolves to localhost, e.g. `http://localhost:8080`.
+**If you are running Kialo in Docker, you must use a non-localhost hostname** so the Kialo backend can connect to the `moodle` container using the same name.
+This can be the IP address of the `moodle` container or the Docker hostname of the `moodle` container (`moodle` by default).
+You can add an entry to your `/etc/hosts` file so the custom hostname resolves correctly (see `.env.example`).
 
 After you started Moodle for the first time, do the following to set some useful default settings:
 
-* Import `development/config/kialo-admin-preset-universal.xml` via http://localhost:8080/admin/tool/admin_presets/index.php?action=import.
+* Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import.
+* Accept Kialo plugin ToS at http://{MOODLE_HOST}:8080/admin/settings.php?section=modsettingkialo.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
 testing Kialo locally won't work, as communication will be blocked by Moodle.
 This also enables web services for mobile (required for the mobile app) and enables debug messages for developers.
 
 By default there is only one user with the username "user" and password "kialo1234". This is the admin user.
+
+If you'd like to set up the instance with some test users and classes, run the following command:
+```shell
+composer docker:populate-users
+```
+All users will have the password "kialo1234".
+
+### Developing the plugin
 
 To update the plugin in Moodle during development, 
 you have to use `development/sync.sh` to copy over the code into the `development/mod_kialo` folder,
@@ -119,16 +137,16 @@ because they require access to the Moodle instance.
 
 To run all tests, follow these steps:
 
-1. Start the docker compose setup: `cd development; docker compose up`
+1. Start the docker compose setup: `composer docker:up`
 2. Initialise the test environment: `development/tests-init.sh`
-3. Ensure the plugin files are synchronized with the Moodle instance: `cd development; sync.sh`
+3. Ensure the plugin files are synchronized with the Moodle instance: `composer docker:sync`
 4. Run the tests:
 
    * To run all tests, execute `development/tests-run-all.sh`
    * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
    * Alternatively, you can use `composer test` to run both init and all tests.
 
-Each time you change the plugin code or a test, you need to run `cd development; sync.sh` again.
+Each time you change the plugin code or a test, you need to run `composer docker:sync` again.
 If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
 
 Each time you add new test files, you need to run `development/tests-init.sh` again.
@@ -182,7 +200,28 @@ To release a new version, follow these steps:
 
 ## Troubleshooting
 
-### When running `docker compose up` the moodle container exits shortly after startup with exit code 1
+### When running `composer docker:up` the moodle container exits shortly after startup with exit code 1
 
-This can happen if you deleted your docker containers before for some reason and then tried running `docker compose up` again.
-Try deleting both the docker images, and the folder `development/moodle`, and then run `docker compose up` again.
+This can happen if you deleted your docker containers before for some reason and then tried running `composer docker:up` again.
+Try resetting the docker images with `composer docker:reset`, delete the folder `development/moodle`, and then run `composer docker:up` again.
+
+### The LTI flow fails when connecting linking or launching a discussion
+
+This can occur if the Kialo backend cannot connect to the `moodle` container or vice versa.
+Check that the Kialo backend and `moodle` containers can `ping` or `curl` the other.
+
+#### Kialo running with Docker
+If the Kialo backend container cannot reach the `moodle` container, check the following:
+* The containers are on the same Docker network.
+* The hostname used for Moodle is one of the network aliases of the `moodle` container. Run `docker inspect {moodle_container_name}` to check.
+
+If the `moodle` container cannot reach the Kialo backend container, check the following:
+* The containers are on the same Docker network.
+
+#### Kialo running with Honcho
+If the `moodle` container cannot reach the Kialo backend, check the following:
+* On Linux, the firewall may be preventing the `moodle` container from connecting to Kialo running on localhost. Example steps with `ufw`:
+   * Find the IP range for the docker network: `docker network inspect kialo_default`.
+   * Find the corresponding network interface created by docker with this IP address: `ip a`. It may have a name like `br-{RANDOM HASH}`. Copy this name.
+   * Add a new rule to allow traffic from the docker network to the host: `sudo ufw allow in on {NETWORK INTERFACE NAME} from {DOCKER NETWORK IP RANGE}`.
+   * After you are done with moodle, clean up the firewall rule. Find the rule number with `sudo ufw status numbered` and delete it with `sudo ufw delete {RULE NUMBER}`.
