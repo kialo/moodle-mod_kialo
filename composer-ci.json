@@ -34,6 +34,9 @@
       "phpro/grumphp-shim": true
     }
   },
+  "autoload-dev": {
+    "exclude-from-classmap": ["vendor/phpunit/"]
+  },
   "scripts": {
     "phpcs": "phpcs --standard=moodle",
     "php-cs-fixer": "php-cs-fixer --config=.php-cs-fixer.php",
@@ -48,39 +51,8 @@
       "phpcbf --standard=moodle --ignore=vendor,development .",
       "php-cs-fixer fix"
     ],
-    "test": [
-      "cd development && ./sync.sh",
-      "cd development && ./tests-init.sh",
-      "cd development && ./tests-run-all.sh"
-    ],
-    "test-single": [
-      "cd development && ./sync.sh",
-      "cd development && ./tests-init.sh",
-      "cd development && ./tests-run.sh"
-    ],
-    "test-privacy": [
-      "cd development && ./sync.sh",
-      "cd development && ./tests-init.sh",
-      "cd development && ./tests-privacy.sh"
-    ],
     "bundle": [
       "cd development && ./bundle.sh"
-    ],
-    "docker:sync": [
-      "cd development && ./sync.sh"
-    ],
-    "docker:reset": [
-      "cd development && docker compose down --rmi 'all'"
-    ],
-    "docker:up": [
-      "cd development && docker compose up -d --build"
-    ],
-    "docker:down": [
-      "cd development && docker compose down"
-    ],
-    "docker:populate-users": [
-      "docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-users.sql",
-      "docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-courses-and-groups.sql"
     ]
   }
 }
