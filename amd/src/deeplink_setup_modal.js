@@ -13,28 +13,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+import {getString} from 'core/str';
+
 /**
  * Javascript code for module instance settings form.
  *
- * @module      mod_kialo/discussion_selection
+ * @module      mod_kialo/deeplink_setup_modal
  * @copyright   2025 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @param {string} deeplinkUrl - The url for discussion selection in Kialo
  */
 
-import ModalFactory from 'core/modal_factory';
-import {getString} from 'core/str';
-
-// TODO: use Modal for newer versions of Moodle? ModalFactory will be removed in 4.7 and 5.2
-// only support for moodle 4.0+
-export const init = async(deeplinkUrl) => {
+/**
+ * Given a modal creation function and a deeplink URL, set up the modal
+ *
+ * @param {function} modalFn - The modal creation function
+ * @param {string} deeplinkUrl - The URL for discussion selection in Kialo
+ */
+export const setupModal = async(modalFn, deeplinkUrl) => {
     let modal;
     document.getElementById('id_kialo_select_discussion').addEventListener('click', async() => {
-        modal = await ModalFactory.create({
+        modal = await modalFn({
             title: await getString('select_discussion', 'mod_kialo'),
             body: `<iframe class="kialo-iframe" src="${deeplinkUrl}"></iframe>`,
             large: true,
         });
+
         modal.show();
     });
 
@@ -55,10 +58,8 @@ export const init = async(deeplinkUrl) => {
                 nameInput.value = event.data.discussiontitle;
             }
 
-            if (modal) {
-                modal.hide();
-                modal.destroy();
-            }
+            modal.hide();
+            modal.destroy();
         }
     );
 };

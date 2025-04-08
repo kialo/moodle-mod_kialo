@@ -84,7 +84,7 @@ After cloning the Moodle repo, run `git clone git@github.com:kialo/moodle-mod_ki
 In the Moodle repo, go through the setup steps for NodeJS and Grunt (https://moodledev.io/general/development/tools/nodejs).
 
 While developing, Moodle will only serve the minified files in the `amd/build` directory.
-Have Grunt running (`npx grunt watch`) whenever you make changes to JavaScript files to automatically build the minified files and source maps.
+Navigate to the plugin directory (`mod/kialo`) and have Grunt running (`npx grunt watch`) whenever you make changes to JavaScript files to automatically build the minified files and source maps.
 It's best to disable JS caching in the admin settings (http://{MOODLE_HOST}:8080/admin/settings.php?section=ajax).
 This will significantly slow down page loads, so only use this when necessary.
 The JavaScript files must still be synced to the docker container with `development/sync.sh`
