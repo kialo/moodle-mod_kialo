@@ -1,4 +1,4 @@
-### v1.4.2 (build - 2025032501)
+### v1.4.2 (Build - 2025032501)
 
 * Minor update to support the latest version of Moodle, 5.0
 
