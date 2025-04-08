@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-import {getString} from 'core/str';
-
 /**
  * Javascript code for module instance settings form.
  *
@@ -22,6 +20,8 @@ import {getString} from 'core/str';
  * @copyright   2025 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+import {getString} from 'core/str';
 
 /**
  * Given a modal creation function and a deeplink URL, set up the modal
