@@ -96,8 +96,7 @@ try {
 
         // We can't use html_writer here because it escapes our required query params.
         echo '<iframe id="kialocontentframe"
-             height="600px"
-             width="100%"
+             class="kialo-iframe"
              src="' . $message->toUrl() . '&embedded"
              allowfullscreen="true">
       </iframe>';

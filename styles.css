@@ -231,6 +231,8 @@
     display: none !important; /* stylelint-disable-line declaration-no-important */
 }
 
-#kialocontentframe {
+.kialo-iframe {
+    height: 600px;
+    width: 100%;
     border: none;
 }
