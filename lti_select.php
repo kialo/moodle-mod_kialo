@@ -88,7 +88,7 @@ if ($courseid) {
     ]);
     echo "<script>
         window.addEventListener('message', (event) => event.data.type === 'kialo_selection_acknowledged' && window.close());
-        window.opener.postMessage({$message}, '*');
+        window.parent.postMessage({$message}, '*');
     </script>";
 
     // The user should basically not see this, or just very briefly.
