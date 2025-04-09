@@ -1,3 +1,7 @@
+### v1.4.2 (Build - 2025032501)
+
+* Minor update to support the latest version of Moodle, 5.0
+
 ### v1.4.1 (Build - 2025021201)
 
 * Streamlined activity setup process, making it quicker and easier to get started.

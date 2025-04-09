@@ -117,6 +117,10 @@ If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBSXML=1` to 
 UPDATE_THIRDPARTYLIBSXML=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
 ```
 
+Dependencies for pipeline runs are handled in the composer-ci.json file. If you need dependencies locally that
+result in pipeline failures, you may want to adjust this file to exclude certain dependencies that cause issues
+or change other settings that are not relevant for local development.
+
 ## Linting
 
 We use PHP CodeSniffer and php-cs-fixer to lint the code. To run the linter, execute `composer lint`.
