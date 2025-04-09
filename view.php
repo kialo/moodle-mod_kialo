@@ -72,7 +72,6 @@ try {
         KIALO_LTI_DEPLOYMENT_ID,
         $USER->id,
         $moduleinstance->discussion_url,
-        $embedded,
         $groupinfo->groupid,
         $groupinfo->groupname,
     );

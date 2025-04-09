@@ -353,7 +353,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            false
         );
 
         $this->assertStringContainsString('/lti/login', $message->getUrl());
@@ -376,7 +375,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true
         );
         $this->assertNotNull($message);
 
@@ -448,7 +446,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );
@@ -505,7 +502,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );

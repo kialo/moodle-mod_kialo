@@ -87,7 +87,6 @@ if ($courseid) {
             "discussiontitle" => $link->discussiontitle,
     ]);
     echo "<script>
-        window.addEventListener('message', (event) => event.data.type === 'kialo_selection_acknowledged' && window.close());
         window.parent.postMessage({$message}, '*');
     </script>";
 
