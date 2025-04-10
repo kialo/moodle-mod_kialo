@@ -37,6 +37,7 @@ export const setupModal = async(modalFn, deeplinkUrl) => {
             body: `<iframe class="kialo-iframe" src="${deeplinkUrl}"></iframe>`,
             large: true,
         });
+        modal.getModal().addClass('kialo-modal');
 
         modal.show();
     });

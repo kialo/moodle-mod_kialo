@@ -17,6 +17,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    animation: kialo-spinner-fade-in 1.5s ease-in 1;
 }
 
 .kialo-loading-title {
@@ -39,7 +40,6 @@
 }
 
 .kialo-spinner {
-    animation: kialo-spinner-fade-in 1.5s ease-in 1;
     overflow: hidden;
     position: relative;
     margin: 0 auto;
@@ -232,7 +232,18 @@
 }
 
 .kialo-iframe {
-    height: 600px;
+    min-height: 600px;
+    height: 100%;
     width: 100%;
     border: none;
+}
+
+/* ---- DISCUSSION SELECTION MODAL ---- */
+
+.kialo-modal {
+    height: 100%;
+}
+
+.kialo-modal .modal-body {
+    overflow-y: initial;
 }
