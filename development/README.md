@@ -93,7 +93,7 @@ If you imported the admin preset from `/development/config/kialo-admin-preset.xm
 
 ### Backup & Restore - cron jobs
 
-Course backups require the cron job to be executed. At the moment, this process is only possible manually due to our current setup.
+Course backups and restores require the cron job to be executed. At the moment, this process is only possible manually due to our current setup.
 * Uncheck `Cron execution via command line only` under site security settings (`http://{MOODLE_HOST}/admin/settings.php?section=sitepolicies`)
 * Open `http://{MOODLE_HOST}/admin/cron.php` - repeat this each time you run a backup & restore process.
 
