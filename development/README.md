@@ -73,14 +73,12 @@ The plugin folder is mounted in the Docker container, so your local changes shou
 If you do not immediately see changes, you may need to purge the cache as a Moodle admin user.
 
 #### JavaScript
-When working on JavaScript, nest the Kialo plugin repo in a local Moodle repo to use Moodle's tooling.
-After cloning the Moodle repo, run `git clone git@github.com:kialo/moodle-mod_kialo.git mod/kialo` to put the plugin code in the correct directory.
-In the Moodle repo, go through the setup steps for NodeJS and Grunt (https://moodledev.io/general/development/tools/nodejs).
-
 While developing, Moodle will only serve the minified files in the `amd/build` directory.
-Navigate to the plugin directory (`mod/kialo`) and have Grunt running (`npx grunt watch`) whenever you make changes to JavaScript files to automatically build the minified files and source maps.
+The Moodle container is set up to automatically build these files and source maps when you make a change in `amd/src`.
 It's best to disable JS caching in the admin settings (http://{MOODLE_HOST}:8080/admin/settings.php?section=ajax).
 This will significantly slow down page loads, so only use this when necessary.
+
+If the CI job fails on the Grunt task due to a mismatch of the JS files, you may need to switch your local Moodle container branch to `main` to update the build tools.
 
 ### Moodle versions
 

@@ -66,8 +66,14 @@
     "docker:reset": [
       "cd development && docker compose down --rmi 'all'"
     ],
+    "docker:rebuild-moodle": [
+      "cd development && docker compose down moodle && docker compose up -d --build moodle"
+    ],
     "docker:up": [
       "cd development && docker compose up -d --build"
+    ],
+    "docker:stop": [
+      "cd development && docker compose stop"
     ],
     "docker:down": [
       "cd development && docker compose down"

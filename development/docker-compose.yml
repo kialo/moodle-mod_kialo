@@ -44,6 +44,7 @@ services:
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
     volumes:
       - '..:/var/www/html/mod/kialo'
+      - /var/www/html/mod/kialo/.git
     depends_on:
       - mariadb
   moodleapp:
