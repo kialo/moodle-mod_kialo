@@ -16,6 +16,12 @@ RUN git clone git://git.moodle.org/moodle.git /var/www/html --depth=1 --branch $
 # Install dnsutils
 RUN apt-get update && apt-get install -y dnsutils
 
+# Create a non-root user with configurable UID/GID
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+RUN groupadd -g ${HOST_GID} developer && \
+    useradd -u ${HOST_UID} -g ${HOST_GID} -m -s /bin/bash developer
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY config.php /var/www/html/config_kialo.php
 
