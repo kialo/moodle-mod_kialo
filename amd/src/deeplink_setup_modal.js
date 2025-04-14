@@ -35,6 +35,7 @@ export const setupModal = async(modalFn, modalTitle, deeplinkUrl) => {
             title: modalTitle,
             body: `<iframe class="kialo-iframe" src="${deeplinkUrl}"></iframe>`,
             large: true,
+            removeOnClose: true,
         });
         modal.getModal().addClass('kialo-modal');
 
@@ -58,7 +59,6 @@ export const setupModal = async(modalFn, modalTitle, deeplinkUrl) => {
                 nameInput.value = event.data.discussiontitle;
             }
 
-            modal.hide();
             modal.destroy();
         }
     );
