@@ -22,6 +22,7 @@
  */
 
 import Modal from 'core/modal';
+import {getString} from 'core/str';
 import {setupModal} from './deeplink_setup_modal';
 
 /**
@@ -30,5 +31,9 @@ import {setupModal} from './deeplink_setup_modal';
  * @param {string} deeplinkUrl - The url for discussion selection in Kialo
  */
 export const init = async(deeplinkUrl) => {
-    await setupModal(Modal.create.bind(Modal), deeplinkUrl);
+    await setupModal(
+        Modal.create.bind(Modal),
+        await getString('select_discussion', 'mod_kialo'),
+        deeplinkUrl
+    );
 };

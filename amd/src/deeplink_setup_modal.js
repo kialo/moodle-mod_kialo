@@ -21,19 +21,18 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-import {getString} from 'core/str';
-
 /**
  * Given a modal creation function and a deeplink URL, set up the modal
  *
  * @param {function} modalFn - The modal creation function
+ * @param {string} modalTitle - The title for the discussion selection modal
  * @param {string} deeplinkUrl - The URL for discussion selection in Kialo
  */
-export const setupModal = async(modalFn, deeplinkUrl) => {
+export const setupModal = async(modalFn, modalTitle, deeplinkUrl) => {
     let modal;
     document.getElementById('id_kialo_select_discussion').addEventListener('click', async() => {
         modal = await modalFn({
-            title: await getString('select_discussion', 'mod_kialo'),
+            title: modalTitle,
             body: `<iframe class="kialo-iframe" src="${deeplinkUrl}"></iframe>`,
             large: true,
         });
