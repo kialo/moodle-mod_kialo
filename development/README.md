@@ -71,6 +71,7 @@ All users will have the password "kialo1234".
 
 The plugin folder is mounted in the Docker container, so your local changes should be reflected on refreshing the page.
 If you do not immediately see changes, you may need to purge the cache as a Moodle admin user.
+When logged in as the admin user, you can scroll to the bottom of any page and click on "Purge all caches" in the footer.
 
 #### JavaScript
 While developing, Moodle will only serve the minified files in the `amd/build` directory.
