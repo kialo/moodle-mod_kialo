@@ -26,7 +26,7 @@ services:
         # main (latest), MOODLE_405_STABLE etc, see https://github.com/moodle/moodle/branches
         MOODLE_BRANCH: ${MOODLE_BRANCH:-main}
         # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
-        PHP_VERSION: ${PHP_VERSION:-8.2}
+        PHP_VERSION: ${PHP_VERSION:-8.4}
     ports:
       - '8080:8080'
     environment:
