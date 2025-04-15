@@ -37,6 +37,7 @@ export const setupModal = async(modalFn, modalTitle, deeplinkUrl) => {
             large: true,
             removeOnClose: true,
         });
+        modal.setScrollable(false);
         modal.getModal().addClass('kialo-modal');
 
         modal.show();

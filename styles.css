@@ -240,10 +240,11 @@
 
 /* ---- DISCUSSION SELECTION MODAL ---- */
 
-.kialo-modal {
-    height: 100%;
+.modal .kialo-modal {
+    /* Bootstrap 5 has a variable available for the margin, but this requires Moodle 5 */
+    height: calc(100% - 3.5rem);
 }
 
-.kialo-modal .modal-body {
-    overflow-y: initial;
+.modal .kialo-modal .modal-content {
+    height: 100%;
 }

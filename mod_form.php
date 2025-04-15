@@ -94,7 +94,6 @@ class mod_kialo_mod_form extends moodleform_mod {
         $this->standard_grading_coursemodule_elements();
         $this->add_action_buttons();
 
-        $PAGE->requires->css('/mod/kialo/styles.css');
         if (version_compare(moodle_major_version(), '4.3', '<')) {
             $PAGE->requires->js_call_amd('mod_kialo/discussion_selection_modal_factory', 'init', [$deeplinkurl]);
         } else {

@@ -79,6 +79,9 @@ The Moodle container is set up to automatically build these files and source map
 It's best to disable JS caching in the admin settings (http://{MOODLE_HOST}:8080/admin/settings.php?section=ajax).
 This will significantly slow down page loads, so only use this when necessary.
 
+The Moodle container will also handle linting for the JS source files, and will not build the minified files if the linting fails.
+You can check the logs of the Moodle container to see the output of the linter.
+
 If the CI job fails on the Grunt task due to a mismatch of the JS files, you may need to switch your local Moodle container branch to `main` to update the build tools.
 
 ### Moodle versions
