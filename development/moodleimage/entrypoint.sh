@@ -53,6 +53,9 @@ if ! grep -q "config_kialo.php" /var/www/html/config.php; then
     echo "Added config_kialo.php to config.php"
 fi
 
+# For Linux, this suppresses an error message about file permissions when running tests
+git config --global --add safe.directory /var/www/html
+
 # Replace the default Apache port 80 with the exposed port 8080. When running Moodle and
 # Kialo in the same Docker network, it is necessary for the container port to be the same
 # as the exposed port so the Kialo backend can connect to the Moodle container using the
