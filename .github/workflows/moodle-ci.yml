@@ -45,7 +45,8 @@ jobs:
           - '7.4'  # minimum support version by Moodle 4.1
           - '8.0'
           - '8.1'
-          - '8.3' # max. supported version by Moodle 5.0 (as of writing)
+          - '8.3' # max. supported version by Moodle 4.5
+#          - '8.4' # max. supported version by Moodle 5.0, not used in testing yet because php-cs-fixer does not support it yet
         moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_405_STABLE', 'MOODLE_500_STABLE', 'main' ]  # LTS & latest.
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
         exclude:
