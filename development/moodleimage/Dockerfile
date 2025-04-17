@@ -1,6 +1,6 @@
 # See https://moodledev.io/general/development/policies/php for the list of available PHP versions.
 # Different versions of Moodle require different versions of PHP.
-ARG PHP_VERSION="8.2"
+ARG PHP_VERSION="8.4"
 
 FROM moodlehq/moodle-php-apache:${PHP_VERSION}
 

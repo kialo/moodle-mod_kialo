@@ -97,6 +97,12 @@ To use the local Moodle instance with the mobile app, you need to change the app
 and enable web services following these instructions: https://docs.moodle.org/402/en/Mobile_web_services.
 If you imported the admin preset from `/development/config/kialo-admin-preset.xml`, this should already be done.
 
+### Backup & Restore - cron jobs
+
+Course backups and restores require the cron job to be executed. At the moment, this process is only possible manually due to our current setup.
+* Uncheck `Cron execution via command line only` under site security settings (`http://{MOODLE_HOST}/admin/settings.php?section=sitepolicies`)
+* Open `http://{MOODLE_HOST}/admin/cron.php` - repeat this each time you run a backup & restore process.
+
 ### Use hosted Moodle instances
 
 If you don't want to or can't run Moodle locally, you can also use Moodle's hosted versions:
