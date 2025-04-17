@@ -1,3 +1,7 @@
+### v1.4.3 (Build - 2025040901)
+
+* Minor update to display the discussion selection page inside Moodle for supported browsers.
+
 ### v1.4.2 (Build - 2025032501)
 
 * Minor update to support the latest version of Moodle, 5.0
