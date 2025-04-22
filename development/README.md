@@ -41,11 +41,6 @@ It may take a few minutes for the `moodle` container to finish downloading and i
 ```shell
 # Follow instructions in the .env file depending on your Kialo setup.
 cp development/.env.example development/.env
-
-# Run this once to set up the Kialo plugin and prevent initialization errors.
-# May need to run the sync script directly with sudo on Linux.
-composer docker:sync
-
 composer docker:up
 ```
 
@@ -75,9 +70,20 @@ All users will have the password "kialo1234".
 
 ### Developing the plugin
 
-To update the plugin in Moodle during development,
-you have to use `development/sync.sh` to copy over the code into the `development/mod_kialo` folder,
-which is mounted in the Moodle docker container.
+The plugin folder is mounted in the Docker container, so your local changes should be reflected on refreshing the page.
+If you do not immediately see changes, you may need to purge the cache as a Moodle admin user.
+When logged in as the admin user, you can scroll to the bottom of any page and click on "Purge all caches" in the footer.
+
+#### JavaScript
+While developing, Moodle will only serve the minified files in the `amd/build` directory.
+The Moodle container is set up to automatically build these files and source maps when you make a change in `amd/src`.
+It's best to disable JS caching in the admin settings (http://{MOODLE_HOST}:8080/admin/settings.php?section=ajax).
+This will significantly slow down page loads, so only use this when necessary.
+
+The Moodle container will also handle linting for the JS source files, and will not build the minified files if the linting fails.
+You can check the logs of the Moodle container to see the output of the linter.
+
+If the CI job fails on the Grunt task due to a mismatch of the JS files, you may need to switch your local Moodle container branch to `main` to update the build tools.
 
 ### Moodle versions
 
@@ -150,15 +156,11 @@ To run all tests, follow these steps:
 
 1. Start the docker compose setup: `composer docker:up`
 2. Initialise the test environment: `development/tests-init.sh`
-3. Ensure the plugin files are synchronized with the Moodle instance: `composer docker:sync`
-4. Run the tests:
+3. Run the tests:
 
    * To run all tests, execute `development/tests-run-all.sh`
    * To run a specific test file, use `tests-run.sh`, e.g.: `development/tests-run.sh tests/acceptance/kialo_test.php`
    * Alternatively, you can use `composer test` to run both init and all tests.
-
-Each time you change the plugin code or a test, you need to run `composer docker:sync` again.
-If you are using IntelliJ IDEA, the project files included in this project already include a file watcher that does that.
 
 Each time you add new test files, you need to run `development/tests-init.sh` again.
 

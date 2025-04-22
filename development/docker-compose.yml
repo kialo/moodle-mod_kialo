@@ -26,7 +26,12 @@ services:
         # main (latest), MOODLE_405_STABLE etc, see https://github.com/moodle/moodle/branches
         MOODLE_BRANCH: ${MOODLE_BRANCH:-main}
         # 7.4, 8.0, 8.1, 8.3 etc., see https://moodledev.io/general/development/policies/php
+
         PHP_VERSION: ${PHP_VERSION:-8.4}
+        # On Linux, if your host user is not the standard 1000:1000, you may need to set these
+        # to handle permission issues with the volume mount
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
     ports:
       - '8080:8080'
     environment:
@@ -39,7 +44,8 @@ services:
       - KIALO_IP=${KIALO_IP}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
     volumes:
-      - './mod_kialo:/var/www/html/mod/kialo'
+      - '..:/var/www/html/mod/kialo'
+      - /var/www/html/mod/kialo/.git
     depends_on:
       - mariadb
   moodleapp:

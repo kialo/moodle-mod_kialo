@@ -9,9 +9,7 @@ composer install --no-dev --no-scripts --prefer-dist --no-interaction
 # extra files we want to include in the bundle (e.g. README.md, LICENSE, etc.)
 cp -r vendor_extra/* ./vendor/
 
-# Ensure that the version in moodle is up-to-date. This corresponds to our release version.
 cd development
-./sync.sh
 
 # Create a new ZIP file
 rm -f mod_kialo.zip

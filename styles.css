@@ -17,6 +17,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    animation: kialo-spinner-fade-in 1.5s ease-in 1;
 }
 
 .kialo-loading-title {
@@ -39,7 +40,6 @@
 }
 
 .kialo-spinner {
-    animation: kialo-spinner-fade-in 1.5s ease-in 1;
     overflow: hidden;
     position: relative;
     margin: 0 auto;
@@ -231,6 +231,20 @@
     display: none !important; /* stylelint-disable-line declaration-no-important */
 }
 
-#kialocontentframe {
+.kialo-iframe {
+    min-height: 600px;
+    height: 100%;
+    width: 100%;
     border: none;
+}
+
+/* ---- DISCUSSION SELECTION MODAL ---- */
+
+.modal .kialo-modal {
+    /* Bootstrap 5 has a variable available for the margin, but this requires Moodle 5 */
+    height: calc(100% - 3.5rem);
+}
+
+.modal .kialo-modal .modal-content {
+    height: 100%;
 }
