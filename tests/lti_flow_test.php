@@ -48,7 +48,7 @@ use OAT\Library\Lti1p3Core\Security\Key\KeyInterface;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 
 /**
  * Tests the LTI flow.
@@ -353,10 +353,9 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            false
         );
 
-        $this->assertStringContainsString('/lti/login', $message->getUrl());
+        $this->assertStringContainsString('/lti/start', $message->getUrl());
     }
 
     /**
@@ -376,7 +375,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true
         );
         $this->assertNotNull($message);
 
@@ -448,7 +446,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );
@@ -505,7 +502,6 @@ final class lti_flow_test extends \advanced_testcase {
             $deploymentid,
             $this->user->id,
             $discussionurl,
-            true,
             $groupinfo->groupid,
             $groupinfo->groupname
         );
@@ -761,7 +757,7 @@ final class lti_flow_test extends \advanced_testcase {
         $message = lti_flow::init_deep_link($this->course->id, $this->user->id, $deploymentid);
         $this->assertNotNull($message);
 
-        $this->assertStringContainsString('/lti/login', $message->getUrl());
+        $this->assertStringContainsString('/lti/start', $message->getUrl());
 
         $params = $message->getParameters()->jsonSerialize();
         $this->assertEquals('https://www.example.com/moodle/mod/kialo', $params['iss']);
