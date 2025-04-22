@@ -55,7 +55,9 @@ class kialo_view {
             return $result;
         }
 
-        $groupid = groups_get_activity_group($cm, $course); // Int or false. 0 means user has access to all groups (admin).
+        $usergroups = groups_get_user_groups($cm->course);
+        // Method groups_get_user_groups returns int or false. 0 means user has access to all groups (admin).
+        $groupid = groups_get_activity_group($cm, false, $usergroups);
         if ($groupid === false || $groupid === 0) {
             return $result;
         }
