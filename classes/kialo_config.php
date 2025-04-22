@@ -144,16 +144,15 @@ class kialo_config {
 
     /**
      * Returns the LTI tool interface representing kialo-edu.com.
-     * @param bool|null $embedded Whether the tool is being shown in an embed within Moodle or in a new tab.
      * @return Tool
      */
-    public function get_tool(?bool $embedded = false): Tool {
+    public function get_tool(): Tool {
         $toolurl = $this->get_tool_url();
         return new Tool(
             'kialo-edu',                // Identifier.
             'Kialo Edu',                // Name.
             $toolurl,                   // Audience.
-            $toolurl . ($embedded ? "/lti/start" : "/lti/login"),    // OIDC initiation url.
+            $toolurl . '/lti/start',    // OIDC initiation url.
             $toolurl . '/lti/launch',   // Launch url.
             $toolurl . '/lti/deeplink'  // Deep linking url.
         );
@@ -162,12 +161,11 @@ class kialo_config {
     /**
      * Creates a new LTI tool registration for Kialo and one specific deployment id.
      * @param string|null $deploymentid The deployment id to use, or null, if it's not relevant.
-     * @param bool|null $embedded Whether to display the Kialo app embedded in Moodle or in a new window.
      * @return Registration
      * @throws \dml_exception
      */
-    public function create_registration(?string $deploymentid = null, ?bool $embedded = true): Registration {
-        $tool = $this->get_tool($embedded);
+    public function create_registration(?string $deploymentid = null): Registration {
+        $tool = $this->get_tool();
         $platformjwksurl = (new moodle_url('/mod/kialo/lti_jwks.php'))->out();
         $tooljwksurl = $this->get_tool_url() . "/lti/jwks.json";
         $deploymentids = $deploymentid ? [$deploymentid] : [];

@@ -48,6 +48,7 @@ class mod_kialo_mod_form extends moodleform_mod {
         // See https://github.com/moodle/moodle/blob/master/course/edit_form.php for an example.
         global $CFG;
         global $COURSE;
+        global $PAGE;
 
         $mform = $this->_form;
 
@@ -86,38 +87,18 @@ class mod_kialo_mod_form extends moodleform_mod {
         ]))->out(false);
         $mform->addElement("button", "kialo_select_discussion", get_string("select_discussion", "mod_kialo"));
 
-        // Scripts that handle the deeplinking response from the other tab via postMessage.
-        $mform->addElement("html", "<script>
-            var kialoSelectWindow = null;
-            document.getElementById('id_kialo_select_discussion').addEventListener('click', () => {
-                kialoSelectWindow = window.open('{$deeplinkurl}', '_blank');
-            });
-            window.addEventListener(
-              'message',
-              (event) => {
-                  if (event.data.type !== 'kialo_discussion_selected') return;
-
-                  // Fill in the deep-linked details.
-                  document.querySelector('input[name=discussion_url]').value = event.data.discussionurl;
-                  document.querySelector('input[name=discussion_title]').value = event.data.discussiontitle;
-
-                  // Prefill activity name based on discussion title if user hasn't entered one yet.
-                  const nameInput = document.querySelector('input[name=name]');
-                  if (!nameInput.value) {
-                      nameInput.value = event.data.discussiontitle;
-                  }
-
-                  // Trigger closing of the selection tab.
-                  kialoSelectWindow.postMessage({ type: 'kialo_selection_acknowledged' }, '*');
-              }
-            );
-            </script>");
         $mform->addHelpButton("kialo_select_discussion", "select_discussion", "mod_kialo");
 
         $this->display_options_elements();
         $this->standard_coursemodule_elements();
         $this->standard_grading_coursemodule_elements();
         $this->add_action_buttons();
+
+        if (version_compare(moodle_major_version(), '4.3', '<')) {
+            $PAGE->requires->js_call_amd('mod_kialo/discussion_selection_modal_factory', 'init', [$deeplinkurl]);
+        } else {
+            $PAGE->requires->js_call_amd('mod_kialo/discussion_selection_modal', 'init', [$deeplinkurl]);
+        }
     }
 
     /**

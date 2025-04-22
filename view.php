@@ -72,7 +72,6 @@ try {
         KIALO_LTI_DEPLOYMENT_ID,
         $USER->id,
         $moduleinstance->discussion_url,
-        $embedded,
         $groupinfo->groupid,
         $groupinfo->groupname,
     );
@@ -96,8 +95,7 @@ try {
 
         // We can't use html_writer here because it escapes our required query params.
         echo '<iframe id="kialocontentframe"
-             height="600px"
-             width="100%"
+             class="kialo-iframe"
              src="' . $message->toUrl() . '&embedded"
              allowfullscreen="true">
       </iframe>';
