@@ -1,3 +1,7 @@
+### v1.4.3 (Build - 2025042201)
+
+* Minor update to fix group assignment with visible groups.
+
 ### v1.4.3 (Build - 2025040901)
 
 * Minor update to display the discussion selection page inside Moodle for supported browsers.
