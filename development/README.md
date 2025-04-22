@@ -50,6 +50,7 @@ composer docker:up
 ```
 
 At this point Moodle should be running locally on port 8080.
+(Note: this takes a while. The moodle logo needs to appear in the logs. You can watch the logs via `cd development && docker compose logs -f`.)
 You may access the site using any hostname that resolves to localhost, e.g. `http://localhost:8080`.
 **If you are running Kialo in Docker, you must use a non-localhost hostname** so the Kialo backend can connect to the `moodle` container using the same name.
 This can be the IP address of the `moodle` container or the Docker hostname of the `moodle` container (`moodle` by default).
@@ -57,7 +58,7 @@ You can add an entry to your `/etc/hosts` file so the custom hostname resolves c
 
 After you started Moodle for the first time, do the following to set some useful default settings:
 
-* Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import.
+* Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import. (Note: you need to login with "user/kialo1234".)
 * Accept Kialo plugin ToS at http://{MOODLE_HOST}:8080/admin/settings.php?section=modsettingkialo.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
@@ -74,7 +75,7 @@ All users will have the password "kialo1234".
 
 ### Developing the plugin
 
-To update the plugin in Moodle during development, 
+To update the plugin in Moodle during development,
 you have to use `development/sync.sh` to copy over the code into the `development/mod_kialo` folder,
 which is mounted in the Moodle docker container.
 
@@ -114,7 +115,7 @@ If you don't want to or can't run Moodle locally, you can also use Moodle's host
 We use PHP Composer to manage our dependencies.
 To add a new dependency, run `composer require <package-name>`.
 
-Whenever any dependency is changed (when `composer.lock` changes), you need to ensure to update `thirdpartylibs.xml` accordingly. Run the test `tests/thirdpartylibs_test.php` to check that 
+Whenever any dependency is changed (when `composer.lock` changes), you need to ensure to update `thirdpartylibs.xml` accordingly. Run the test `tests/thirdpartylibs_test.php` to check that
 the thirdpartylibs.xml file is up to date.
 
 If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBSXML=1` to automatically regenerate the file:
@@ -185,7 +186,7 @@ To create a new release, follow these steps:
 To verify that the release was successful:
 
 1. Wait for the release to be created on GitHub. This can take a few minutes.
-   See https://github.com/kialo/moodle-mod_kialo/actions/workflows/moodle-ci.yml. 
+   See https://github.com/kialo/moodle-mod_kialo/actions/workflows/moodle-ci.yml.
    Note that the release job in the CI workflow is only triggered for tags.
 2. Check the release [on GitHub](https://github.com/kialo/moodle-mod_kialo/releases). Ensure the `mod_kialo.zip` file is attached.
 3. Check the release on https://moodle.org/plugins/mod_kialo. Ensure the version number and changelog is correct.
