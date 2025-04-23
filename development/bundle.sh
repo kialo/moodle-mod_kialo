@@ -28,6 +28,7 @@ rsync -atm --delete --delete-excluded \
   --exclude="*/\.*" \
   --exclude="*/moodle/" \
   --exclude=".git" \
+  --exclude="development" \
   "$PARENT_DIR"/ "$TARGET_DIR"/
 
 cd "$SCRIPT_DIR"
