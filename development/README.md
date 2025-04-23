@@ -45,7 +45,9 @@ composer docker:up
 ```
 
 At this point Moodle should be running locally on port 8080.
-(Note: this takes a while. The moodle logo needs to appear in the logs. You can watch the logs via `cd development && docker compose logs -f`.)
+(Note: this takes a while when running it for the first time.
+The moodle logo needs to appear in the logs and after that the dependencies need to finish installing.
+You can watch the logs via `cd development && docker compose logs -f`.)
 You may access the site using any hostname that resolves to localhost, e.g. `http://localhost:8080`.
 **If you are running Kialo in Docker, you must use a non-localhost hostname** so the Kialo backend can connect to the `moodle` container using the same name.
 This can be the IP address of the `moodle` container or the Docker hostname of the `moodle` container (`moodle` by default).
