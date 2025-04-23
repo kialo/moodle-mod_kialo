@@ -17,7 +17,7 @@ composer install --no-dev --no-scripts --prefer-dist --no-interaction
 cp -r vendor_extra/* ./vendor/
 
 # Create a new ZIP file
-rm -f "$SCRIPT_DIR/mod_kialo.zip"
+rm -f "$ZIP_FILE"
 
 # Create target directory
 mkdir -p "$TARGET_DIR"
