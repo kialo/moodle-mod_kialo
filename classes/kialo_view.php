@@ -40,6 +40,7 @@ class kialo_view {
      * @return \stdClass group information (groupname and groupid)
      */
     public static function get_current_group_info(\stdClass $cm, \stdClass $course): \stdClass {
+        global $USER;
         $result = new \stdClass();
         $result->groupid = null;
         $result->groupname = null;
@@ -55,8 +56,10 @@ class kialo_view {
             return $result;
         }
 
-        $usergroups = groups_get_user_groups($cm->course);
-        // Method groups_get_user_groups returns int or false. 0 means user has access to all groups (admin).
+        $usergroups = groups_get_all_groups($course->id, $USER->id);
+        // Method groups_get_activity_group returns int or false. 0 means user has access to all groups (admin).
+        // Note: the 3rd parameter (allowedgroups) is only meant for internal use.
+        // We filter for allowed groups as with group mode VISIBLEGROUPS this would also return groups the user is not member of.
         $groupid = groups_get_activity_group($cm, false, $usergroups);
         if ($groupid === false || $groupid === 0) {
             return $result;

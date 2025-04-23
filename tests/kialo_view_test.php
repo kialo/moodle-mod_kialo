@@ -56,21 +56,23 @@ final class kialo_view_test extends \advanced_testcase {
      * Creates a new course with group mode enabled or not, along with a Kialo activity in the course.
      * @param bool $coursegroupmode whether the course should have group mode enabled
      * @param bool $modulegroupmode whether the activity should have group mode enabled
+     * @param bool $visiblegroups whether the enabled group mode should use VISIBLEGROUPS
      * @return \stdClass
      * @throws \coding_exception
      */
     private function create_course_and_activity(
         bool $coursegroupmode = true,
-        bool $modulegroupmode = true
+        bool $modulegroupmode = true,
+        bool $visiblegroups = false
     ): \stdClass {
         $result = new \stdClass();
+        $groupmode = $coursegroupmode ? ($visiblegroups ? VISIBLEGROUPS : SEPARATEGROUPS) : NOGROUPS;
         $result->course = $this->getDataGenerator()->create_course((object) [
-            // Our app doesn't distinguish between SEPARATEGROUPS and VISIBLEGROUPS. It's both handled the same.
-            'groupmode' => $coursegroupmode ? SEPARATEGROUPS : NOGROUPS,
+            'groupmode' => $groupmode,
         ]);
         $result->module = $this->getDataGenerator()->create_module('kialo', [
             'course' => $result->course->id,
-            'groupmode' => $coursegroupmode || $modulegroupmode ? SEPARATEGROUPS : NOGROUPS,
+            'groupmode' => ($coursegroupmode || $modulegroupmode) ? ($visiblegroups ? VISIBLEGROUPS : SEPARATEGROUPS) : NOGROUPS,
         ]);
         $result->cm = get_coursemodule_from_instance("kialo", $result->module->id);
 
@@ -89,7 +91,7 @@ final class kialo_view_test extends \advanced_testcase {
      */
     public function test_group_info_no_group_mode(): void {
         // When group mode is disabled in the course and activity.
-        $subject = $this->create_course_and_activity(false, false);
+        $subject = $this->create_course_and_activity(false, false, false);
 
         // There should be no group info.
         $groupinfo = kialo_view::get_current_group_info($subject->cm, $subject->course);
@@ -105,7 +107,7 @@ final class kialo_view_test extends \advanced_testcase {
      */
     public function test_group_info_course_level_group_mode(): void {
         // Group mode is enabled in the course, but not forced on activities.
-        $subject = $this->create_course_and_activity(true, false);
+        $subject = $this->create_course_and_activity(true, false, false);
 
         // By default the activity is created with group mode disabled, so there should be no group info.
         $groupinfo = kialo_view::get_current_group_info($subject->cm, $subject->course);
@@ -120,12 +122,28 @@ final class kialo_view_test extends \advanced_testcase {
      * @covers \mod_kialo\kialo_view::get_current_group_info
      */
     public function test_group_info_course_level_group_mode_user_without_group(): void {
-        $subject = $this->create_course_and_activity(true, true);
+        $subject = $this->create_course_and_activity(true, true, false);
         $this->getDataGenerator()->enrol_user($this->user->id, $subject->course->id, "student");
         // User is not part of a group, even though group mode is enabled.
 
         // The user is not in any group, so there should be no group info.
         $groupinfo = kialo_view::get_current_group_info($subject->cm, $subject->course);
+        $this->assertNull($groupinfo->groupid);
+        $this->assertNull($groupinfo->groupname);
+    }
+
+    /**
+     * Tests the group info retrieval when group mode is VISIBLEGROUPS and the user is not in a group.
+     *
+     * @return void
+     * @covers \mod_kialo\kialo_view::get_current_group_info
+     */
+    public function test_group_info_visible_groups(): void {
+        $test = $this->create_course_and_activity(true, true, true);
+        $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "student");
+        // User is not part of a group, but group mode is VISIBLEGROUPS.
+
+        $groupinfo = kialo_view::get_current_group_info($test->cm, $test->course);
         $this->assertNull($groupinfo->groupid);
         $this->assertNull($groupinfo->groupname);
     }
@@ -138,7 +156,7 @@ final class kialo_view_test extends \advanced_testcase {
      */
     public function test_group_info_module_level_group_mode(): void {
         // Both the course and module have group mode enabled.
-        $test = $this->create_course_and_activity(true, true);
+        $test = $this->create_course_and_activity(true, true, false);
         $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "student");
         $this->getDataGenerator()->create_group_member(['groupid' => $test->group->id, 'userid' => $this->user->id]);
 
@@ -155,7 +173,7 @@ final class kialo_view_test extends \advanced_testcase {
      * @covers \mod_kialo\kialo_view::get_current_group_info
      */
     public function test_group_info_for_teachers(): void {
-        $test = $this->create_course_and_activity(true, false);
+        $test = $this->create_course_and_activity(true, false, false);
         $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "editingteacher");
         $this->getDataGenerator()->create_group_member(['groupid' => $test->group->id, 'userid' => $this->user->id]);
 
@@ -173,7 +191,7 @@ final class kialo_view_test extends \advanced_testcase {
      * @covers \mod_kialo\kialo_view::get_current_group_info
      */
     public function test_group_info_multiple_groups(): void {
-        $test = $this->create_course_and_activity(true, true);
+        $test = $this->create_course_and_activity(true, true, false);
         $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "student");
 
         // Create another group and add the user to it.
@@ -196,7 +214,7 @@ final class kialo_view_test extends \advanced_testcase {
      * @covers \mod_kialo\kialo_view::get_current_group_info
      */
     public function test_group_info_grouping(): void {
-        $test = $this->create_course_and_activity(true, true);
+        $test = $this->create_course_and_activity(true, true, false);
         $this->getDataGenerator()->enrol_user($this->user->id, $test->course->id, "student");
         $group1 = $test->group;
         $group2 = $this->getDataGenerator()->create_group(['courseid' => $test->course->id, 'name' => "group-0000"]);
