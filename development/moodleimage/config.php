@@ -28,9 +28,9 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
 //=========================================================================
 
 // Force a debugging mode regardless the settings in the site administration
- @error_reporting(E_ALL | E_STRICT);   // NOT FOR PRODUCTION SERVERS!
+ @error_reporting(E_ALL);   // NOT FOR PRODUCTION SERVERS!
  @ini_set('display_errors', '1');         // NOT FOR PRODUCTION SERVERS!
- $CFG->debug = (E_ALL | E_STRICT);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
+ $CFG->debug = (E_ALL);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
  $CFG->debugdisplay = 1;              // NOT FOR PRODUCTION SERVERS!
 
 // Make sure that the temp directories are not deleted during the backup process. Allows easier testing of the backup process.
