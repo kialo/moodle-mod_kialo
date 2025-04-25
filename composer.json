@@ -79,8 +79,11 @@
       "cd development && docker compose down"
     ],
     "docker:populate-users": [
-      "docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-users.sql",
+      "sed 's|\\${SITENAME}|local|g' $KIALO_ROOT/.github/scripts/populate-moodle-users.sql | docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle",
       "docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-courses-and-groups.sql"
+    ],
+    "docker:show_logs":[
+      "cd development && docker compose logs -f"
     ]
   }
 }
