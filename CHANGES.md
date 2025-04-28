@@ -1,4 +1,4 @@
-### v1.4.3 (Build - 2025042201)
+### v1.4.4 (Build - 2025042401)
 
 * Minor update to fix group assignment with visible groups.
 
