@@ -149,7 +149,7 @@ If you use Visual Studio Code, there as an [extension](https://marketplace.visua
 
 ## Testing
 
-Tests for the plugin are located in the `tests` folder. This need to be executed in the docker compose context,
+Tests for the plugin are located in the `tests` folder. This needs to be executed in the docker compose context,
 because they require access to the Moodle instance.
 
 ### How to run tests
