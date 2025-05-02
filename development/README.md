@@ -219,6 +219,7 @@ To release a new version, follow these steps:
 If you are using Chrome, this can occur because the site is running without HTTPS and the cookie cannot have the `SameSite=None` and `Secure` flags.
 Chrome will block the cookie in the iframe in this case.
 For local development, Firefox is preferred as it seems to allow the embedded iframe to access the Moodle session cookie even without HTTPS.
+Safari does not block the cookie in the iframe and can also be used for local development.
 
 ### When running `composer docker:up` the moodle container exits shortly after startup with exit code 1
 
