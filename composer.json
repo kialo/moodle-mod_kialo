@@ -83,7 +83,11 @@
       "docker exec -i mod_kialo-mariadb-1 mariadb --user moodle moodle < $KIALO_ROOT/.github/scripts/populate-moodle-courses-and-groups.sql"
     ],
     "docker:logs":[
+      "Composer\\Config::disableProcessTimeout",
       "cd development && docker compose logs -f"
+    ],
+    "docker:purge-cache":[
+      "docker exec mod_kialo-moodle-1 php admin/cli/purge_caches.php"
     ]
   }
 }
