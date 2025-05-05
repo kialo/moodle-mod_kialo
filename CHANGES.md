@@ -1,6 +1,6 @@
 ### v1.5.0 (Build - 2025050501)
 
-* **New**: Dropped support for Moodle 3.8.-3.11., and have increased minimum required Moodle version to 4.0.
+* **New**: Dropped support for Moodle 3.8-3.11, and have increased minimum required Moodle version to 4.0.
 
 ### v1.4.4 (Build - 2025042401)
 
