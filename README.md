@@ -63,6 +63,11 @@ We are ISO 27001 compliant, and how we handle your data can be seen in detail in
 
 ## Installation ##
 
+### Prerequisites
+
+* Moodle 4.0 or later
+* PHP 7.4 or later
+
 ### Installing via uploaded ZIP file ###
 
 You can find the latest version of the plugin in the [Moodle plugins directory](https://moodle.org/plugins/mod_kialo),
