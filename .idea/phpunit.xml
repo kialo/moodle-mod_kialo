@@ -75,7 +75,7 @@
         <option value="$PROJECT_DIR$/development/mod_kialo/moodle/communication/tests" />
         <option value="$PROJECT_DIR$/development/mod_kialo/moodle/ai/tests" />
         <option value="$PROJECT_DIR$/development/mod_kialo/moodle/sms/tests" />
-        <option value="$PROJECT_DIR$/development/mod_kialo/tests" />
+        <option value="$PROJECT_DIR$/development/mod_kialo/vendor/codercat/jwk-to-pem/tests" />
         <option value="$PROJECT_DIR$/moodle/lib/phpunit/tests" />
         <option value="$PROJECT_DIR$/moodle/lib/testing" />
         <option value="$PROJECT_DIR$/moodle/lib/ddl/tests" />
