@@ -186,6 +186,48 @@ jobs:
           cd plugin/development
           ./bundle.sh
 
+      - name: Verify bundle
+        run: |
+          cd plugin/development
+          if [[ ! -f mod_kialo.zip ]]; then
+              echo "mod_kialo.zip not found!"
+              exit 1
+          fi
+          unzip -qq -t mod_kialo.zip || {
+              echo "failed to verify zip archive"
+              exit 1
+          }
+
+          unzip -qq mod_kialo.zip -d unzipped_mod_kialo
+          echo "zip archive verified"
+          cd unzipped_mod_kialo
+
+          if [[ ! -d kialo ]]; then
+              echo "kialo folder not found!"
+              exit 1
+          fi
+          cd kialo
+
+          if [[ ! -d vendor ]]; then
+              echo "vendor folder not found!"
+              exit 1
+          fi
+          cd vendor
+
+          if [[ ! -f readme_moodle.txt ]]; then
+              echo "readme_moodle.txt not found!"
+              exit 1
+          fi
+          echo "readme_moodle.txt found"
+
+          vendor_directory_count=$(find . -mindepth 1 -maxdepth 1 -type d | wc -l)
+          min_vendor_directory_count=15
+          if [[ $vendor_directory_count -lt $min_vendor_directory_count ]]; then
+              echo "Too few vendor directories found!"
+              exit 1
+          fi
+          echo "vendor directory count verified"
+
       # Create a new release on GitHub
       - name: Release to GitHub
         id: github-release
