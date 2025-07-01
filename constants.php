@@ -38,6 +38,10 @@ const MOD_KIALO_LTI_AGS_SCOPES = [
     LtiConstants::AGS_SCOPE_SCORE,
 ];
 
+// TODO review these values
+const MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE = "https://www.kialo-edu.com/spec/moodle-mod_kialo/scope/update_discussion_url";
+const MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_ENDPOINT_CLAIM = "https://www.kialo-edu.com/spec/moodle-mod_kialo/claim/endpoint";
+
 /**
  * Value used to indicate that the Kialo app should be displayed in the same Moodle window as an embed.
  */

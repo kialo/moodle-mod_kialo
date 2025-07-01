@@ -386,7 +386,7 @@ class lti_flow {
             'product_family_code' => self::PRODUCT_FAMILY_CODE,
             'version' => $CFG->version,
         ]);
-        self::add_grading_service($payloadbuilder, $request);
+        self::add_endpoints($payloadbuilder, $request);
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
@@ -396,6 +396,7 @@ class lti_flow {
     }
 
     /**
+     * TODO update docstring, or split into separate `add_update_discussion_url_endpoint`
      * Adds claims necessary to inform LTI consumers about the assignment and grading service we implemented
      * according to https://www.imsglobal.org/spec/lti-ags/v2p0. Essentially it provides the endpoints necessary
      * to use the service from the Kialo app (the LTI tool / consumer).
@@ -406,7 +407,7 @@ class lti_flow {
      * @throws LtiExceptionInterface
      * @throws \moodle_exception
      */
-    public static function add_grading_service(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
+    public static function add_endpoints(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
         // Get required context for service params from original JWT token. See init_resource_link and init_deep_link.
         $originaltoken = (new Parser())->parse(LtiMessage::fromServerRequest($request)->getParameters()->get('lti_message_hint'));
         $courseid = $originaltoken->getClaims()->getMandatory(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT)['id'];
@@ -435,6 +436,11 @@ class lti_flow {
             // But if we end up implementing it, this is what it will be called.
             "lineitems" => (new moodle_url('/mod/kialo/lti_lineitems.php', $serviceparams))->out(false),
         ]);
+
+        $payloadbuilder->withClaim(MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_ENDPOINT_CLAIM, [
+            "scope" => [MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE],
+            "update_discussion_url" => (new moodle_url('/mod/kialo/update_discussion_url.php', $serviceparams))->out(false),
+        ]);
     }
 
     /**
@@ -449,7 +455,8 @@ class lti_flow {
         $factory = new AuthorizationServerFactory(
             new ClientRepository($registrationrepo, null, new kialo_logger("ClientRepository")),
             new AccessTokenRepository(moodle_cache::access_token_cache(), new kialo_logger("AccessTokenRepository")),
-            new ScopeRepository(array_map(fn ($scope): Scope => new Scope($scope), MOD_KIALO_LTI_AGS_SCOPES)),
+            // TODO format
+            new ScopeRepository(array_map(fn ($scope): Scope => new Scope($scope), array_merge(MOD_KIALO_LTI_AGS_SCOPES, [MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE]))),
             $kialoconfig->get_platform_keychain()->getPrivateKey()->getContent(),
         );
 
