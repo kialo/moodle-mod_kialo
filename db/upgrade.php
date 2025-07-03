@@ -36,6 +36,11 @@ const VERSION_GRADING_1 = 2024091805;
 const VERSION_DISPLAY_OPTIONS_1 = 2025012402;
 
 /**
+ * In this version the resource_link_id_history field was first introduced.
+ */
+const VERSION_RESOURCE_LINK_ID_HISTORY_1 = 2025070301;
+
+/**
  * Custom upgrade steps.
  * @param int $oldversion
  */
@@ -78,6 +83,16 @@ function xmldb_kialo_upgrade($oldversion = 0): bool {
 
         // Kialo savepoint reached.
         upgrade_mod_savepoint(true, VERSION_DISPLAY_OPTIONS_1, 'kialo');
+    }
+
+    if ($oldversion < VERSION_RESOURCE_LINK_ID_HISTORY_1) {
+        $displayfield = new xmldb_field('resource_link_id_history', XMLDB_TYPE_TEXT);
+
+        if (!$dbman->field_exists($table, $displayfield)) {
+            $dbman->add_field($table, $displayfield);
+        }
+
+        upgrade_mod_savepoint(true, VERSION_RESOURCE_LINK_ID_HISTORY_1, 'kialo');
     }
 
     return true;

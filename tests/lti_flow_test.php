@@ -411,8 +411,9 @@ final class lti_flow_test extends \advanced_testcase {
 
         $this->assertEquals($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/context")["id"], $this->course->id);
 
-        // By default there are no custom claims for groups.
-        $this->assertNull($token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
+        $this->assertEquals([
+        'resourceLinkIdHistory' => '',
+        ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
     }
 
     /**
@@ -458,6 +459,7 @@ final class lti_flow_test extends \advanced_testcase {
 
         // Group information is passed via custom claims.
         $this->assertEquals([
+        'resourceLinkIdHistory' => '',
             "kialoGroupId" => $group->id,
             "kialoGroupName" => $group->name,
         ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));
@@ -514,6 +516,7 @@ final class lti_flow_test extends \advanced_testcase {
 
         // Group information is passed via custom claims.
         $this->assertEquals([
+        'resourceLinkIdHistory' => '',
             "kialoGroupId" => "grouping-{$grouping->id}",
             "kialoGroupName" => $grouping->name,
         ], $token->claims()->get("https://purl.imsglobal.org/spec/lti/claim/custom"));

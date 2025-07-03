@@ -184,6 +184,7 @@ class lti_flow {
      * @param string $discussionurl
      * @param string|null $groupid
      * @param string|null $groupname
+     * @param string|null $resourcelinkidhistory
      * @return LtiMessageInterface
      * @throws LtiExceptionInterface
      * @throws \coding_exception
@@ -196,12 +197,15 @@ class lti_flow {
         string $moodleuserid,
         string $discussionurl,
         ?string $groupid = null,
-        ?string $groupname = null
+        ?string $groupname = null,
+        ?string $resourcelinkidhistory = null
     ): LtiMessageInterface {
         $context = context_module::instance($coursemoduleid);
         $roles = self::assign_lti_roles($context);
 
-        $customclaims = [];
+        $customclaims = [
+            'resourceLinkIdHistory' => $resourcelinkidhistory ?? '',
+        ];
 
         if (!empty($groupid) && !empty($groupname)) {
             $customclaims['kialoGroupId'] = $groupid;

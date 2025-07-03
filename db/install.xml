@@ -18,6 +18,7 @@
         <FIELD NAME="deployment_id" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="The deployment ID of the discussion."/>
         <FIELD NAME="grade" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="100" SEQUENCE="false" COMMENT="The maximum score or grade scale."/>
         <FIELD NAME="display" TYPE="char" LENGTH="16" NOTNULL="true" DEFAULT="embed" SEQUENCE="false" COMMENT="How to display the discussion (embed or window)."/>
+        <FIELD NAME="resource_link_id_history" TYPE="text" COMMENT="When copied, the resource link ids of previous versions. This should behave like LTI's $ResourceLink.id.history."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

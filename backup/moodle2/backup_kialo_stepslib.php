@@ -35,7 +35,7 @@ class backup_kialo_activity_structure_step extends backup_activity_structure_ste
      * @throws base_element_struct_exception
      */
     protected function define_structure() {
-        // We just back up everything. See install.xml for fields that need to be backed up.
+        // We back up everything except `grade` and `display`. See install.xml for a list of all fields.
         $kialo = new backup_nested_element('kialo', ['id'], [
             'course',
             'name',
@@ -46,8 +46,18 @@ class backup_kialo_activity_structure_step extends backup_activity_structure_ste
             'discussion_title',
             'deployment_id',
             'discussion_url',
+            'resource_link_id_history',
+            // Include the current course module ID in the backup in order to be able to update
+            // `resource_link_id_history` during restore.
+            'coursemoduleid',
         ]);
-        $kialo->set_source_table('kialo', ['id' => backup::VAR_ACTIVITYID]);
+
+        $kialo->set_source_sql(
+            "SELECT *, ? AS coursemoduleid
+             FROM {kialo}
+             WHERE id = ?",
+            [backup::VAR_MODID, backup::VAR_ACTIVITYID]
+        );
 
         // Currently we don't need any annotations.
         // If at some point our data refers to users, groups, groupings, roles, scales, outcomes, or files,

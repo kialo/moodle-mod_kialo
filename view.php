@@ -74,6 +74,7 @@ try {
         $moduleinstance->discussion_url,
         $groupinfo->groupid,
         $groupinfo->groupname,
+        $moduleinstance->resource_link_id_history,
     );
 
     $output = $PAGE->get_renderer('mod_kialo');
