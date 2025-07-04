@@ -270,3 +270,32 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
         kialo_grade_item_update($kialo);
     }
 }
+
+/**
+ * Updates the discussion URL for a kialo activity instance.
+ *
+ * @param int $cmid Course module ID
+ * @param string $discussionurl New discussion URL
+ * @return bool True if update was successful, false otherwise
+ */
+function kialo_update_discussion_url(int $cmid, string $discussionurl): bool {
+    global $DB;
+
+    try {
+        // Get the kialo instance ID from the course module.
+        $coursemodule = $DB->get_record('course_modules', ['id' => $cmid], 'instance', MUST_EXIST);
+        $kialoid = $coursemodule->instance;
+
+        // Update the discussion_url field in the kialo table.
+        $result = $DB->update_record('kialo', (object)[
+            'id' => $kialoid,
+            'discussion_url' => $discussionurl,
+            'timemodified' => time(),
+        ]);
+
+        return $result;
+    } catch (Exception $e) {
+        debugging("Failed to update discussion URL for cmid $cmid: " . $e->getMessage());
+        return false;
+    }
+}
