@@ -22,8 +22,9 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// PM-49506: Investigate why this is needed.
-defined('MOODLE_INTERNAL') || die();
+// phpcs:disable moodle.Files.RequireLogin.Missing -- doesn't require user to be logged in, as it's an LTI service
+
+require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/constants.php');
 require_once(__DIR__ . '/vendor/autoload.php');
@@ -38,6 +39,11 @@ $requestbody = json_decode(file_get_contents('php://input'), true);
 
 $discussionurl = $requestbody['discussion_url'] ?? '';
 
-kialo_update_discussion_url($coursemoduleid, $discussionurl);
-
-http_response_code(200);
+try {
+    kialo_update_discussion_url($coursemoduleid, $discussionurl);
+    http_response_code(204);
+} catch (\moodle_exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
+    exit;
+}
