@@ -276,27 +276,22 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
  *
  * @param int $coursemoduleid Course module ID
  * @param string $updateddiscussionurl New discussion URL
- * @return bool True if update was successful, false otherwise
+ * @return bool True if update was successful
+ * @throws dml_exception If database operation fails
+ * @throws dml_missing_record_exception If course module not found
  */
 function kialo_update_discussion_url(int $coursemoduleid, string $updateddiscussionurl): bool {
     global $DB;
 
-    try {
-        // Get the kialo instance ID from the course module.
-        $coursemodule = $DB->get_record('course_modules', ['id' => $coursemoduleid], 'instance', MUST_EXIST);
-        $kialoid = $coursemodule->instance;
+    // Get the kialo instance ID from the course module.
+    $coursemodule = $DB->get_record('course_modules', ['id' => $coursemoduleid], 'instance', MUST_EXIST);
+    $kialoid = $coursemodule->instance;
 
-        // Update the discussion_url field in the kialo table.
-        $updatedata = new stdClass();
-        $updatedata->id = $kialoid;
-        $updatedata->discussion_url = $updateddiscussionurl;
-        $updatedata->timemodified = time();
+    // Update the discussion_url field in the kialo table.
+    $updatedata = new stdClass();
+    $updatedata->id = $kialoid;
+    $updatedata->discussion_url = $updateddiscussionurl;
+    $updatedata->timemodified = time();
 
-        $result = $DB->update_record('kialo', $updatedata);
-
-        return $result;
-    } catch (Exception $e) {
-        debugging("Failed to update discussion URL for coursemoduleid $coursemoduleid: " . $e->getMessage());
-        return false;
-    }
+    return $DB->update_record('kialo', $updatedata);
 }

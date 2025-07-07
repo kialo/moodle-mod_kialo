@@ -85,11 +85,9 @@ final class update_discussion_url_test extends \advanced_testcase {
         $invalidcmid = 9999;
         $newurl = 'https://example.com/new-discussion-url';
 
-        // Test updating with invalid cmid.
-        $result = kialo_update_discussion_url($invalidcmid, $newurl);
-
-        // Verify the function returns false.
-        $this->assertFalse($result);
+        // Test updating with invalid cmid should throw exception.
+        $this->expectException(\dml_missing_record_exception::class);
+        kialo_update_discussion_url($invalidcmid, $newurl);
     }
 
     /**
