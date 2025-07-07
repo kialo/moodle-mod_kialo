@@ -32,10 +32,12 @@ use mod_kialo\lti_flow;
 
 lti_flow::authenticate_service_request([MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE]);
 
-$cmid = required_param('cmid', PARAM_INT);
+$coursemoduleid = required_param('cmid', PARAM_INT);
 
 $requestbody = json_decode(file_get_contents('php://input'), true);
 
-// PM-49506 do the actual update when the function is implemented.
+$discussionurl = $requestbody['discussion_url'] ?? '';
+
+kialo_update_discussion_url($coursemoduleid, $discussionurl);
 
 http_response_code(200);
