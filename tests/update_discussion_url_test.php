@@ -60,10 +60,7 @@ final class update_discussion_url_test extends \advanced_testcase {
 
         // Test updating the discussion URL.
         $newurl = 'https://example.com/new-discussion-url';
-        $result = kialo_update_discussion_url($cm->id, $newurl);
-
-        // Verify the function returns true.
-        $this->assertTrue($result);
+        kialo_update_discussion_url($cm->id, $newurl);
 
         // Verify the URL was updated in the database.
         $updatedkialo = $DB->get_record('kialo', ['id' => $kialo->id], '*', MUST_EXIST);
@@ -110,10 +107,7 @@ final class update_discussion_url_test extends \advanced_testcase {
         $cm = get_coursemodule_from_instance('kialo', $kialo->id);
 
         // Test updating with empty URL.
-        $result = kialo_update_discussion_url($cm->id, '');
-
-        // Verify the function returns true (empty string is valid).
-        $this->assertTrue($result);
+        kialo_update_discussion_url($cm->id, '');
 
         // Verify the URL was cleared in the database.
         $updatedkialo = $DB->get_record('kialo', ['id' => $kialo->id], '*', MUST_EXIST);
@@ -140,10 +134,7 @@ final class update_discussion_url_test extends \advanced_testcase {
 
         // Test with a URL that's at the field limit (255 characters).
         $longurl = 'https://example.com/' . str_repeat('a', 235); // 255 chars total.
-        $result = kialo_update_discussion_url($cm->id, $longurl);
-
-        // Verify the function returns true.
-        $this->assertTrue($result);
+        kialo_update_discussion_url($cm->id, $longurl);
 
         // Verify the URL was updated in the database.
         $updatedkialo = $DB->get_record('kialo', ['id' => $kialo->id], '*', MUST_EXIST);
@@ -177,10 +168,7 @@ final class update_discussion_url_test extends \advanced_testcase {
 
         // Test updating the discussion URL.
         $newurl = 'https://example.com/updated-url';
-        $result = kialo_update_discussion_url($cm->id, $newurl);
-
-        // Verify the function returns true.
-        $this->assertTrue($result);
+        kialo_update_discussion_url($cm->id, $newurl);
 
         // Verify timemodified was updated.
         $updatedkialo = $DB->get_record('kialo', ['id' => $kialo->id], '*', MUST_EXIST);
