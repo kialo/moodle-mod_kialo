@@ -22,7 +22,8 @@
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../../config.php');
+// PM-49506: Investigate why this is needed.
+defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/lib.php');
 require_once(__DIR__ . '/constants.php');
 require_once(__DIR__ . '/vendor/autoload.php');

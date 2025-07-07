@@ -453,8 +453,7 @@ class lti_flow {
     }
 
     /**
-     * Adds claims for the custom update discussion URL endpoint. This endpoint is a custom endpoint to be used
-     * during the backup restore workflow provided by the Kialo plugin.
+     * Adds claims for the custom endpoint of the Kialo plugin to update discussion URLs during the backup restore workflow.
      *
      * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
      * @param array $serviceparams
