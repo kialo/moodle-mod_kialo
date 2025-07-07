@@ -220,11 +220,11 @@ function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int
 
     if ($kialo->grade >= 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
-        $params['grademax']  = $kialo->grade;
-        $params['grademin']  = 0;
+        $params['grademax'] = $kialo->grade;
+        $params['grademin'] = 0;
     } else if ($kialo->grade < 0) {
         $params['gradetype'] = GRADE_TYPE_SCALE;
-        $params['scaleid']   = -$kialo->grade;
+        $params['scaleid'] = -$kialo->grade;
     } else {
         $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.
     }
@@ -263,7 +263,7 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
         kialo_grade_item_update($kialo, $grades);
     } else if ($userid && $nullifnone) {
         $grade = new stdClass();
-        $grade->userid   = $userid;
+        $grade->userid = $userid;
         $grade->rawgrade = null;
         kialo_grade_item_update($kialo, $grade);
     } else {
