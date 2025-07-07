@@ -39,6 +39,16 @@ const MOD_KIALO_LTI_AGS_SCOPES = [
 ];
 
 /**
+* Scope required for the Kialo LTI 1.3 service to update discussion URLs in the backup restore workflow.
+*/
+const MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE = "https://www.kialo-edu.com/spec/moodle-mod_kialo/scope/update_discussion_url";
+
+/**
+* Custom LTI claim that provides the endpoint to update discussion URLs during the backup and restore workflow.
+*/
+const MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_ENDPOINT_CLAIM = "https://www.kialo-edu.com/spec/moodle-mod_kialo/claim/endpoint";
+
+/**
  * Value used to indicate that the Kialo app should be displayed in the same Moodle window as an embed.
  */
 const MOD_KIALO_DISPLAY_IN_EMBED = 'embed';
