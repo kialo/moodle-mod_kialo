@@ -220,11 +220,11 @@ function kialo_grade_item_update(stdClass $kialo, ?stdClass $grades = null): int
 
     if ($kialo->grade >= 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
-        $params['grademax']  = $kialo->grade;
-        $params['grademin']  = 0;
+        $params['grademax'] = $kialo->grade;
+        $params['grademin'] = 0;
     } else if ($kialo->grade < 0) {
         $params['gradetype'] = GRADE_TYPE_SCALE;
-        $params['scaleid']   = -$kialo->grade;
+        $params['scaleid'] = -$kialo->grade;
     } else {
         $params['gradetype'] = GRADE_TYPE_TEXT; // Allow text comments only.
     }
@@ -263,10 +263,38 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
         kialo_grade_item_update($kialo, $grades);
     } else if ($userid && $nullifnone) {
         $grade = new stdClass();
-        $grade->userid   = $userid;
+        $grade->userid = $userid;
         $grade->rawgrade = null;
         kialo_grade_item_update($kialo, $grade);
     } else {
         kialo_grade_item_update($kialo);
+    }
+}
+
+/**
+ * Updates the discussion URL for a kialo activity instance.
+ *
+ * @param int $coursemoduleid Course module ID
+ * @param string $updateddiscussionurl New discussion URL
+ * @return void
+ * @throws dml_exception If database operation fails
+ * @throws dml_missing_record_exception If course module not found
+ */
+function kialo_update_discussion_url(int $coursemoduleid, string $updateddiscussionurl): void {
+    global $DB;
+
+    // Get the kialo instance ID from the course module.
+    $coursemodule = $DB->get_record('course_modules', ['id' => $coursemoduleid], 'instance', MUST_EXIST);
+    $kialoid = $coursemodule->instance;
+
+    // Update the discussion_url field in the kialo table.
+    $updatedata = new stdClass();
+    $updatedata->id = $kialoid;
+    $updatedata->discussion_url = $updateddiscussionurl;
+    $updatedata->timemodified = time();
+
+    $result = $DB->update_record('kialo', $updatedata);
+    if (!$result) {
+        throw new dml_exception('updaterecordfailed', 'Failed to update kialo record');
     }
 }
