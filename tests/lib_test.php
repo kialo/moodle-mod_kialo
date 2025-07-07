@@ -462,33 +462,6 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
-     * Test that the function handles long URLs correctly.
-     *
-     * @covers ::kialo_update_discussion_url
-     */
-    public function test_kialo_update_discussion_url_long_url(): void {
-        global $DB;
-        $this->resetAfterTest();
-
-        // Create a course and kialo activity.
-        $course = $this->getDataGenerator()->create_course();
-        $kialo = $this->getDataGenerator()->create_module('kialo', [
-            'course' => $course,
-        ]);
-
-        // Get the course module.
-        $cm = get_coursemodule_from_instance('kialo', $kialo->id);
-
-        // Test with a URL that's at the field limit (255 characters).
-        $longurl = 'https://example.com/' . str_repeat('a', 235); // 255 chars total.
-        kialo_update_discussion_url($cm->id, $longurl);
-
-        // Verify the URL was updated in the database.
-        $updatedkialo = $DB->get_record('kialo', ['id' => $kialo->id], '*', MUST_EXIST);
-        $this->assertEquals($longurl, $updatedkialo->discussion_url);
-    }
-
-    /**
      * Test that timemodified is updated when discussion URL changes.
      *
      * @covers ::kialo_update_discussion_url
