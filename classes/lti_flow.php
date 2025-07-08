@@ -409,19 +409,21 @@ class lti_flow {
         $originaltoken = (new Parser())->parse(LtiMessage::fromServerRequest($request)->getParameters()->get('lti_message_hint'));
         $courseid = $originaltoken->getClaims()->getMandatory(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT)['id'];
         $resourcelink = $originaltoken->getClaims()->get(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK);
-        $serviceparams = [
+        $agsparams = [
             "course_id" => $courseid,
         ];
 
         // Resource link claim is only present in resource link flows, not during deep linking.
         if ($resourcelink) {
-            $serviceparams['resource_link_id'] = $resourcelink['id'];
-            $serviceparams['cmid'] = self::parse_resource_link_id($resourcelink['id']);
-        }
+            $agsparams['resource_link_id'] = $resourcelink['id'];
 
-        // Add the actual endpoints.
-        self::add_ags_endpoints($payloadbuilder, $serviceparams);
-        self::add_update_discussion_url_endpoint($payloadbuilder, $serviceparams);
+            $cmid = self::parse_resource_link_id($resourcelink['id']);
+            $agsparams['cmid'] = $cmid;
+            self::add_update_discussion_url_endpoint($payloadbuilder, [
+                "cmid" => $cmid,
+            ]);
+        }
+        self::add_ags_endpoints($payloadbuilder, $agsparams);
     }
 
     /**

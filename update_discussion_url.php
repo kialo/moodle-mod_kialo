@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Handles `POST /lti_update_discussion_url.php` requests for the LTI 1.3 Kialo plugin
+ * Handles `POST /update_discussion_url.php` requests for the LTI 1.3 Kialo plugin
  *
  * @package    mod_kialo
  * @copyright  2025 onwards, Kialo GmbH <support@kialo-edu.com>
