@@ -44,6 +44,7 @@ try {
     http_response_code(204);
 } catch (\moodle_exception $e) {
     http_response_code(500);
+    header('Content-Type: application/json');
     echo json_encode(['error' => $e->getMessage()]);
     exit;
 }
