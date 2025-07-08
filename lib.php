@@ -277,7 +277,7 @@ function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone 
  * @param int $coursemoduleid Course module ID
  * @param string $updateddiscussionurl New discussion URL
  * @return void
- * @throws dml_exception If database operation fails
+ * @throws moodle_exception If database operation fails
  * @throws dml_missing_record_exception If course module not found
  */
 function kialo_update_discussion_url(int $coursemoduleid, string $updateddiscussionurl): void {
@@ -295,6 +295,6 @@ function kialo_update_discussion_url(int $coursemoduleid, string $updateddiscuss
 
     $result = $DB->update_record('kialo', $updatedata);
     if (!$result) {
-        throw new dml_exception('updaterecordfailed', 'Failed to update kialo record');
+        throw new \moodle_exception('errors:updaterecordfailed', 'kialo');
     }
 }
