@@ -298,3 +298,17 @@ function kialo_update_discussion_url(int $coursemoduleid, string $updateddiscuss
         throw new \moodle_exception('errors:updaterecordfailed', 'kialo');
     }
 }
+
+/**
+ * Sends a JSON error response with the given message and status code.
+ *
+ * @param int $statuscode The HTTP status code to set for the response.
+ * @param string $message The error message to send.
+ * @return void
+ */
+function send_json_error_response(int $statuscode, string $message): void {
+    http_response_code($statuscode);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => $message]);
+    exit;
+}

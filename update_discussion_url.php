@@ -37,14 +37,15 @@ $coursemoduleid = required_param('cmid', PARAM_INT);
 
 $requestbody = json_decode(file_get_contents('php://input'), true);
 
-$discussionurl = $requestbody['discussion_url'] ?? '';
+if (empty($requestbody['discussion_url'])) {
+    send_json_error_response(400, get_string('errors:missingdiscussionurl', 'kialo'));
+}
+
+$discussionurl = $requestbody['discussion_url'];
 
 try {
     kialo_update_discussion_url($coursemoduleid, $discussionurl);
     http_response_code(204);
 } catch (\moodle_exception $e) {
-    http_response_code(500);
-    header('Content-Type: application/json');
-    echo json_encode(['error' => $e->getMessage()]);
-    exit;
+    send_json_error_response(500, $e->getMessage());
 }
