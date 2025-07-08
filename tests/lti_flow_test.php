@@ -661,6 +661,33 @@ final class lti_flow_test extends \advanced_testcase {
     }
 
     /**
+     * The LTI authentication response should contain information about update_discussion_url endpoint.
+     *
+     * @covers \mod_kialo\lti_flow::lti_auth
+     */
+    public function test_lti_auth_response_contains_update_discussion_url_endpoint(): void {
+        $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
+
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
+            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+                "id" => lti_flow::resource_link_id($this->cmid),
+            ]);
+        });
+
+        // The response message should contain information about the discussion url update endpoints of the plugin.
+        $message = lti_flow::lti_auth();
+        $token = $this->assert_jwt_signed_by_platform($message->getParameters()->get("id_token"));
+        $claim = $token->claims()->get(MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_ENDPOINT_CLAIM);
+
+        $this->assertEquals([MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE], $claim["scope"]);
+        $this->assertEquals(
+            "https://www.example.com/moodle" .
+            "/mod/kialo/update_discussion_url.php?cmid={$this->cmid}",
+            $claim["update_discussion_url"]
+        );
+    }
+
+    /**
      * Provides test scenarios of invalid LTI auth requests.
      *
      * @return array[] lists of invalid LTI auth requests.
