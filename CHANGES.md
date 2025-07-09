@@ -1,3 +1,7 @@
+### v1.5.1 (Build - 2025070901)
+
+* Improved support for restoring Kialo activity backups.
+
 ### v1.5.0 (Build - 2025050501)
 
 * **New**: Dropped support for Moodle 3.8-3.11, and have increased minimum required Moodle version to 4.0.
