@@ -1,4 +1,4 @@
-### v1.5.1 (Build - 2025070901)
+### v1.5.1 (Build - 2025071501)
 
 * Improved support for restoring Kialo activity backups.
 
