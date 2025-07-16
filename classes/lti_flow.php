@@ -386,7 +386,7 @@ class lti_flow {
             'product_family_code' => self::PRODUCT_FAMILY_CODE,
             'version' => $CFG->version,
         ]);
-        self::add_grading_service($payloadbuilder, $request);
+        self::add_endpoints($payloadbuilder, $request);
 
         // Create the OIDC authenticator.
         $authenticator = new OidcAuthenticator($registrationrepository, $userauthenticator, $payloadbuilder);
@@ -396,9 +396,7 @@ class lti_flow {
     }
 
     /**
-     * Adds claims necessary to inform LTI consumers about the assignment and grading service we implemented
-     * according to https://www.imsglobal.org/spec/lti-ags/v2p0. Essentially it provides the endpoints necessary
-     * to use the service from the Kialo app (the LTI tool / consumer).
+     * Adds all necessary service endpoint claims to the LTI payload.
      *
      * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
      * @param ServerRequestInterface $request The LTI authentication request
@@ -406,21 +404,40 @@ class lti_flow {
      * @throws LtiExceptionInterface
      * @throws \moodle_exception
      */
-    public static function add_grading_service(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
+    public static function add_endpoints(MessagePayloadBuilder $payloadbuilder, ServerRequestInterface $request): void {
         // Get required context for service params from original JWT token. See init_resource_link and init_deep_link.
         $originaltoken = (new Parser())->parse(LtiMessage::fromServerRequest($request)->getParameters()->get('lti_message_hint'));
         $courseid = $originaltoken->getClaims()->getMandatory(LtiMessagePayloadInterface::CLAIM_LTI_CONTEXT)['id'];
         $resourcelink = $originaltoken->getClaims()->get(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK);
-        $serviceparams = [
+        $agsparams = [
             "course_id" => $courseid,
         ];
 
         // Resource link claim is only present in resource link flows, not during deep linking.
         if ($resourcelink) {
-            $serviceparams['resource_link_id'] = $resourcelink['id'];
-            $serviceparams['cmid'] = self::parse_resource_link_id($resourcelink['id']);
-        }
+            $agsparams['resource_link_id'] = $resourcelink['id'];
 
+            $cmid = self::parse_resource_link_id($resourcelink['id']);
+            $agsparams['cmid'] = $cmid;
+            self::add_update_discussion_url_endpoint($payloadbuilder, [
+                "cmid" => $cmid,
+            ]);
+        }
+        self::add_ags_endpoints($payloadbuilder, $agsparams);
+    }
+
+    /**
+     * Adds claims necessary to inform LTI consumers about the assignment and grading service we implemented
+     * according to https://www.imsglobal.org/spec/lti-ags/v2p0. Essentially it provides the endpoints necessary
+     * to use the service from the Kialo app (the LTI tool / consumer).
+     *
+     * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
+     * @param array $serviceparams
+     * @return void
+     * @throws LtiExceptionInterface
+     * @throws \moodle_exception
+     */
+    public static function add_ags_endpoints(MessagePayloadBuilder $payloadbuilder, array $serviceparams): void {
         $payloadbuilder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_AGS, [
             "scope" => MOD_KIALO_LTI_AGS_SCOPES,
 
@@ -438,6 +455,21 @@ class lti_flow {
     }
 
     /**
+     * Adds claims for the custom endpoint of the Kialo plugin to update discussion URLs during the backup restore workflow.
+     *
+     * @param MessagePayloadBuilder $payloadbuilder Payload to add claims to (for the LTI authentication response)
+     * @param array $serviceparams
+     * @return void
+     * @throws LtiExceptionInterface
+     * @throws \moodle_exception
+     */
+    public static function add_update_discussion_url_endpoint(MessagePayloadBuilder $payloadbuilder, array $serviceparams): void {
+        $payloadbuilder->withClaim(MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_ENDPOINT_CLAIM, [
+            "scope" => [MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE],
+            "update_discussion_url" => (new moodle_url('/mod/kialo/update_discussion_url.php', $serviceparams))->out(false),
+        ]);
+    }
+    /**
      * Generates an access token for the service to use when calling the LTI service endpoints.
      * @return ResponseInterface
      * @throws \dml_exception
@@ -449,7 +481,10 @@ class lti_flow {
         $factory = new AuthorizationServerFactory(
             new ClientRepository($registrationrepo, null, new kialo_logger("ClientRepository")),
             new AccessTokenRepository(moodle_cache::access_token_cache(), new kialo_logger("AccessTokenRepository")),
-            new ScopeRepository(array_map(fn ($scope): Scope => new Scope($scope), MOD_KIALO_LTI_AGS_SCOPES)),
+            new ScopeRepository(array_map(
+                fn ($scope): Scope => new Scope($scope),
+                [...MOD_KIALO_LTI_AGS_SCOPES, MOD_KIALO_LTI_UPDATE_DISCUSSION_URL_SCOPE]
+            )),
             $kialoconfig->get_platform_keychain()->getPrivateKey()->getContent(),
         );
 
