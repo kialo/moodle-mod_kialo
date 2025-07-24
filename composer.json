@@ -40,9 +40,8 @@
       "phpcs --config-set default_standard moodle"
     ],
     "lint": [
-      "phpcs --version",
-      "phpcs --standard=moodle --ignore=vendor,development -s .",
-      "php-cs-fixer fix --dry-run --diff"
+      "vendor/bin/phpcs --standard=moodle --ignore=vendor,development -s .",
+      "vendor/bin/php-cs-fixer fix --dry-run --diff"
     ],
     "fix": [
       "phpcbf --standard=moodle --ignore=vendor,development .",
