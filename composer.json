@@ -21,7 +21,7 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.13",
     "moodlehq/moodle-cs": "^v3.4.10",
-    "friendsofphp/php-cs-fixer": "^3.58",
+    "friendsofphp/php-cs-fixer": "^3.59",
     "phpro/grumphp-shim": "^1.13"
   },
   "config": {
@@ -40,6 +40,7 @@
       "phpcs --config-set default_standard moodle"
     ],
     "lint": [
+      "phpcs --version",
       "phpcs --standard=moodle --ignore=vendor,development -s .",
       "php-cs-fixer fix --dry-run --diff"
     ],
