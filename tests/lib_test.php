@@ -39,7 +39,6 @@ require_once($CFG->dirroot . '/mod/kialo/constants.php');
  * @author    Kialo GmbH (support@kialo-edu.com)
  */
 final class lib_test extends \advanced_testcase {
-
     /**
      * Check support
      *

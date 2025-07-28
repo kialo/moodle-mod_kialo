@@ -37,7 +37,6 @@ use core_privacy\local\metadata\collection;
  * @covers \mod_kialo\privacy\provider
  */
 final class provider_test extends \core_privacy\tests\provider_testcase {
-
     /**
      * Test for provider::get_metadata().
      */

@@ -32,7 +32,6 @@ require_once($CFG->dirroot . '/mod/kialo/backup/moodle2/restore_kialo_stepslib.p
  * Implementation of the Moodle Restore API for the Kialo plugin.
  */
 class restore_kialo_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */
@@ -73,7 +72,6 @@ class restore_kialo_activity_task extends restore_activity_task {
         $rules[] = new restore_decode_rule('KIALOINDEX', '/mod/kialo/index.php?id=$1', 'course');
 
         return $rules;
-
     }
 
     /**

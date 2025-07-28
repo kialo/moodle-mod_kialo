@@ -23,7 +23,6 @@
  * @phpcs:disable PHPCompatibility.FunctionDeclarations.RemovedImplicitlyNullableParam.Deprecated
  */
 class mod_kialo_generator extends testing_module_generator {
-
     /**
      * Create a new instance of the Kialo activity module, setting some useful default placeholder values for tests.
      * @param stdClass $record

@@ -64,7 +64,7 @@ if ($ADMIN->fulltree) {
             'mod_kialo/kialourl',
             new lang_string('kialourl', 'mod_kialo'),
             new lang_string('kialourl_desc', 'mod_kialo'),
-            '',  // If left blank, this defaults to the TARGET_KIALO_URL env var or 'https://www.kialo-edu.com'.
+            '', // If left blank, this defaults to the TARGET_KIALO_URL env var or 'https://www.kialo-edu.com'.
         );
 
         $settings->add($kialourl);

@@ -40,7 +40,6 @@ require_once(__DIR__ . '/constants.php');
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_kialo_mod_form extends moodleform_mod {
-
     /**
      * Defines forms elements
      */

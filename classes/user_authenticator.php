@@ -39,7 +39,6 @@ use OAT\Library\Lti1p3Core\User\UserIdentity;
  * create a new account on Kialo.
  */
 class user_authenticator implements UserAuthenticatorInterface {
-
     /**
      * Authenticates the user.
      * @param RegistrationInterface $registration

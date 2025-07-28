@@ -32,7 +32,6 @@ use OAT\Library\Lti1p3Core\Security\Nonce\NonceInterface;
  * A static nonce generator that always returns the same nonce.
  */
 class static_nonce_generator implements NonceGeneratorInterface {
-
     /**
      * @var string
      */

@@ -35,7 +35,6 @@ require_once(__DIR__ . '/../../vendor/autoload.php');
  * Tests the LTI flow.
  */
 final class grading_service_test extends \advanced_testcase {
-
     /**
      * Copy of $_SERVER superglobal before the test.
      * @var array|null

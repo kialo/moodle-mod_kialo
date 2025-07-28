@@ -63,7 +63,6 @@ use Psr\Http\Message\ServerRequestInterface;
  * Functions implementing the LTI steps.
  */
 class lti_flow {
-
     /**
      * The LTI standard requires a stable GUID to be send with the platform information.
      * See https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim.
@@ -335,13 +334,13 @@ class lti_flow {
             [
                 new DeepLinkingSettingsClaim(
                     $deeplinkingreturnurl,
-                    [LtiResourceLinkInterface::TYPE],   // Accept_types.
-                    ["window"],                         // Accept_presentation_document_targets.
-                    null,                               // Accept_media_types, unused.
-                    false,                              // AcceptMultiple: We just accept one discussion.
-                    false,                              // AutoCreate.
-                    null,                               // Title, unused.
-                    null,                               // Text, unused.
+                    [LtiResourceLinkInterface::TYPE], // Accept_types.
+                    ["window"], // Accept_presentation_document_targets.
+                    null, // Accept_media_types, unused.
+                    false, // AcceptMultiple: We just accept one discussion.
+                    false, // AutoCreate.
+                    null, // Title, unused.
+                    null, // Text, unused.
                     $datatoken,
                 ),
 

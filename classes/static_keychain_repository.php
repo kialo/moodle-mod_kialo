@@ -35,7 +35,6 @@ use OAT\Library\Lti1p3Core\Security\Key\KeyChainRepositoryInterface;
  * A static keychain repository that always returns the same keychain.
  */
 class static_keychain_repository implements KeyChainRepositoryInterface {
-
     /**
      * The registration that is returned by the repository.
      * @var KeyChainInterface

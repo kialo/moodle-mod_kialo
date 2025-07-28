@@ -33,7 +33,6 @@ require_once(__DIR__ . '/../vendor/autoload.php');
  * Tests the LTI flow.
  */
 final class lti_token_test extends \advanced_testcase {
-
     /**
      * Tests the expected result when just calling this endpoint with a GET request without necessary parameters.
      * @return void
