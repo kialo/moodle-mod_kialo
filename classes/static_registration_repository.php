@@ -34,7 +34,6 @@ use OAT\Library\Lti1p3Core\Registration\RegistrationRepositoryInterface;
  * A static registration repository that always returns the same registration.
  */
 class static_registration_repository implements RegistrationRepositoryInterface {
-
     /**
      * The registration that is returned by the repository.
      * @var RegistrationInterface

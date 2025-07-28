@@ -110,11 +110,11 @@ class kialo_config {
         $publickeystr = openssl_pkey_get_details(openssl_pkey_get_private($privatekeystr))['key'];
 
         return (new KeyChainFactory())->create(
-            $kid,                       // Identifier (used for JWT kid header).
-            'kialo',                    // Key set name (for grouping).
-            $publickeystr,              // Public key (file or content).
-            $privatekeystr,             // Private key (file or content).
-            '',                         // Our key has no passphrase.
+            $kid, // Identifier (used for JWT kid header).
+            'kialo', // Key set name (for grouping).
+            $publickeystr, // Public key (file or content).
+            $privatekeystr, // Private key (file or content).
+            '', // Our key has no passphrase.
             KeyInterface::ALG_RS256     // Algorithm.
         );
     }
@@ -134,10 +134,10 @@ class kialo_config {
      */
     public function get_platform(): Platform {
         return new Platform(
-            'kialo-moodle-plugin',                               // Identifier.
-            'Kialo Moodle Plugin',                               // Name.
-            (new moodle_url('/mod/kialo'))->out(),               // Audience.
-            (new moodle_url('/mod/kialo/lti_auth.php'))->out(),  // OIDC authentication url.
+            'kialo-moodle-plugin', // Identifier.
+            'Kialo Moodle Plugin', // Name.
+            (new moodle_url('/mod/kialo'))->out(), // Audience.
+            (new moodle_url('/mod/kialo/lti_auth.php'))->out(), // OIDC authentication url.
             (new moodle_url('/mod/kialo/lti_token.php'))->out(), // OAuth2 access token URL.
         );
     }
@@ -149,11 +149,11 @@ class kialo_config {
     public function get_tool(): Tool {
         $toolurl = $this->get_tool_url();
         return new Tool(
-            'kialo-edu',                // Identifier.
-            'Kialo Edu',                // Name.
-            $toolurl,                   // Audience.
-            $toolurl . '/lti/start',    // OIDC initiation url.
-            $toolurl . '/lti/launch',   // Launch url.
+            'kialo-edu', // Identifier.
+            'Kialo Edu', // Name.
+            $toolurl, // Audience.
+            $toolurl . '/lti/start', // OIDC initiation url.
+            $toolurl . '/lti/launch', // Launch url.
             $toolurl . '/lti/deeplink'  // Deep linking url.
         );
     }
@@ -171,15 +171,15 @@ class kialo_config {
         $deploymentids = $deploymentid ? [$deploymentid] : [];
 
         return new Registration(
-            'kialo-moodle-registration',    // Registration ID. Since we don't need to store this, we can use a constant.
-            $this->get_client_id(),         // Client ID.
-            $this->get_platform(),          // Platform.
-            $tool,                          // Tool.
-            $deploymentids,                 // Deployment IDs.
+            'kialo-moodle-registration', // Registration ID. Since we don't need to store this, we can use a constant.
+            $this->get_client_id(), // Client ID.
+            $this->get_platform(), // Platform.
+            $tool, // Tool.
+            $deploymentids, // Deployment IDs.
             $this->get_platform_keychain(), // Platform's keychain used for signing messages.
-            $this->toolkeychain,            // Kialo's keychain for verifying messages. Usuallly downloaded from the JWKS URL.
-            $platformjwksurl,               // JWKS URL for the platform. Unused by us.
-            $tooljwksurl,                   // JWKS URL used to download Kialo's keyset.
+            $this->toolkeychain, // Kialo's keychain for verifying messages. Usuallly downloaded from the JWKS URL.
+            $platformjwksurl, // JWKS URL for the platform. Unused by us.
+            $tooljwksurl, // JWKS URL used to download Kialo's keyset.
         );
     }
 

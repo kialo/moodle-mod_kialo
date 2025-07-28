@@ -26,8 +26,8 @@
 
 // phpcs:disable moodle.Files.RequireLogin.Missing -- This is a public endpoint that doesn't require a login.
 
-require(__DIR__.'/../../config.php');
-require_once(__DIR__.'/lib.php');
+require(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 use OAT\Library\Lti1p3Core\Security\Jwks\Exporter\Jwk\JwkRS256Exporter;
@@ -41,10 +41,10 @@ $pk = openssl_pkey_get_details($privatekey);
 $publickeystr = $pk['key'];
 
 $platformkeychain = (new KeyChainFactory())->create(
-    $kid,                       // Identifier (used for JWT kid header).
-    'kialo',                    // Key set name (for grouping).
-    $publickeystr,              // Public key (file or content).
-    $privatekeystr,             // Private key (file or content).
+    $kid, // Identifier (used for JWT kid header).
+    'kialo', // Key set name (for grouping).
+    $publickeystr, // Public key (file or content).
+    $privatekeystr, // Private key (file or content).
 );
 
 $jwkexport = (new JwkRS256Exporter())->export($platformkeychain);

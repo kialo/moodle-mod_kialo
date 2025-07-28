@@ -40,7 +40,7 @@ use core_privacy\local\metadata\null_provider;
  * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider, null_provider {
+class provider implements null_provider, \core_privacy\local\metadata\provider {
     /**
      * Declares the personal data exported to Kialo.
      * @param collection $collection

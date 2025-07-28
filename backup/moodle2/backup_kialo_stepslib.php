@@ -28,7 +28,6 @@
  * Define all the backup steps that will be used by the backup_choice_activity_task
  */
 class backup_kialo_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Define the backup structure for the kialo activity.
      * @return backup_nested_element

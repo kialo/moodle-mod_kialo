@@ -257,7 +257,7 @@ function kialo_get_user_grades(stdClass $kialo, int $userid): stdClass {
  */
 function kialo_update_grades(stdClass $kialo, int $userid = 0, bool $nullifnone = true): void {
     global $CFG, $DB;
-    require_once($CFG->libdir.'/gradelib.php');
+    require_once($CFG->libdir . '/gradelib.php');
 
     if ($userid > 0 && $grades = kialo_get_user_grades($kialo, $userid)) {
         kialo_grade_item_update($kialo, $grades);

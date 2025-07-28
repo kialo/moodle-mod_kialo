@@ -44,7 +44,6 @@ use stdClass;
  * @covers \mod_kialo\backup\restore_kialo_activity_task
  */
 final class backup_and_restore_test extends advanced_testcase {
-
     /**
      * Setup to ensure that fixtures are loaded.
      */

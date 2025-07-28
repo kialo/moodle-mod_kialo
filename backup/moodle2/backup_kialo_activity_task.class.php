@@ -32,7 +32,6 @@ require_once($CFG->dirroot . '/mod/kialo/backup/moodle2/backup_kialo_stepslib.ph
  * Implements Moodle's backup interface.
  */
 class backup_kialo_activity_task extends \backup_activity_task {
-
     /**
      * This plugin has no backup settings.
      */

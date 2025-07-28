@@ -26,7 +26,6 @@ use Psr\Log\LoggerInterface;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class kialo_logger implements LoggerInterface {
-
     /**
      * Name of the logger.
      *

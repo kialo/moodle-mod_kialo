@@ -34,7 +34,6 @@ require_once(__DIR__ . '/../vendor/autoload.php');
  * @covers \mod_kialo\static_registration_repository
  */
 final class static_registration_repository_test extends \basic_testcase {
-
     /**
      * Tests the static registration repository.
      * @covers \mod_kialo\static_registration_repository::find

@@ -54,7 +54,6 @@ require_once(__DIR__ . '/../vendor/autoload.php');
  * Tests the LTI flow.
  */
 final class lti_flow_test extends \advanced_testcase {
-
     /**
      * Message is signed by the platform (the Kialo Moodle plugin).
      */
@@ -151,11 +150,11 @@ final class lti_flow_test extends \advanced_testcase {
         $toolpublickeystr = openssl_pkey_get_details(openssl_pkey_get_private($toolprivatekeystr))['key'];
 
         $toolkeychain = (new KeyChainFactory())->create(
-            'example-key-id-1234',                           // Identifier (used for JWT kid header).
-            'kialo',                                         // Key set name (for grouping).
-            $toolpublickeystr,                               // Public key (file or content).
-            $toolprivatekeystr,                              // Private key (file or content).
-            '',                                              // Our key has no passphrase.
+            'example-key-id-1234', // Identifier (used for JWT kid header).
+            'kialo', // Key set name (for grouping).
+            $toolpublickeystr, // Public key (file or content).
+            $toolprivatekeystr, // Private key (file or content).
+            '', // Our key has no passphrase.
             KeyInterface::ALG_RS256                          // Algorithm.
         );
 
