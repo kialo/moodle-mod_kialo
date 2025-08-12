@@ -1,3 +1,7 @@
+### v1.5.2 (Build - 2025081201)
+
+* Minor fix for a grading synchronization issue.
+
 ### v1.5.1 (Build - 2025071501)
 
 * Improved support for restoring Kialo activity backups.

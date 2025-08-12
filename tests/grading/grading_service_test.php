@@ -317,4 +317,46 @@ final class grading_service_test extends \advanced_testcase {
         // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
         $this->expectOutputRegex('/(The instance of this module does not exist)+/');
     }
+
+    /**
+     * Ensure get_line_item only fetches grade item from the same course.
+     *
+     * @return void
+     * @throws \OAT\Library\Lti1p3Core\Exception\LtiException
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     * @covers \mod_kialo\grading\grading_service::get_line_item
+     */
+    public function test_get_line_item_ignores_other_course_grade_item(): void {
+        $maxgrade = 77;
+
+        // Course A with Kialo module and grade max 77.
+        $coursea = $this->getDataGenerator()->create_course();
+        $kialoa = $this->getDataGenerator()->create_module('kialo', ['course' => $coursea->id, 'grade' => $maxgrade]);
+        $cma = get_coursemodule_from_instance('kialo', $kialoa->id);
+
+        // Course B with a conflicting grade_item (same iteminstance).
+        $courseb = $this->getDataGenerator()->create_course();
+        $this->getDataGenerator()->create_grade_item([
+            'iteminstance' => $kialoa->id,
+            'courseid' => $courseb->id,
+            'itemmodule' => 'kialo',
+            'itemtype' => 'mod',
+            'grademax' => 5,
+        ]);
+
+        $courseid = $coursea->id;
+        $coursemoduleid = $cma->id;
+        $resourcelinkid = lti_flow::resource_link_id($coursemoduleid);
+
+        $endpoint = "/mod/kialo/lti_lineitem.php?course_id={$courseid}&cmid={$coursemoduleid}&resource_link_id={$resourcelinkid}";
+        $_SERVER['REQUEST_URI'] = $endpoint;
+
+        $lineitem = grading_service::get_line_item($courseid, $coursemoduleid, $resourcelinkid);
+        $this->assertEquals("https://www.example.com/moodle" . $endpoint, $lineitem->id);
+        $this->assertEquals($cma->name, $lineitem->label);
+        // Should respect Course A's grade item, not the conflicting one in Course B.
+        $this->assertEquals($maxgrade, $lineitem->scoreMaximum);
+        $this->assertEquals($resourcelinkid, $lineitem->resourceLinkId);
+    }
 }
