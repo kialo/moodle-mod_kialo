@@ -335,9 +335,8 @@ final class grading_service_test extends \advanced_testcase {
         $kialoa = $this->getDataGenerator()->create_module('kialo', ['course' => $coursea->id, 'grade' => $maxgrade]);
         $cma = get_coursemodule_from_instance('kialo', $kialoa->id);
 
-        // Course B with a conflicting grade_item (same iteminstance) but different module type.
+        // Course B with a conflicting grade_item (same iteminstance).
         $courseb = $this->getDataGenerator()->create_course();
-        // Create a grade item in another course with same iteminstance id to simulate collision.
         $this->getDataGenerator()->create_grade_item([
             'iteminstance' => $kialoa->id,
             'courseid' => $courseb->id,
