@@ -81,7 +81,7 @@ $conf = [
         ],
         // This is similar to https://www.imsglobal.org/spec/lti/v1p3#platform-instance-claim, but not the same!
         'https://purl.imsglobal.org/spec/lti-platform-configuration' => [
-                'product_family_code' => 'moodle_kialo_plugin',
+                'product_family_code' => 'moodle',
                 'version' => $CFG->release,
                 'messages_supported' => [
                         ['type' => 'LtiResourceLinkRequest'],
