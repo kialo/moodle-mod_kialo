@@ -129,7 +129,7 @@ the thirdpartylibs.xml file is up to date.
 If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBSXML=1` to automatically regenerate the file:
 
 ```shell
-UPDATE_THIRDPARTYLIBSXML=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
+UPDATE_THIRDPARTYLIBSXML=1 composer test-single -- thirdpartylibs_test.php
 ```
 
 ## Linting
