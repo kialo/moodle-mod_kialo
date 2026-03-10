@@ -37,7 +37,7 @@ done
 echo "MariaDB is ready!"
 
 # Ensure ownership of the mounted directory is the same as host for Linux
-chown -R developer:developer /var/www/html/mod/kialo
+chown -R developer:developer "/var/www/html/$MOODLE_MOD_PATH/kialo"
 
 # Install Moodle. See https://docs.moodle.org/404/en/Installing_Moodle#Command_line_installer
 su - www-data -s /bin/bash -c "php /var/www/html/admin/cli/install.php --non-interactive --agree-license --allow-unstable --wwwroot=$MOODLE_HOST --dataroot=/var/www/moodledata --dbtype=mariadb --dbhost=$MOODLE_DATABASE_HOST --dbname=moodle --dbuser=moodle --dbpass=$MOODLE_DATABASE_PASSWORD --dbport=$MOODLE_DATABASE_PORT_NUMBER --fullname=Moodle --shortname=moodle --adminuser=user --adminpass=$MOODLE_PASSWORD --adminemail=sre@kialo.com --supportemail=sre@kialo.com"

@@ -44,9 +44,12 @@ services:
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
       - KIALO_IP=${KIALO_IP}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
+      # Moodle 5.1+ serves from public/, older versions from the root.
+      # Set MOODLE_MOD_PATH=mod in .env for Moodle < 5.1.
+      - MOODLE_MOD_PATH=${MOODLE_MOD_PATH:-public/mod}
     volumes:
-      - '..:/var/www/html/mod/kialo'
-      - /var/www/html/mod/kialo/.git
+      - '..:/var/www/html/${MOODLE_MOD_PATH:-public/mod}/kialo'
+      - /var/www/html/${MOODLE_MOD_PATH:-public/mod}/kialo/.git
     depends_on:
       - mariadb
   moodleapp:

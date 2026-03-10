@@ -4,8 +4,10 @@
 export NVM_DIR=$HOME/.nvm
 . $NVM_DIR/nvm.sh
 
-cd /var/www/html/mod/kialo
+KIALO_DIR="/var/www/html/$MOODLE_MOD_PATH/kialo"
 
-while inotifywait -r -e modify,create,delete,move /var/www/html/mod/kialo/amd/src; do
+cd "$KIALO_DIR"
+
+while inotifywait -r -e modify,create,delete,move "$KIALO_DIR/amd/src"; do
   npx grunt amd;
 done
