@@ -324,9 +324,6 @@ final class lib_test extends \advanced_testcase {
         $this->assertEquals(50, $grade->grade);
         $this->assertEquals('Good job!', $grade->feedback);
         $this->assertNotNull($grade->datesubmitted);
-
-        // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
-        $this->expectOutputRegex('/(The instance of this module does not exist)+/');
     }
 
     /**

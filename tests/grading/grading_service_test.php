@@ -248,9 +248,6 @@ final class grading_service_test extends \advanced_testcase {
         $this->assertEquals($score, $grade->grade);
         $this->assertEquals($feedback, $grade->feedback);
         $this->assertEquals(FORMAT_MOODLE, $grade->feedbackformat);
-
-        // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
-        $this->expectOutputRegex('/(The instance of this module does not exist)+/');
     }
 
 
@@ -313,9 +310,6 @@ final class grading_service_test extends \advanced_testcase {
         $this->assertEquals($score, $grade->grade);
         $this->assertEquals($feedback, $grade->feedback);
         $this->assertEquals(FORMAT_MOODLE, $grade->feedbackformat);
-
-        // I don't know why these warnings appear. The test itself works as expected, and the plugin code itself, as well.
-        $this->expectOutputRegex('/(The instance of this module does not exist)+/');
     }
 
     /**
