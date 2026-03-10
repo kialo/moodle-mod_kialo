@@ -44,9 +44,10 @@ services:
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}
       - KIALO_IP=${KIALO_IP}
       - MOODLE_HOST=http://${MOODLE_HOST:-localhost:8080}
+      - MOODLE_PUBLIC_PREFIX=${MOODLE_PUBLIC_PREFIX-public/}
     volumes:
-      - '..:/var/www/html/mod/kialo'
-      - /var/www/html/mod/kialo/.git
+      - '..:/var/www/html/${MOODLE_PUBLIC_PREFIX-public/}mod/kialo'
+      - /var/www/html/${MOODLE_PUBLIC_PREFIX-public/}mod/kialo/.git
     depends_on:
       - mariadb
   moodleapp:
