@@ -20,7 +20,6 @@
  * @package    mod_kialo
  * @copyright  2023 onwards, Kialo GmbH <support@kialo-edu.com>
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @phpcs:disable PHPCompatibility.FunctionDeclarations.RemovedImplicitlyNullableParam.Deprecated
  */
 class mod_kialo_generator extends testing_module_generator {
     /**
@@ -30,7 +29,7 @@ class mod_kialo_generator extends testing_module_generator {
      * @return stdClass
      * @throws coding_exception
      */
-    public function create_instance($record = null, array $options = null): stdClass {
+    public function create_instance($record = null, ?array $options = null): stdClass {
         $record = (object) (array) $record;
 
         // Set some useful defaults for tests.
