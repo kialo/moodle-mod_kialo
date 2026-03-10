@@ -1,6 +1,7 @@
 # Kialo Discussions #
 
 Perfect for class discussions and argumentative reasoning, online debates are easy with Kialo Edu!
+
 Motivate and empower students to have lively yet thoughtful discussions like never before.
 
 ## Table of Contents  
