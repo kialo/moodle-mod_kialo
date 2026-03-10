@@ -55,8 +55,8 @@ You can add an entry to your `/etc/hosts` file so the custom hostname resolves c
 
 After you started Moodle for the first time, do the following to set some useful default settings:
 
-* Import `development/config/kialo-admin-preset-universal.xml` via http://{MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import. (Note: you need to login with "user/kialo1234".)
-* Accept Kialo plugin ToS at http://{MOODLE_HOST}:8080/admin/settings.php?section=modsettingkialo.
+* Import `development/config/kialo-admin-preset-universal.xml` via `http://${MOODLE_HOST}/admin/tool/admin_presets/index.php?action=import`. (Note: you need to login with "user/kialo1234".)
+* Accept Kialo plugin ToS at `http://${MOODLE_HOST}/admin/settings.php?section=modsettingkialo`.
 
 The admin presets are important, as they adjust Moodle's curl blocklist and allowed ports. Without that,
 testing Kialo locally won't work, as communication will be blocked by Moodle.
