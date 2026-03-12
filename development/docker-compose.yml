@@ -1,20 +1,21 @@
 name: mod_kialo
 services:
   mariadb:
-    image: docker.io/bitnami/mariadb:10.11
+    image: mariadb:10.11
     ports:
       - '8833:3306'
       - '8443:443'
     environment:
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
+      # MARIADB_ALLOW_EMPTY_ROOT_PASSWORD is recommended only for development.
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_USER=moodle
+      - MARIADB_PASSWORD=moodle
       - MARIADB_DATABASE=moodle
       - MARIADB_CHARACTER_SET=utf8mb4
       - MARIADB_COLLATE=utf8mb4_unicode_ci
     # liveness probe
     healthcheck:
-      test: ["CMD", "mysqladmin", "status", "-uroot"]
+      test: ["CMD", "mariadb-admin", "status", "-uroot"]
       interval: 2s
       timeout: 1s
       retries: 10
@@ -37,7 +38,7 @@ services:
     environment:
       - MOODLE_DATABASE_HOST=mariadb
       - MOODLE_DATABASE_PORT_NUMBER=3306
-      - ALLOW_EMPTY_PASSWORD=yes
+      - MOODLE_DATABASE_PASSWORD=moodle
       - MOODLE_PASSWORD=kialo1234
       # you can override the following by creating a .env file in the same directory as this file
       - TARGET_KIALO_URL=${TARGET_KIALO_URL:-http://localhost:5000}

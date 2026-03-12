@@ -129,12 +129,8 @@ the thirdpartylibs.xml file is up to date.
 If the test fails, run it with the env variable `UPDATE_THIRDPARTYLIBSXML=1` to automatically regenerate the file:
 
 ```shell
-UPDATE_THIRDPARTYLIBSXML=1 ./vendor/bin/phpunit tests/thirdpartylibs_test.php
+UPDATE_THIRDPARTYLIBSXML=1 composer test-single -- thirdpartylibs_test.php
 ```
-
-Dependencies for pipeline runs are handled in the composer-ci.json file. If you need dependencies locally that
-result in pipeline failures, you may want to adjust this file to exclude certain dependencies that cause issues
-or change other settings that are not relevant for local development.
 
 ## Linting
 
