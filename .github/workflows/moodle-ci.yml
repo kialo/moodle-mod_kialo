@@ -19,7 +19,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
+        image: postgres:16
         env:
           POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
@@ -42,35 +42,27 @@ jobs:
       fail-fast: false
       matrix:
         php:  # see https://moodledev.io/general/development/policies/php
-          - '7.4'  # minimum support version by Moodle 4.1
-          - '8.0'
-          - '8.1'
+          - '8.1' # min. supported version by Moodle 4.5
           - '8.3' # max. supported version by Moodle 4.5
-#          - '8.4' # max. supported version by Moodle 5.0, not used in testing yet because php-cs-fixer does not support it yet
-        moodle-branch: [ 'MOODLE_401_STABLE', 'MOODLE_405_STABLE', 'MOODLE_500_STABLE', 'main' ]  # LTS & latest.
+          - '8.4' # max. supported version by Moodle 5.0/5.1
+        moodle-branch:
+          # Versions officially supported by Moodle (https://moodledev.io/general/releases)
+          - 'MOODLE_405_STABLE'
+          - 'MOODLE_500_STABLE'
+          - 'MOODLE_501_STABLE'
+          - 'main'
         database: [ pgsql ]  # We don't use any database specific features, and our test sites run mariadb already.
         exclude:
           # Moodle 5.0+ requires PHP 8.2+
           - php: '8.1'
-            moodle-branch: 'main'
+            moodle-branch: 'MOODLE_500_STABLE'
           - php: '8.1'
-            moodle-branch: 'MOODLE_500_STABLE'
-          # Moodle 4.4+ requires PHP 8.1+
-          - php: '8.0'
-            moodle-branch: 'MOODLE_405_STABLE'
-          - php: '8.0'
+            moodle-branch: 'MOODLE_501_STABLE'
+          - php: '8.1'
             moodle-branch: 'main'
-          - php: '8.0'
-            moodle-branch: 'MOODLE_500_STABLE'
-          - php: '7.4'
+          # Moodle 4.5 only supports PHP 8.1-8.3
+          - php: '8.4'
             moodle-branch: 'MOODLE_405_STABLE'
-          - php: '7.4'
-            moodle-branch: 'main'
-          - php: '7.4'
-            moodle-branch: 'MOODLE_500_STABLE'
-          # Moodle 4.1 does not support PHP 8.3
-          - php: '8.3'
-            moodle-branch: 'MOODLE_401_STABLE'
 
     steps:
       - name: Check out repository code

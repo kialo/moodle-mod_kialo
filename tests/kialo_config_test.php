@@ -31,6 +31,7 @@ require_once(__DIR__ . '/../vendor/autoload.php');
 
 /**
  * Tests the mod_kialo config.
+ * @covers \mod_kialo\kialo_config
  */
 final class kialo_config_test extends \advanced_testcase {
     public function setUp(): void {
@@ -152,6 +153,7 @@ final class kialo_config_test extends \advanced_testcase {
      * Tests the registration repository.
      * @covers \mod_kialo\kialo_config::get_instance::get_registration_repository
      */
+    #[\PHPUnit\Framework\Attributes\IgnoreDeprecations]
     public function test_registration_repository(): void {
         $repo = kialo_config::get_instance()->get_registration_repository("DEPLID1234");
         $this->assertNotNull($repo);

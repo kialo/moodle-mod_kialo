@@ -28,6 +28,9 @@ ENV MOODLE_BRANCH=${MOODLE_BRANCH}
 
 RUN git clone git://git.moodle.org/moodle.git /var/www/html --depth=1 --branch ${MOODLE_BRANCH}
 
+# Support older Moodle versions that don't have a 'public' directory by symlinking to the root
+RUN if [ ! -d /var/www/html/public ]; then ln -s . /var/www/html/public; fi
+
 USER root
 COPY config.php /var/www/html/config_kialo.php
 RUN chown www-data /var/www/html/config_kialo.php
