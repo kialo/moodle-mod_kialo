@@ -1,3 +1,7 @@
+### v1.6.0 (Build - 2026040701)
+
+* Updated dependencies.
+
 ### v1.5.2 (Build - 2025081201)
 
 * Minor fix for a grading synchronization issue.
