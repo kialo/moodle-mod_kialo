@@ -33,8 +33,28 @@ require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 use mod_kialo\kialo_config;
+use mod_kialo\kialo_view;
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
+use mod_kialo\output\repost_page;
+
+// Re-issue this request from Moodle's own origin so the SameSite=Lax session cookie is sent in the
+// embedded (cross-site iframe) flow. See \mod_kialo\output\repost_page for the why and how.
+if (kialo_view::needs_session_repost()) {
+    // Avoid setting a fresh anonymous session cookie that would replace the user's real one on the repost.
+    header_remove('Set-Cookie');
+
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url('/mod/kialo/lti_auth.php');
+    $PAGE->set_title(get_string('redirect_title', 'mod_kialo'));
+
+    // Kialo sends this request as a GET, so repost it as a GET whose form fields land back in the query
+    // string, which is where the LTI library reads the parameters from.
+    $reposturl = (new moodle_url('/mod/kialo/lti_auth.php'))->out(false);
+    $output = $PAGE->get_renderer('mod_kialo');
+    echo $output->render(new repost_page($reposturl, $_GET));
+    exit;
+}
 
 try {
     $message = lti_flow::lti_auth();
