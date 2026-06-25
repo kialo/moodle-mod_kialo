@@ -33,8 +33,33 @@ require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 use mod_kialo\kialo_config;
+use mod_kialo\kialo_view;
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
+use mod_kialo\output\repost_page;
+
+// Since MDL-83526 the MoodleSession cookie defaults to SameSite=Lax. When a Kialo discussion is shown
+// embedded, Kialo redirects the browser back to this endpoint from within its own (cross-site) iframe,
+// so the browser does not send the session cookie and the user appears logged out. Re-issuing the exact
+// same request from a page served by Moodle itself makes it a same-site request, so the cookie is sent
+// and we can authenticate normally. This mirrors Moodle core's own mod/lti/auth.php (MDL-71887).
+if (kialo_view::needs_session_repost()) {
+    // Prevent this cookie-less request from setting a fresh (anonymous) session cookie. Otherwise that
+    // new cookie would be sent on the repost instead of the user's real session, keeping them logged out.
+    header_remove('Set-Cookie');
+
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url('/mod/kialo/lti_auth.php');
+    $PAGE->set_title(get_string('redirect_title', 'mod_kialo'));
+
+    // Repost to the exact same URL. REQUEST_URI preserves the original query string (nonce, state,
+    // lti_message_hint, ...) verbatim, which the LTI library reads from the query parameters, so they
+    // survive the repost. The value is escaped by the template before being placed in the form action.
+    $reposturl = $_SERVER['REQUEST_URI'] ?? (new moodle_url('/mod/kialo/lti_auth.php'))->out(false);
+    $output = $PAGE->get_renderer('mod_kialo');
+    echo $output->render(new repost_page($reposturl, $_POST));
+    exit;
+}
 
 try {
     $message = lti_flow::lti_auth();

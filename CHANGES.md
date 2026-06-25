@@ -1,3 +1,7 @@
+### v1.6.1 (Build - 2026062500)
+
+* **Fix:** Embedded Kialo discussions and the discussion selection dialog no longer load on recent Moodle versions (4.5.12+, 5.0.8+, 5.1.5+, 5.2.1+), which changed the Moodle session cookie to `SameSite=Lax` (MDL-83526). The plugin now re-issues the LTI authentication request from Moodle's own domain so the session cookie is sent, matching the technique used by Moodle's built-in LTI module.
+
 ### v1.6.0 (Build - 2026040701)
 
 * Updated dependencies.
