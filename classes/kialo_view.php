@@ -71,6 +71,29 @@ class kialo_view {
     }
 
     /**
+     * Decides whether the current LTI authentication request must be re-issued from Moodle's own
+     * origin before it can be processed (the "cross-site repost", see \mod_kialo\output\repost_page).
+     *
+     * Since MDL-83526 the MoodleSession cookie defaults to SameSite=Lax, so it is not sent when Kialo
+     * redirects the browser back to lti_auth.php from within its (cross-site) iframe in the embedded
+     * display mode. Without the cookie the user appears logged out. Reposting the request from a
+     * Moodle-origin page turns it into a same-site request, so the cookie is sent on the second try.
+     *
+     * @return bool True if the current request should be reposted from Moodle's origin first.
+     */
+    public static function needs_session_repost(): bool {
+        // If this request is already the result of a repost and there is still no session, then the
+        // user is genuinely not logged in (e.g. an expired session). In that case we must not repost
+        // again (which would loop forever) and instead let the normal login flow handle it. The marker
+        // is checked in both GET and POST, since the repost reproduces the original request method.
+        if (!empty($_GET['repost']) || !empty($_POST['repost'])) {
+            return false;
+        }
+
+        return !isloggedin();
+    }
+
+    /**
      * Writes a response to the client.
      *
      * @param ResponseInterface $response

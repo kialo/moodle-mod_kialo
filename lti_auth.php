@@ -33,8 +33,47 @@ require_once(__DIR__ . '/lib.php');
 require_once('vendor/autoload.php');
 
 use mod_kialo\kialo_config;
+use mod_kialo\kialo_view;
 use mod_kialo\lti_flow;
 use mod_kialo\output\loading_page;
+use mod_kialo\output\repost_page;
+
+// Since MDL-83526 the MoodleSession cookie defaults to SameSite=Lax. When a Kialo discussion is shown
+// embedded, Kialo redirects the browser back to this endpoint from within its own (cross-site) iframe,
+// so the browser does not send the session cookie and the user appears logged out. Re-issuing the exact
+// same request from a page served by Moodle itself makes it a same-site request, so the cookie is sent
+// and we can authenticate normally. This mirrors Moodle core's own mod/lti/auth.php (MDL-71887).
+if (kialo_view::needs_session_repost()) {
+    // Prevent this cookie-less request from setting a fresh (anonymous) session cookie. Otherwise that
+    // new cookie would be sent on the repost instead of the user's real session, keeping them logged out.
+    header_remove('Set-Cookie');
+
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_url('/mod/kialo/lti_auth.php');
+    $PAGE->set_title(get_string('redirect_title', 'mod_kialo'));
+
+    // The repost must reproduce the original request faithfully: same HTTP method, same parameters in
+    // the same place. The LTI library reads request parameters method-dependently (query string for
+    // GET, request body for POST), so a GET launch reposted as a POST would lose lti_message_hint.
+    // Kialo redirects here via GET, so we normally repost as a GET with the parameters in the query.
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+        // Keep the original query string in the action so query parameters are preserved; resubmit the
+        // body parameters as hidden fields.
+        $reposturl = $_SERVER['REQUEST_URI'] ?? (new moodle_url('/mod/kialo/lti_auth.php'))->out(false);
+        $repostmethod = 'post';
+        $repostparams = $_POST;
+    } else {
+        // GET: submit the parameters as form fields so they end up in the query string of the new
+        // request. The action must be the bare endpoint URL (a GET form replaces any query string).
+        $reposturl = (new moodle_url('/mod/kialo/lti_auth.php'))->out(false);
+        $repostmethod = 'get';
+        $repostparams = $_GET;
+    }
+
+    $output = $PAGE->get_renderer('mod_kialo');
+    echo $output->render(new repost_page($reposturl, $repostmethod, $repostparams));
+    exit;
+}
 
 try {
     $message = lti_flow::lti_auth();

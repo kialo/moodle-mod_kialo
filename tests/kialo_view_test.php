@@ -245,6 +245,56 @@ final class kialo_view_test extends \advanced_testcase {
     }
 
     /**
+     * No repost is needed when the user has a valid Moodle session.
+     *
+     * @return void
+     * @covers \mod_kialo\kialo_view::needs_session_repost
+     */
+    public function test_needs_session_repost_logged_in(): void {
+        // The setUp() method already logs in a real user.
+        $this->assertFalse(kialo_view::needs_session_repost());
+    }
+
+    /**
+     * A repost is needed when there is no Moodle session, e.g. because the SameSite=Lax session cookie
+     * was withheld on the cross-site request from the embedded Kialo iframe.
+     *
+     * @return void
+     * @covers \mod_kialo\kialo_view::needs_session_repost
+     */
+    public function test_needs_session_repost_not_logged_in(): void {
+        $this->setUser(null);
+        $this->assertTrue(kialo_view::needs_session_repost());
+    }
+
+    /**
+     * Once a request has already been reposted, we must not repost again even if there is still no
+     * session, otherwise the page would reload forever. The normal login flow handles it instead.
+     *
+     * @return void
+     * @covers \mod_kialo\kialo_view::needs_session_repost
+     */
+    public function test_needs_session_repost_does_not_loop(): void {
+        $this->setUser(null);
+
+        // The repost reproduces the original (GET) request, so the marker arrives in $_GET; it may also
+        // arrive in $_POST for a POST launch. Either one must stop a further repost.
+        $originalget = $_GET;
+        $originalpost = $_POST;
+        try {
+            $_GET['repost'] = '1';
+            $this->assertFalse(kialo_view::needs_session_repost());
+            $_GET = $originalget;
+
+            $_POST['repost'] = '1';
+            $this->assertFalse(kialo_view::needs_session_repost());
+        } finally {
+            $_GET = $originalget;
+            $_POST = $originalpost;
+        }
+    }
+
+    /**
      * Tests writing an HTTP response.
      *
      * @return void

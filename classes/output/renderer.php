@@ -37,4 +37,16 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
         return parent::render_from_template('mod_kialo/loading_page', $data);
     }
+
+    /**
+     * Defer to template.
+     *
+     * @param repost_page $page
+     *
+     * @return string html for the page
+     */
+    public function render_repost_page(repost_page $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('mod_kialo/repost_page', $data);
+    }
 }
