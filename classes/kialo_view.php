@@ -71,6 +71,22 @@ class kialo_view {
     }
 
     /**
+     * Decides whether the current LTI authentication request must be re-issued from Moodle's own origin
+     * before it can be processed. See \mod_kialo\output\repost_page for why this is needed.
+     *
+     * @return bool True if the current request should be reposted from Moodle's origin first.
+     */
+    public static function needs_session_repost(): bool {
+        // Already reposted but still no session => genuinely logged out (e.g. expired); don't loop,
+        // let the normal login flow handle it (the GET repost carries the marker in the query string).
+        if (!empty($_GET['repost'])) {
+            return false;
+        }
+
+        return !isloggedin();
+    }
+
+    /**
      * Writes a response to the client.
      *
      * @param ResponseInterface $response

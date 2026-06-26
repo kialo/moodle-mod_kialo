@@ -1,0 +1,121 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_kialo/repost_page
+
+    Re-submits the current LTI authentication request to Moodle from its own origin so the session
+    cookie is sent. See \mod_kialo\output\repost_page for why this is needed.
+
+    The form auto-submits via JavaScript; a "Continue" button is a manual fallback.
+
+    Context variables required for this template:
+    * url: string, the URL to repost to (no query string; the parameters are submitted as form fields)
+    * params: array of {key, value}, original request parameters to resubmit as hidden fields
+    * htmltitle: string, the page title
+    * loadingtext: string, the text shown while submitting
+    * continuetext: string, the label of the manual submit button
+
+    Example context (json):
+    {
+        "url": "https://moodle.example.com/mod/kialo/lti_auth.php",
+        "params": [{"key": "nonce", "value": "abc"}, {"key": "response_type", "value": "id_token"}],
+        "htmltitle": "Loading",
+        "loadingtext": "Loading",
+        "continuetext": "Continue"
+    }
+}}
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <meta name=viewport content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name=theme-color content=#2c343d>
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <meta name=mobile-web-app-capable content=yes>
+    <meta name=referrer content=strict-origin-when-cross-origin>
+    <title lang=en>{{ htmltitle }}</title>
+    <meta name=robots content=noindex,follow>
+    <link rel=icon sizes=16x16 href="/mod/kialo/pix/monologo.png" type=image/png>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="kialo-loading-text">
+    <form action="{{ url }}" method="get" id="kialo-repost-form">
+        {{#params}}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {{/params}}
+        <input type="hidden" name="repost" value="1">
+        <p class="kialo-loading-title">{{ loadingtext }}</p>
+        <noscript>
+            <button type="submit">{{ continuetext }}</button>
+        </noscript>
+    </form>
+    <div id="kialo-loading-spinner" class="kialo-spinner kialo-spinner--large kialo-spinner--prerender">
+        <div class="kialo-spinner__circle kialo-spinner__circle--1">
+            <div class="kialo-spinner__line">
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--left"></div>
+                </div>
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="kialo-spinner__circle kialo-spinner__circle--2">
+            <div class="kialo-spinner__line">
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--left"></div>
+                </div>
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="kialo-spinner__circle kialo-spinner__circle--3">
+            <div class="kialo-spinner__line">
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--left"></div>
+                </div>
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="kialo-spinner__circle kialo-spinner__circle--4">
+            <div class="kialo-spinner__line">
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--left"></div>
+                </div>
+                <div class="kialo-spinner__arc">
+                    <div class="kialo-spinner__arc-inner kialo-spinner__arc-inner--right"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+    // Submit on load (not inline) so the page paints the loading spinner before navigating away,
+    // matching the redirect loading page.
+    window.addEventListener("load", function() {
+        document.getElementById("kialo-repost-form").submit();
+    });
+    //]]>
+</script>
+</body>
+</html>
