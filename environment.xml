@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <COMPATIBILITY_MATRIX>
     <PLUGIN name="mod_kialo">
-        <PHP version="7.4.0" level="required" />
+        <PHP version="8.1.0" level="required" />
         <PHP_EXTENSIONS>
             <PHP_EXTENSION name="json" level="required" />
             <PHP_EXTENSION name="openssl" level="required" />
