@@ -146,7 +146,25 @@ function kialo_get_coursemodule_info($coursemodule) {
         $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
     }
 
+    // Cached so that kialo_cm_info_dynamic can use it without a DB query.
+    $info->customdata = ['display' => $instance->display];
+
     return $info;
+}
+
+/**
+ * Sets dynamic information about a course module.
+ *
+ * @param cm_info $cm
+ * @return void
+ */
+function kialo_cm_info_dynamic(cm_info $cm): void {
+    // Moodle 5.2+ linear navigation ("Previous"/"Next") redirects to activities in the same window, ignoring the onclick
+    // handler. Exclude activities that open in a new window, so that students aren't taken out of Moodle unexpectedly.
+    $display = $cm->customdata['display'] ?? null;
+    if ($display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW && method_exists($cm, 'set_navigation_url')) {
+        $cm->set_navigation_url(null);
+    }
 }
 
 /**

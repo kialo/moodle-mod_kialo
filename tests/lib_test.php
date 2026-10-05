@@ -146,6 +146,52 @@ final class lib_test extends \advanced_testcase {
     }
 
     /**
+     * Check that only activities opening in a new window are excluded from linear navigation.
+     *
+     * @covers ::kialo_cm_info_dynamic
+     * @dataProvider kialo_cm_info_dynamic_provider
+     * @param string $display The display option of the activity.
+     * @param bool $navigable Whether the activity should be part of linear navigation.
+     */
+    public function test_kialo_cm_info_dynamic(string $display, bool $navigable): void {
+        if (!method_exists(\cm_info::class, 'get_navigation_url')) {
+            $this->markTestSkipped('Linear navigation requires Moodle 5.2 or later.');
+        }
+        $this->resetAfterTest();
+
+        // Activities of disabled modules are left out of the course modinfo.
+        set_config('acceptterms', true, 'mod_kialo');
+        kialo_update_visibility_depending_on_accepted_terms();
+
+        $course = $this->getDataGenerator()->create_course();
+        $activity = $this->getDataGenerator()->create_module('kialo', [
+            'course' => $course,
+            'display' => $display,
+        ]);
+        $cm = get_fast_modinfo($course->id)->get_cm($activity->cmid);
+
+        // The course page link is unaffected either way.
+        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $cm->get_url()->out(false));
+        if ($navigable) {
+            $this->assertEquals($cm->get_url(), $cm->get_navigation_url());
+        } else {
+            $this->assertNull($cm->get_navigation_url());
+        }
+    }
+
+    /**
+     * Data provider for test_kialo_cm_info_dynamic.
+     *
+     * @return array
+     */
+    public static function kialo_cm_info_dynamic_provider(): array {
+        return [
+            'embedded' => [MOD_KIALO_DISPLAY_IN_EMBED, true],
+            'new window' => [MOD_KIALO_DISPLAY_IN_NEW_WINDOW, false],
+        ];
+    }
+
+    /**
      * Check the kialo_pre_enable_plugin_actions function.
      *
      * @covers ::kialo_pre_enable_plugin_actions
