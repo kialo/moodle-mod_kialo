@@ -100,7 +100,7 @@ try {
              allowfullscreen="true">
       </iframe>';
 
-        // This resize script was taken directly from moodle's own mod/lti/view.php.
+        // This resize script is based on moodle's own mod/lti/view.php.
         // It ensures that our Iframe has as much height as it can get.
         $resizescript = <<<JS
         <script type="text/javascript">
@@ -110,13 +110,38 @@ try {
                 var frame = Y.one("#kialocontentframe");
                 var padding = 15;
                 var lastHeight;
-                var resize = function(e) {
-                    var viewportHeight = doc.get("winHeight");
-                    if (lastHeight !== Math.min(doc.get("docHeight"), viewportHeight)) {
-                        frame.setStyle("height", viewportHeight - frame.getY() - padding + "px");
-                        lastHeight = Math.min(doc.get("docHeight"), viewportHeight);
+
+                // Since Moodle 5.3, activity pages can have a sticky footer (e.g. linear course navigation).
+                // It is fixed to the bottom of the viewport and overlays the page, so we leave room for it.
+                var stickyFooter = null;
+                var stickyFooterEnabled = false;
+                var getStickyFooterHeight = function() {
+                    return stickyFooter && stickyFooterEnabled ? stickyFooter.offsetHeight : 0;
+                };
+
+                var resize = function() {
+                    var height = doc.get("winHeight") - frame.getY() - getStickyFooterHeight() - padding;
+                    if (lastHeight !== height) {
+                        frame.setStyle("height", height + "px");
+                        lastHeight = height;
                     }
                 };
+
+                // The sticky footer is rendered after this script, so we look for it once the DOM is ready.
+                Y.on("domready", function() {
+                    stickyFooter = document.querySelector(".stickyfooter");
+                    if (stickyFooter) {
+                        stickyFooterEnabled = !stickyFooter.dataset.disable;
+                        document.addEventListener("core/stickyfooter_state_changed", function(e) {
+                            stickyFooterEnabled = e.detail.enabled;
+                            resize();
+                        });
+                        if (window.ResizeObserver) {
+                            new ResizeObserver(resize).observe(stickyFooter);
+                        }
+                    }
+                    resize();
+                });
 
                 resize();
                 Y.on("windowresize", resize);

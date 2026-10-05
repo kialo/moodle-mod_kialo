@@ -2,6 +2,7 @@
 
 * **New**: Dropped support for PHP 7.4 and 8.0. The plugin now requires PHP 8.1 or later, and therefore Moodle 4.1 or later.
 * Added support for Moodle 5.3.
+* **Fix:** On Moodle 5.3+, embedded Kialo discussions are no longer partly hidden behind the new sticky course navigation footer (Previous / Next / completion).
 * Updated dependencies.
 
 ### v1.6.1 (Build - 2026062503)
