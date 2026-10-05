@@ -2,6 +2,7 @@
 
 * **New**: Dropped support for PHP 7.4 and 8.0. The plugin now requires PHP 8.1 or later, and therefore Moodle 4.1 or later.
 * Added support for Moodle 5.3.
+* Added support for Moodle 5.3's linear navigation (Previous/Next links). For activities set to open in a new window, these links now lead to a page within Moodle with a button to open the discussion, instead of replacing Moodle with Kialo in the current tab.
 * Updated dependencies.
 
 ### v1.6.1 (Build - 2026062503)

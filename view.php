@@ -65,6 +65,29 @@ $groupinfo = kialo_view::get_current_group_info($cm, $course);
 
 $embedded = $moduleinstance->display === MOD_KIALO_DISPLAY_IN_EMBED;
 
+// Linear navigation (Moodle 5.3+) links here with forceview=1 for activities that open in a new window,
+// see kialo_cm_info_dynamic(). Instead of replacing the current tab with Kialo, we stay within Moodle
+// and open the discussion in a new window.
+if (!$embedded && optional_param('forceview', false, PARAM_BOOL)) {
+    $launchurl = new moodle_url('/mod/kialo/view.php', ['id' => $cm->id]);
+    $windowname = 'kialo-' . $cm->id;
+
+    $PAGE->set_url('/mod/kialo/view.php', ['id' => $cm->id, 'forceview' => 1]);
+    $PAGE->set_title($moduleinstance->name);
+    $PAGE->set_pagelayout('incourse');
+
+    // We don't open the window automatically, because browsers block popups that aren't triggered by a click.
+    echo $OUTPUT->header();
+    echo html_writer::tag('p', get_string('newwindow_info', 'mod_kialo'));
+    echo html_writer::link(
+        $launchurl,
+        get_string('newwindow_open', 'mod_kialo'),
+        ['class' => 'btn btn-primary', 'target' => $windowname]
+    );
+    echo $OUTPUT->footer();
+    die();
+}
+
 try {
     $message = lti_flow::init_resource_link(
         $course->id,

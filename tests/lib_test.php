@@ -143,6 +143,74 @@ final class lib_test extends \advanced_testcase {
         // Clicking the activity name should open a new window by default.
         $this->assertStringContainsString("window.open", $info->onclick);
         $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $info->onclick);
+        $this->assertEquals(['display' => MOD_KIALO_DISPLAY_IN_NEW_WINDOW], $info->customdata);
+    }
+
+    /**
+     * Check embedded course modules open in the same window.
+     *
+     * @covers ::kialo_get_coursemodule_info
+     */
+    public function test_kialo_get_coursemodule_info_embed(): void {
+        $this->resetAfterTest();
+
+        $course = $this->getDataGenerator()->create_course();
+        $activity = $this->getDataGenerator()->create_module('kialo', [
+            'course' => $course,
+            'display' => MOD_KIALO_DISPLAY_IN_EMBED,
+        ]);
+        $cm = get_coursemodule_from_instance("kialo", $activity->id);
+        $info = kialo_get_coursemodule_info($cm);
+
+        $this->assertEmpty($info->onclick);
+        $this->assertEquals(['display' => MOD_KIALO_DISPLAY_IN_EMBED], $info->customdata);
+    }
+
+    /**
+     * Check linear navigation links to the in-Moodle landing page for activities that open in a new window,
+     * and to the normal view page for embedded activities.
+     *
+     * @covers ::kialo_cm_info_dynamic
+     * @dataProvider kialo_cm_info_dynamic_provider
+     * @param string $display
+     * @param bool $expectforceview
+     */
+    public function test_kialo_cm_info_dynamic(string $display, bool $expectforceview): void {
+        if (!method_exists(\cm_info::class, 'set_navigation_url')) {
+            $this->markTestSkipped('Linear navigation requires Moodle 5.3 or later.');
+        }
+        $this->resetAfterTest();
+
+        // Disabled modules are excluded from the course modinfo.
+        set_config('acceptterms', true, 'mod_kialo');
+        kialo_update_visibility_depending_on_accepted_terms();
+
+        $course = $this->getDataGenerator()->create_course();
+        $activity = $this->getDataGenerator()->create_module('kialo', [
+            'course' => $course->id,
+            'display' => $display,
+        ]);
+        $cm = get_fast_modinfo($course->id)->get_cm($activity->cmid);
+
+        $url = $cm->get_navigation_url();
+        $this->assertEquals((new \moodle_url('/mod/kialo/view.php'))->out_omit_querystring(), $url->out_omit_querystring());
+        $this->assertEquals($activity->cmid, $url->get_param('id'));
+        $this->assertEquals($expectforceview ? 1 : null, $url->get_param('forceview'));
+
+        // The link on the course page itself is not affected.
+        $this->assertNull($cm->url->get_param('forceview'));
+    }
+
+    /**
+     * Data provider for test_kialo_cm_info_dynamic.
+     *
+     * @return array
+     */
+    public static function kialo_cm_info_dynamic_provider(): array {
+        return [
+            'new window' => [MOD_KIALO_DISPLAY_IN_NEW_WINDOW, true],
+            'embed' => [MOD_KIALO_DISPLAY_IN_EMBED, false],
+        ];
     }
 
     /**

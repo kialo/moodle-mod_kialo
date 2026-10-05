@@ -146,7 +146,33 @@ function kialo_get_coursemodule_info($coursemodule) {
         $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
     }
 
+    // Cached so that kialo_cm_info_dynamic() can use it without a DB query.
+    $info->customdata = ['display' => $instance->display];
+
     return $info;
+}
+
+/**
+ * Adjusts the course module info dynamically, on every request.
+ *
+ * Linear navigation (Moodle 5.3+) links to the activity's navigation URL directly and ignores the onclick
+ * handler set in kialo_get_coursemodule_info(). For activities that open in a new window, view.php would
+ * then replace the current Moodle tab with Kialo. Instead, we send linear navigation to a landing page
+ * within Moodle (see view.php), which opens Kialo in a new window.
+ *
+ * @param cm_info $cm
+ * @return void
+ */
+function kialo_cm_info_dynamic(cm_info $cm): void {
+    // Linear navigation was introduced in Moodle 5.3.
+    if (!method_exists($cm, 'set_navigation_url')) {
+        return;
+    }
+
+    $url = $cm->get_navigation_url();
+    if ($url && ($cm->customdata['display'] ?? null) === MOD_KIALO_DISPLAY_IN_NEW_WINDOW) {
+        $cm->set_navigation_url(new moodle_url($url, ['forceview' => 1]));
+    }
 }
 
 /**
