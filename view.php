@@ -43,6 +43,9 @@ $id = optional_param('id', 0, PARAM_INT);
 // Activity instance id.
 $k = optional_param('k', 0, PARAM_INT);
 
+// Whether to launch Kialo directly. Only relevant for activities displayed in a new window.
+$launch = optional_param('launch', 0, PARAM_BOOL);
+
 if ($id) {
     $cm = get_coursemodule_from_id('kialo', $id, 0, false, MUST_EXIST);
     $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
@@ -64,6 +67,25 @@ if (isguestuser() || is_guest($context)) {
 $groupinfo = kialo_view::get_current_group_info($cm, $course);
 
 $embedded = $moduleinstance->display === MOD_KIALO_DISPLAY_IN_EMBED;
+
+// Activities displayed in a new window are opened via JS on the course page, which adds the launch param.
+// Other entry points (e.g. course index or course navigation) link here directly, so instead of navigating
+// the current window to Kialo, we show a Moodle page with a button that opens Kialo in a new window.
+if (!$embedded && !$launch) {
+    $PAGE->set_url('/mod/kialo/view.php', ['id' => $cm->id]);
+    $PAGE->set_title($moduleinstance->name);
+    $PAGE->set_pagelayout('incourse');
+
+    echo $OUTPUT->header();
+    echo html_writer::tag('p', get_string('opens_in_new_window', 'mod_kialo'));
+    echo html_writer::link(
+        new moodle_url('/mod/kialo/view.php', ['id' => $cm->id, 'launch' => 1]),
+        get_string('open_in_new_window', 'mod_kialo'),
+        ['class' => 'btn btn-primary', 'target' => '_blank'],
+    );
+    echo $OUTPUT->footer();
+    exit;
+}
 
 try {
     $message = lti_flow::init_resource_link(

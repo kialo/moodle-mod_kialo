@@ -142,7 +142,7 @@ function kialo_get_coursemodule_info($coursemodule) {
 
     $instance = $DB->get_record('kialo', ['id' => $coursemodule->instance], '*', MUST_EXIST);
     if ($instance->display === MOD_KIALO_DISPLAY_IN_NEW_WINDOW) {
-        $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id]);
+        $url = new moodle_url('/mod/kialo/view.php', ['id' => $coursemodule->id, 'launch' => 1]);
         $info->onclick = sprintf("window.open('%s'); return false;", $url->out(false));
     }
 
