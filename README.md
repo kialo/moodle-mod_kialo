@@ -65,8 +65,8 @@ We are ISO 27001 compliant, and how we handle your data can be seen in detail in
 
 ### Prerequisites
 
-* Moodle 4.0 or later
-* PHP 7.4 or later
+* Moodle 4.1 or later
+* PHP 8.1 or later
 
 ### Installing via uploaded ZIP file ###
 
