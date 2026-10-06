@@ -11,23 +11,23 @@
     }
   ],
   "require": {
-    "php": ">=7.4.0",
-    "oat-sa/lib-lti1p3-core": "^6.9",
+    "php": ">=8.1.0",
+    "oat-sa/lib-lti1p3-core": "^7.3",
     "guzzlehttp/guzzle": "^6.5 || ^7.0",
     "ext-openssl": "*",
     "ext-json": "*",
     "cache/adapter-common": "^1.2"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.13",
-    "moodlehq/moodle-cs": "^v3.5.0",
-    "friendsofphp/php-cs-fixer": "^3.59",
-    "dealerdirect/phpcodesniffer-composer-installer": "^v1.1.1",
+    "squizlabs/php_codesniffer": "^3.13.6",
+    "moodlehq/moodle-cs": "^v3.7.0",
+    "friendsofphp/php-cs-fixer": "^3.95",
+    "dealerdirect/phpcodesniffer-composer-installer": "^v1.2.1",
     "phpro/grumphp-shim": "^1.13"
   },
   "config": {
     "platform": {
-      "php": "7.4"
+      "php": "8.1"
     },
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true,

@@ -215,7 +215,7 @@ final class lti_flow_test extends \advanced_testcase {
      * Creates a signed JWT.
      *
      * @param string|array $signer self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
-     * @param callable|null $callback Callback to add custom claims to the token.
+     * @param callable|null $callback Callback to add custom claims to the token. Receives and returns a JWT Builder.
      * @return string Signed JWT.
      * @throws \Exception
      */
@@ -229,8 +229,8 @@ final class lti_flow_test extends \advanced_testcase {
             ->withClaim("nonce", "fc5fdc6d-5dd6-47f4-b2c9-5d1216e9b771");
 
         $now = new DateTimeImmutable("now", new \DateTimeZone("UTC"));
-        $tokenbuilder->issuedAt($now);
-        $tokenbuilder->expiresAt($now->modify('+1 hour'));
+        $tokenbuilder = $tokenbuilder->issuedAt($now);
+        $tokenbuilder = $tokenbuilder->expiresAt($now->modify('+1 hour'));
 
         // JWT needs to be signed by either the tool (Kialo) or the platform (Kialo Moodle plugin).
         $algorithm = new Sha256();
@@ -239,29 +239,29 @@ final class lti_flow_test extends \advanced_testcase {
         if ($signer == self::SIGNER_PLATFORM) {
             $keychain = kialo_config::get_instance()->get_platform_keychain();
             $signingkey = $converter->convert($keychain->getPrivateKey());
-            $tokenbuilder->withHeader("kid", $keychain->getIdentifier());
-            $tokenbuilder->issuedBy("https://www.example.com/moodle/mod/kialo");
-            $tokenbuilder->permittedFor("https://www.kialo-edu.com"); // The 'aud' header.
+            $tokenbuilder = $tokenbuilder->withHeader("kid", $keychain->getIdentifier());
+            $tokenbuilder = $tokenbuilder->issuedBy("https://www.example.com/moodle/mod/kialo");
+            $tokenbuilder = $tokenbuilder->permittedFor("https://www.kialo-edu.com"); // The 'aud' header.
         } else if ($signer == self::SIGNER_TOOL) {
             // See https://www.imsglobal.org/spec/security/v1p0/#tool-jwt.
             $keychain = kialo_config::get_instance()->toolkeychain;
             $signingkey = $converter->convert($keychain->getPrivateKey());
-            $tokenbuilder->withHeader("kid", $keychain->getIdentifier());
-            $tokenbuilder->issuedBy("kialo-moodle-client");
-            $tokenbuilder->permittedFor("https://www.example.com/moodle/mod/kialo"); // The 'aud' header.
+            $tokenbuilder = $tokenbuilder->withHeader("kid", $keychain->getIdentifier());
+            $tokenbuilder = $tokenbuilder->issuedBy("kialo-moodle-client");
+            $tokenbuilder = $tokenbuilder->permittedFor("https://www.example.com/moodle/mod/kialo"); // The 'aud' header.
         } else if (is_array($signer)) {
             // Assume signer is an arbitrary private key.
             $signingkey = $converter->convert(new Key($signer['key'], '', KeyInterface::ALG_RS256));
-            $tokenbuilder->withHeader("kid", $signer['kid'] ?? md5($signer['key']));
-            $tokenbuilder->issuedBy($signer['iss']);
-            $tokenbuilder->permittedFor($signer['aud']); // The 'aud' header.
+            $tokenbuilder = $tokenbuilder->withHeader("kid", $signer['kid'] ?? md5($signer['key']));
+            $tokenbuilder = $tokenbuilder->issuedBy($signer['iss']);
+            $tokenbuilder = $tokenbuilder->permittedFor($signer['aud']); // The 'aud' header.
         } else {
             $this->assertFalse(false, "Invalid signer: " . $signer);
         }
 
         // Add custom claims.
         if ($callback) {
-            $callback($tokenbuilder);
+            $tokenbuilder = $callback($tokenbuilder);
         }
 
         return $tokenbuilder->getToken($algorithm, $signingkey)->toString();
@@ -523,6 +523,7 @@ final class lti_flow_test extends \advanced_testcase {
      *
      * @param string|array $signer self::SIGNER_PLATFORM, self::SIGNER_TOOL, or ['iss' => string, 'aud' => string, 'key' => string].
      * @param callable|null $callback Callback to add custom claims to the token or modify other $_GET params.
+     *                                Receives and returns a JWT Builder.
      * @return void
      * @throws \Exception
      */
@@ -538,8 +539,8 @@ final class lti_flow_test extends \advanced_testcase {
         $_GET['login_hint'] = $this->course->id . "/" . $this->user->id;
 
         // LTI Message JWT - created and signed by the Moodle plugin initially and then passed around.
-        $tokenstr = $this->create_signed_jwt($signer, function ($builder) use ($callback) {
-            $builder
+        $tokenstr = $this->create_signed_jwt($signer, function (Builder $builder) use ($callback): Builder {
+            $builder = $builder
                 ->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiResourceLinkRequest')
                 ->withClaim(
                     "https://purl.imsglobal.org/spec/lti/claim/target_link_uri",
@@ -551,8 +552,10 @@ final class lti_flow_test extends \advanced_testcase {
                 ->withClaim("registration_id", "kialo-moodle-registration");
 
             if ($callback) {
-                $callback($builder);
+                $builder = $callback($builder);
             }
+
+            return $builder;
         });
         $this->assertNotEmpty($tokenstr);
 
@@ -572,8 +575,8 @@ final class lti_flow_test extends \advanced_testcase {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
         // Given a redirect GET request from Kialo with the LTI auth response.
-        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
-            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder): Builder {
+            return $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
                 "id" => lti_flow::resource_link_id($this->cmid),
             ]);
         });
@@ -628,8 +631,8 @@ final class lti_flow_test extends \advanced_testcase {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
         // Given a redirect GET request from Kialo with the LTI auth response.
-        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
-            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder): Builder {
+            return $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
                 "id" => lti_flow::resource_link_id($this->cmid),
             ]);
         });
@@ -667,8 +670,8 @@ final class lti_flow_test extends \advanced_testcase {
     public function test_lti_auth_response_contains_update_discussion_url_endpoint(): void {
         $this->getDataGenerator()->enrol_user($this->user->id, $this->course->id, "student");
 
-        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder) {
-            $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
+        $this->prepare_lti_auth_request(self::SIGNER_PLATFORM, function (Builder $builder): Builder {
+            return $builder->withClaim(LtiMessagePayloadInterface::CLAIM_LTI_RESOURCE_LINK, [
                 "id" => lti_flow::resource_link_id($this->cmid),
             ]);
         });
@@ -711,31 +714,34 @@ final class lti_flow_test extends \advanced_testcase {
             ],
             "wrong Moodle user" => [
                 self::SIGNER_PLATFORM,
-                function (Builder $builder) {
+                function (Builder $builder): Builder {
                     $othercourseid = "42";
                     $invaliduserid = "9999";
                     $_GET["login_hint"] = "$othercourseid/$invaliduserid";
+                    return $builder;
                 },
                 "/^OIDC authentication failed.*/",
             ],
             "missing state parameter" => [
                 self::SIGNER_PLATFORM,
-                function (Builder $builder) {
+                function (Builder $builder): Builder {
                     unset($_GET['state']);
+                    return $builder;
                 },
                 new LtiException("OIDC authentication failed: Missing mandatory state"),
             ],
             "missing login_hint" => [
                 self::SIGNER_PLATFORM,
-                function (Builder $builder) {
+                function (Builder $builder): Builder {
                     unset($_GET['login_hint']);
+                    return $builder;
                 },
                 new LtiException("OIDC authentication failed: Missing mandatory login_hint"),
             ],
             "wrong registration id" => [
                 self::SIGNER_PLATFORM,
-                function (Builder $builder) {
-                    $builder->withClaim("registration_id", "wrong-registration");
+                function (Builder $builder): Builder {
+                    return $builder->withClaim("registration_id", "wrong-registration");
                 },
                 new LtiException("Invalid message hint registration id claim"),
             ],
@@ -833,9 +839,9 @@ final class lti_flow_test extends \advanced_testcase {
      * @throws \Exception
      */
     private function prepare_deep_link_response_request($signer, ?callable $callable = null) {
-        $_GET['JWT'] = $this->create_signed_jwt($signer, function (Builder $builder) use ($callable) {
-            $builder->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiDeepLinkingResponse');
-            $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
+        $_GET['JWT'] = $this->create_signed_jwt($signer, function (Builder $builder) use ($callable): Builder {
+            $builder = $builder->withClaim('https://purl.imsglobal.org/spec/lti/claim/message_type', 'LtiDeepLinkingResponse');
+            $builder = $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                 [
                     "type" => "ltiResourceLink",
                     "title" => "Selected Kialo Discussion",
@@ -845,14 +851,16 @@ final class lti_flow_test extends \advanced_testcase {
             ]);
 
             // The "data" claim needs to be a JWT signed by the platform, content doesn't matter.
-            $builder->withClaim(
+            $builder = $builder->withClaim(
                 "https://purl.imsglobal.org/spec/lti-dl/claim/data",
                 $this->create_signed_jwt(self::SIGNER_PLATFORM)
             );
 
             if ($callable) {
-                $callable($builder);
+                $builder = $callable($builder);
             }
+
+            return $builder;
         });
         $_SERVER['QUERY_STRING'] = http_build_query($_GET, '', '&');
     }
@@ -893,15 +901,15 @@ final class lti_flow_test extends \advanced_testcase {
         return [
             "invalid issuer" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->issuedBy("invalid-issuer");
+                function (Builder $builder): Builder {
+                    return $builder->issuedBy("invalid-issuer");
                 },
                 new LtiException("No matching registration found platform side"),
             ],
             "missing issuer" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->issuedBy('');
+                function (Builder $builder): Builder {
+                    return $builder->issuedBy('');
                 },
                 new LtiException("No matching registration found platform side"),
             ],
@@ -918,22 +926,22 @@ final class lti_flow_test extends \advanced_testcase {
             ],
             "missing nonce" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->withClaim("nonce", "");
+                function (Builder $builder): Builder {
+                    return $builder->withClaim("nonce", "");
                 },
                 new LtiException("JWT nonce claim is missing"),
             ],
             "missing content items" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
+                function (Builder $builder): Builder {
+                    return $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", []);
                 },
                 new LtiException("Expected exactly one content item"),
             ],
             "wrong content type" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
+                function (Builder $builder): Builder {
+                    return $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                         [
                             "type" => "link",
                             "url" => "https://www.kialo-edu.com/discussion-title-1234",
@@ -944,8 +952,8 @@ final class lti_flow_test extends \advanced_testcase {
             ],
             "missing content item URL" => [
                 self::SIGNER_TOOL,
-                function (Builder $builder) {
-                    $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
+                function (Builder $builder): Builder {
+                    return $builder->withClaim("https://purl.imsglobal.org/spec/lti-dl/claim/content_items", [
                         [
                             "type" => "ltiResourceLink",
                             "title" => "Selected Kialo Discussion",

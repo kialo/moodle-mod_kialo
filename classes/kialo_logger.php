@@ -72,7 +72,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function emergency($message, array $context = []) {
+    public function emergency($message, array $context = []): void {
         $this->write('EMERGENCY', $message, $context);
     }
 
@@ -87,7 +87,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function alert($message, array $context = []) {
+    public function alert($message, array $context = []): void {
         $this->write('ALERT', $message, $context);
     }
 
@@ -101,7 +101,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function critical($message, array $context = []) {
+    public function critical($message, array $context = []): void {
         $this->write('CRITICAL', $message, $context);
     }
 
@@ -114,7 +114,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function error($message, array $context = []) {
+    public function error($message, array $context = []): void {
         $this->write('ERROR', $message, $context);
     }
 
@@ -129,7 +129,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function warning($message, array $context = []) {
+    public function warning($message, array $context = []): void {
         $this->write('WARNING', $message, $context);
     }
 
@@ -141,7 +141,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function notice($message, array $context = []) {
+    public function notice($message, array $context = []): void {
         $this->write('NOTICE', $message, $context);
     }
 
@@ -155,7 +155,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function info($message, array $context = []) {
+    public function info($message, array $context = []): void {
         $this->write('INFO', $message, $context);
     }
 
@@ -167,7 +167,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @return void
      */
-    public function debug($message, array $context = []) {
+    public function debug($message, array $context = []): void {
         $this->write('DEBUG', $message, $context);
     }
 
@@ -182,7 +182,7 @@ class kialo_logger implements LoggerInterface {
      *
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public function log($level, $message, array $context = []) {
+    public function log($level, $message, array $context = []): void {
         $this->write($level, $message, $context);
     }
 }

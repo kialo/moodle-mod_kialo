@@ -1,7 +1,7 @@
 name: mod_kialo
 services:
   mariadb:
-    image: mariadb:10.11
+    image: mariadb:11.4
     ports:
       - '8833:3306'
       - '8443:443'
@@ -11,8 +11,8 @@ services:
       - MARIADB_USER=moodle
       - MARIADB_PASSWORD=moodle
       - MARIADB_DATABASE=moodle
-      - MARIADB_CHARACTER_SET=utf8mb4
-      - MARIADB_COLLATE=utf8mb4_unicode_ci
+    # MariaDB 11's default collation (utf8mb4_uca1400_ai_ci) fails Moodle's unicode environment check.
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     # liveness probe
     healthcheck:
       test: ["CMD", "mariadb-admin", "status", "-uroot"]

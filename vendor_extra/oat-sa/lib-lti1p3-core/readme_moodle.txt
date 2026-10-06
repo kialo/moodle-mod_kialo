@@ -38,4 +38,4 @@ Information
 Repository: https://github.com/oat-sa/lib-lti1p3-core
 Documentation: https://github.com/oat-sa/lib-lti1p3-core#documentation
 
-Downloaded version: v6.9.0 (see composer.json)
+Downloaded version: v7.3.2 (see composer.json)
