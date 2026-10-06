@@ -142,7 +142,7 @@ final class lib_test extends \advanced_testcase {
 
         // Clicking the activity name should open a new window by default.
         $this->assertStringContainsString("window.open", $info->onclick);
-        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id, $info->onclick);
+        $this->assertStringContainsString("/mod/kialo/view.php?id=" . $cm->id . "&launch=1", $info->onclick);
     }
 
     /**
