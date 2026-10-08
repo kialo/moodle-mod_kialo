@@ -1,4 +1,4 @@
-### v1.7.0 (Build - 2026093001)
+### v1.7.0 (Build - 2026100701)
 
 * **New**: Dropped support for PHP 7.4 and 8.0. The plugin now requires PHP 8.1 or later, and therefore Moodle 4.1 or later.
 * Added support for Moodle 5.3.
